@@ -1,10 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, FocusEvent } from 'react';
 import '../styles/Signup.css';
 import openEyeIcon from '../img/lgsp/openeye.svg';
 import closeEyeIcon from '../img/lgsp/closeeye.svg';
 import googleLogo from '../img/lgsp/googlelogo.png';
 
-// Define form fields type
 interface FormFields {
   firstName: string;
   lastName: string;
@@ -23,6 +22,9 @@ const Signup: React.FC = () => {
     password: '',
     confirmPassword: '',
   });
+  const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
+  const [passwordValid, setPasswordValid] = useState<boolean>(false); // Password validation state
+  const [errorMessage, setErrorMessage] = useState<string>(''); // Error message for invalid password
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
@@ -30,11 +32,28 @@ const Signup: React.FC = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormFields({ ...formFields, [name]: value });
+
+    if (name === 'password') {
+      validatePassword(value);
+    }
+  };
+
+  const handlePasswordFocus = () => setPasswordFocused(true);
+  const handlePasswordBlur = () => setPasswordFocused(false);
+
+  const validatePassword = (password: string) => {
+    const lengthValid = password.length >= 10;
+    const upperCaseValid = /[A-Z]/.test(password);
+    const lowerCaseValid = /[a-z]/.test(password);
+    const numberValid = /\d/.test(password);
+    const specialCharValid = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    setPasswordValid(lengthValid && upperCaseValid && lowerCaseValid && numberValid && specialCharValid);
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic
+    
   };
 
   return (
@@ -90,7 +109,9 @@ const Signup: React.FC = () => {
               name="password"
               value={formFields.password}
               onChange={handleInputChange}
-              className="input"
+              onFocus={handlePasswordFocus}
+              onBlur={handlePasswordBlur}
+              className={`input ${passwordFocused ? (passwordValid ? 'valid' : 'invalid') : ''}`}
               required
             />
             <label className={formFields.password ? 'floating-label-s filled' : 'floating-label-s'}>
@@ -102,6 +123,11 @@ const Signup: React.FC = () => {
               className="toggle-icon"
               onClick={togglePasswordVisibility}
             />
+            {passwordFocused && !passwordValid && (
+              <div className="password-hint">
+                At least 10 characters with a mix of upper/lowercase, numbers, and symbols.
+              </div>
+            )}
           </div>
           <div className="password-container input-container">
             <input
@@ -122,10 +148,10 @@ const Signup: React.FC = () => {
               onClick={toggleConfirmPasswordVisibility}
             />
           </div>
-          <button type="submit" className="signup-btn">Sign Up</button>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <button type="submit" className="signup-btn" >Sign Up</button>
         </form>
 
-        {/* Added Login Link */}
         <div className="login-text-container">
           <p className="login-text">
             Already have an account? <a href="/login" className="login-link">Login now</a>
@@ -133,7 +159,6 @@ const Signup: React.FC = () => {
         </div>
 
         <div className="alternative-login">
-          {/* Added horizontal line around "Or sign up with" */}
           <div className="divider">
             <span className="divider-text">Or sign up with</span>
           </div>

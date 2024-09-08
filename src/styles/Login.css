@@ -67,7 +67,7 @@ body {
 }
 
 .input:focus {
-  border-color: #4a90e2;
+  border-color: #000000;
 }
 
 /* Floating Label Styling */
