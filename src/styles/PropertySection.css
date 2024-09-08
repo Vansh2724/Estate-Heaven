@@ -13,9 +13,10 @@
 
 .property-section-description {
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: #000000;
   max-width: 600px;
   margin: 0 auto 40px auto;
+  text-align: center;
 }
 
 /* Property Grid */
