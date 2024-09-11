@@ -49,6 +49,20 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+.heart-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  color: #e0e0e0; /* Default color */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.heart-icon.favorite {
+  color: red; /* Color when favorite */
+}
+
 .property-type-badge {
   position: absolute;
   top: 15px;
@@ -88,6 +102,30 @@
   color: #666;
   margin-bottom: 20px;
   line-height: 1.5;
+}
+.property-location-owner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.property-location-owner span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.property-location {
+  font-size: 0.9rem;
+  color: #000000; /* Lighter color to not overpower the card */
+}
+
+.property-owner {
+  font-size: 0.9rem;
+  color: #000000; /* Lighter color to balance with the location */
 }
 
 .property-bhkbs {

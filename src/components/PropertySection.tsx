@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/PropertySection.css'; // Import the CSS styles
-import { FaBed, FaBath, FaHome, FaRulerCombined, FaCouch } from 'react-icons/fa'; // Importing icons
+import { FaBed, FaBath, FaHome, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt } from 'react-icons/fa'; // Importing icons
 
 const PropertySection: React.FC = () => {
+  // State to manage favorite status for each property
+  const [favorites, setFavorites] = useState<number[]>([]);
+
+  // Toggle favorite status for a property
+  const toggleFavorite = (index: number) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.includes(index)
+        ? prevFavorites.filter((i) => i !== index) // Remove from favorites
+        : [...prevFavorites, index] // Add to favorites
+    );
+  };
+
   // Sample data for properties
   const properties = [
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Modern Family Home',
       description: 'A beautiful 4-bedroom house located in a serene neighborhood with modern amenities.',
-      price: '₹45,00,000', // Converted to INR
+      price: '₹45,00,000',
       type: 'For Sale',
+      location: 'Mumbai, India',
+      owner: 'John Doe',
       bhkbs: {
         bedrooms: 4,
         hall: 1,
@@ -23,8 +37,10 @@ const PropertySection: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Cozy Apartment',
       description: 'A stylish apartment in the heart of the city, close to all major attractions.',
-      price: '₹90,000/month', // Converted to INR
+      price: '₹90,000/month',
       type: 'For Rent',
+      location: 'New Delhi, India',
+      owner: 'Jane Smith',
       bhkbs: {
         bedrooms: 2,
         hall: 1,
@@ -37,8 +53,10 @@ const PropertySection: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Luxury Villa',
       description: 'An exquisite villa with a stunning view and luxurious facilities.',
-      price: '₹1,20,00,000', // Converted to INR
+      price: '₹1,20,00,000',
       type: 'For Sale',
+      location: 'Bangalore, India',
+      owner: 'Michael Johnson',
       bhkbs: {
         bedrooms: 5,
         hall: 2,
@@ -59,10 +77,20 @@ const PropertySection: React.FC = () => {
         {properties.map((property, index) => (
           <div key={index} className="property-card">
             <div className="property-type-badge">{property.type}</div>
+            <FaHeart
+              className={`heart-icon ${favorites.includes(index) ? 'favorite' : ''}`}
+              onClick={() => toggleFavorite(index)}
+            />
             <img src={property.image} alt={property.title} className="property-image" />
             <div className="property-info">
               <h3 className="property-title">{property.title}</h3>
+              <hr />
+                <div className="property-location-owner">
+                <span className="property-location"><FaMapMarkerAlt /> {property.location}</span>
+                <span className="property-owner">{property.owner}</span>
+              </div>
               <p className="property-description">{property.description}</p>
+
               <div className="property-bhkbs">
                 <span><FaBed /> {property.bhkbs.bedrooms} BHK</span>
                 <span><FaCouch /> {property.bhkbs.hall} Hall</span>
@@ -74,6 +102,7 @@ const PropertySection: React.FC = () => {
                 <span className="property-price">{property.price}</span>
                 <button className="property-btn">View Details</button>
               </div>
+             
             </div>
           </div>
         ))}

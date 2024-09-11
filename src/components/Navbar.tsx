@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
             <a href="#search">Search Properties</a>
             <a href="#list">List Property</a>
             <a href="#about">About Us</a>
-            <a href="#contact">Contact Us</a>
+
           </div>
           <div className="auth-buttons-desktop">
             <a href="/signup" className="nav-btn signup">Sign Up</a>
@@ -42,7 +42,6 @@ const Navbar: React.FC = () => {
           <a href="#search" onClick={toggleMenu}>Search Properties</a>
           <a href="#list" onClick={toggleMenu}>List Property</a>
           <a href="#about" onClick={toggleMenu}>About Us</a>
-          <a href="#contact" onClick={toggleMenu}>Contact Us</a>
         </div>
         <div className="auth-buttons">
           <a href="/signup" className="nav-btn signup" onClick={toggleMenu}>Sign Up</a>
