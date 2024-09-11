@@ -76,6 +76,54 @@ body {
   background-color: #2980b9;
 }
 
+/* User Profile and Dropdown */
+.user-profile {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-icon {
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  z-index: 1002;
+}
+
+.user-dropdown a,
+.logout-btn {
+  text-decoration: none;
+  font-size: 14px;
+  color: #2c3e50;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+}
+
+.user-dropdown a:hover,
+.logout-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.logout-btn {
+  border-top: 1px solid #eaeaea;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
 .menu-icon {
   display: none;
   cursor: pointer;

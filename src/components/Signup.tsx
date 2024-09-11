@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, FocusEvent } from 'react';
+import axios from 'axios'; // Import axios
+import { useNavigate } from 'react-router-dom'; // For redirection after signup
 import '../styles/Signup.css';
 import openEyeIcon from '../img/lgsp/openeye.svg';
 import closeEyeIcon from '../img/lgsp/closeeye.svg';
@@ -13,6 +15,7 @@ interface FormFields {
 }
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [formFields, setFormFields] = useState<FormFields>({
@@ -24,7 +27,7 @@ const Signup: React.FC = () => {
   });
   const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
   const [passwordValid, setPasswordValid] = useState<boolean>(false); // Password validation state
-  const [errorMessage, setErrorMessage] = useState<string>(''); // Error message for invalid password
+  const [errorMessage, setErrorMessage] = useState<string>(''); // Error message for invalid password or mismatched passwords
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
@@ -51,9 +54,36 @@ const Signup: React.FC = () => {
     setPasswordValid(lengthValid && upperCaseValid && lowerCaseValid && numberValid && specialCharValid);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
+    // Check if passwords match
+    if (formFields.password !== formFields.confirmPassword) {
+      setErrorMessage('Passwords do not match!');
+      return;
+    }
+
+    // Reset error message if passwords match
+    setErrorMessage('');
+
+    try {
+      // Make API request for signup
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        firstName: formFields.firstName,
+        lastName: formFields.lastName,
+        email: formFields.email,
+        password: formFields.password,
+      });
+
+      if (response.status === 201) { // Assume 201 is the success status
+        // Redirect to homepage after successful signup
+        navigate('/');
+      } else {
+        setErrorMessage('Signup failed. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred during signup. Please try again.');
+    }
   };
 
   return (
@@ -149,7 +179,7 @@ const Signup: React.FC = () => {
             />
           </div>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <button type="submit" className="signup-btn" >Sign Up</button>
+          <button type="submit" className="signup-btn">Sign Up</button>
         </form>
 
         <div className="login-text-container">

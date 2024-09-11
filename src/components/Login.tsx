@@ -1,26 +1,84 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import "../styles/Login.css";
+import axios from "axios";
 import openEyeIcon from "../img/lgsp/openeye.svg";
 import closeEyeIcon from "../img/lgsp/closeeye.svg";
 import googleLogo from "../img/lgsp/googlelogo.png";
+import { ToastContainer, toast } from "react-toastify"; // Importing Toast
+import "react-toastify/dist/ReactToastify.css"; // Importing Toast CSS
 
 const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [formData, setFormData] = useState({ email: "", password: "" }); // Track form data
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value }); // Update form data
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
+      
+      // Handle success
+      if (response.status === 200) {
+        toast.success("Login successful! Redirecting...", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        // Store token (you might want to use cookies instead for security reasons)
+        localStorage.setItem("token", response.data.token);
+
+        // Redirect or perform post-login actions here
+      }
+    } catch (error: any) {
+      // Handle specific error messages
+      if (error.response && error.response.status === 404) {
+        toast.error("User not found. Please check your email.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else if (error.response && error.response.status === 401) {
+        toast.error("Invalid password. Please try again.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error("An unexpected error occurred. Please try again later.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
   };
 
   return (
     <div className="login-wrapper">
+      <ToastContainer /> {/* Toast container to show notifications */}
       <div className="login-box">
         <h1 className="login-header">Estate Heaven</h1>
         <h3 className="login-header2">Welcome Back</h3>
@@ -32,11 +90,9 @@ const Login: React.FC = () => {
               onChange={handleInputChange}
               className="input"
               required
-              value={formData.email} // Controlled input value
+              value={formData.email}
             />
-            <label
-              className={`floating-label-l ${formData.email ? "filled" : ""}`}
-            >
+            <label className={`floating-label-l ${formData.email ? "filled" : ""}`}>
               Email Address
             </label>
           </div>
@@ -47,11 +103,9 @@ const Login: React.FC = () => {
               onChange={handleInputChange}
               className="input"
               required
-              value={formData.password} // Controlled input value
+              value={formData.password}
             />
-            <label
-              className={`floating-label-l ${formData.password ? "filled" : ""}`}
-            >
+            <label className={`floating-label-l ${formData.password ? "filled" : ""}`}>
               Password
             </label>
             <img
@@ -69,15 +123,10 @@ const Login: React.FC = () => {
 
         <div className="signup-text-container">
           <p className="signup-text">
-            Don't have an account?{" "}
-            <a href="/signup" className="signup-link">
-              Sign up now
-            </a>
+            Don't have an account? <a href="/signup" className="signup-link">Sign up now</a>
           </p>
           <p className="forgot-password-text">
-            <a href="/forgot-password" className="forgot-password-link">
-              Forgot Password?
-            </a>
+            <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
           </p>
         </div>
 
