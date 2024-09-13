@@ -1,6 +1,6 @@
 // src/components/Navbar.tsx
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,12 +13,14 @@ const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false); // User dropdown visibility
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   if (!authContext) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }
 
   const { isAuthenticated, userName, avatarColor, logout } = authContext;
+
 
   useEffect(() => {
     // Reset dropdown visibility when authentication status changes
@@ -35,6 +37,18 @@ const Navbar: React.FC = () => {
     toast.success('Successfully logged out!');
     navigate('/'); // Redirect to home page after logout
   };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -52,13 +66,13 @@ const Navbar: React.FC = () => {
           <div className="auth-section">
             {isAuthenticated ? (
               <>
-                <div className="user-profile" onClick={() => setShowDropdown(prev => !prev)}>
+                <div className="user-profile" onClick={() => setShowDropdown(!showDropdown)}>
                   <span className="user-name">Welcome, {userName}</span>
                   <div className="user-avatar" style={{ backgroundColor: avatarColor }}>
                     {userName[0]?.toUpperCase()}
                   </div>
                   {showDropdown && (
-                    <div className="user-dropdown">
+                     <div className="user-dropdown" ref={dropdownRef}>
                       <a href="/dashboard">Dashboard</a>
                       <a href="/my-properties">My Properties</a>
                       <a href="/messages">Messages</a>
@@ -96,19 +110,7 @@ const Navbar: React.FC = () => {
             <a href="/login" className="nav-btn login" onClick={toggleMenu}>Login</a>
           </div>
         ) : (
-          <div className="user-profile-mobile">
-            <span className="user-name">Welcome, {userName}</span>
-            <div className="user-avatar" style={{ backgroundColor: avatarColor }}>
-              {userName[0]?.toUpperCase()}
-            </div>
-            <div className="user-dropdown-mobile">
-              <a href="/dashboard" onClick={toggleMenu}>Dashboard</a>
-              <a href="/my-properties" onClick={toggleMenu}>My Properties</a>
-              <a href="/messages" onClick={toggleMenu}>Messages</a>
-              <a href="/settings" onClick={toggleMenu}>Settings</a>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
-            </div>
-          </div>
         )}
       </div>
       <ToastContainer />

@@ -176,7 +176,7 @@ body {
 
 .side-panel-close {
   font-size: 24px;
-  color: #2c3e50;
+  color: #000000;
   cursor: pointer;
   align-self: flex-end;
 }
@@ -213,6 +213,10 @@ body {
 
 @media (max-width: 768px) {
   .nav-links {
+    display: none;
+  }
+
+  .user-name{
     display: none;
   }
 
