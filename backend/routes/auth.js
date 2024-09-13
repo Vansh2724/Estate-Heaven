@@ -46,14 +46,27 @@ router.post('/signup', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '1h' }, // Token expires in 1 hour
       (err, token) => {
-        if (err) throw err;
-        res.status(201).json({ message: 'User registered successfully', token });
+        if (err) {
+          console.error('Error signing token:', err);
+          return res.status(500).json({ message: 'Error generating token' });
+        }
+
+        // Return both token and user data
+        res.status(201).json({
+          message: 'User registered successfully',
+          token,
+          user: {
+            id: newUser.id,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
+          },
+        });
       }
     );
   } catch (error) {
     console.error('Error during user signup:', error);
 
-    // Improved error handling
     if (error.name === 'ValidationError') {
       res.status(400).json({ message: 'Invalid input data', error: error.message });
     } else if (error.code === 11000) { // Duplicate key error for MongoDB
@@ -69,39 +82,28 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if user exists
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+    if (!user) return res.status(400).json({ message: 'Invalid email' });
 
-    // Compare password with hashed password in database
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+    if (!isMatch) return res.status(400).json({ message: 'Invalid password' });
 
-    // User matched, create JWT payload
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
+    const payload = { user: { id: user.id } };
 
-    // Sign token
-    jwt.sign(
-      payload,
-      JWT_SECRET,
-      { expiresIn: '1h' }, // Token expires in 1 hour
-      (err, token) => {
-        if (err) throw err;
-        res.json({ message: 'Login successful', token });
-      }
-    );
+    jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      if (err) throw err;
+      res.json({
+        message: 'Login successful',
+        token,
+        user: { firstName: user.firstName, id: user.id }
+      });
+    });
   } catch (err) {
     console.error('Error during user login:', err.message);
     res.status(500).send('Server error');
   }
 });
+
+
 
 module.exports = router;

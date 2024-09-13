@@ -1,54 +1,62 @@
-import React, { useState, useEffect } from 'react';
+// src/components/Navbar.tsx
+
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Navbar.css';
-import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa'; // Add user profile icon
+import { FaBars, FaTimes } from 'react-icons/fa';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);  // For side panel visibility
-  const [isAuthenticated, setIsAuthenticated] = useState(false);  // For user authentication state
-  const [showDropdown, setShowDropdown] = useState(false);  // For user dropdown menu
+  const [isOpen, setIsOpen] = useState(false); // Side panel visibility
+  const [showDropdown, setShowDropdown] = useState(false); // User dropdown visibility
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  // Mock function to check authentication (replace with actual logic)
+  if (!authContext) {
+    throw new Error('AuthContext must be used within an AuthProvider');
+  }
+
+  const { isAuthenticated, userName, avatarColor, logout } = authContext;
+
   useEffect(() => {
-    const token = localStorage.getItem('token');  // Check for a token in local storage
-    if (token) setIsAuthenticated(true);
-  }, []);
+    // Reset dropdown visibility when authentication status changes
+    setShowDropdown(false);
+  }, [isAuthenticated]);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-    document.body.style.overflow = isOpen ? 'auto' : 'hidden'; // Prevent scrolling behind the panel
+    setIsOpen(prev => !prev);
+    document.body.style.overflow = isOpen ? 'auto' : 'hidden'; // Prevent scrolling when side panel is open
   };
 
   const handleLogout = () => {
-    // Clear user authentication data (like token) from storage
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-    setShowDropdown(false);
+    logout();
+    toast.success('Successfully logged out!');
+    navigate('/'); // Redirect to home page after logout
   };
 
   return (
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          {/* Brand Logo */}
           <div className="brand-logo">
             <a href="/">Estate Heaven</a>
           </div>
-
-          {/* Desktop Navigation Links */}
           <div className="nav-links">
             <a href="#home">Home</a>
             <a href="#search">Search Properties</a>
             <a href="#list">List Property</a>
             <a href="#about">About Us</a>
           </div>
-
-          {/* Authentication Section */}
           <div className="auth-section">
             {isAuthenticated ? (
               <>
-                {/* User Profile Section */}
-                <div className="user-profile" onClick={() => setShowDropdown(!showDropdown)}>
-                  <FaUserCircle className="user-icon" />
+                <div className="user-profile" onClick={() => setShowDropdown(prev => !prev)}>
+                  <span className="user-name">Welcome, {userName}</span>
+                  <div className="user-avatar" style={{ backgroundColor: avatarColor }}>
+                    {userName[0]?.toUpperCase()}
+                  </div>
                   {showDropdown && (
                     <div className="user-dropdown">
                       <a href="/dashboard">Dashboard</a>
@@ -61,24 +69,17 @@ const Navbar: React.FC = () => {
                 </div>
               </>
             ) : (
-              <>
-                {/* If Not Authenticated - Show Login/Sign Up */}
-                <div className="auth-buttons-desktop">
-                  <a href="/signup" className="nav-btn signup">Sign Up</a>
-                  <a href="/login" className="nav-btn login">Login</a>
-                </div>
-              </>
+              <div className="auth-buttons-desktop">
+                <a href="/signup" className="nav-btn signup">Sign Up</a>
+                <a href="/login" className="nav-btn login">Login</a>
+              </div>
             )}
           </div>
-
-          {/* Mobile Menu Icon */}
           <div className="menu-icon" onClick={toggleMenu}>
             {isOpen ? <FaTimes /> : <FaBars />}
           </div>
         </div>
       </nav>
-
-      {/* Side Panel for Mobile */}
       <div className={`side-panel ${isOpen ? 'open' : ''}`}>
         <div className="side-panel-close" onClick={toggleMenu}>
           <FaTimes />
@@ -89,19 +90,28 @@ const Navbar: React.FC = () => {
           <a href="#list" onClick={toggleMenu}>List Property</a>
           <a href="#about" onClick={toggleMenu}>About Us</a>
         </div>
-
-        {/* Auth Buttons for Mobile */}
-        <div className="auth-buttons">
-          {isAuthenticated ? (
-            <button onClick={handleLogout} className="nav-btn logout">Logout</button>
-          ) : (
-            <>
-              <a href="/signup" className="nav-btn signup" onClick={toggleMenu}>Sign Up</a>
-              <a href="/login" className="nav-btn login" onClick={toggleMenu}>Login</a>
-            </>
-          )}
-        </div>
+        {!isAuthenticated ? (
+          <div className="auth-buttons">
+            <a href="/signup" className="nav-btn signup" onClick={toggleMenu}>Sign Up</a>
+            <a href="/login" className="nav-btn login" onClick={toggleMenu}>Login</a>
+          </div>
+        ) : (
+          <div className="user-profile-mobile">
+            <span className="user-name">Welcome, {userName}</span>
+            <div className="user-avatar" style={{ backgroundColor: avatarColor }}>
+              {userName[0]?.toUpperCase()}
+            </div>
+            <div className="user-dropdown-mobile">
+              <a href="/dashboard" onClick={toggleMenu}>Dashboard</a>
+              <a href="/my-properties" onClick={toggleMenu}>My Properties</a>
+              <a href="/messages" onClick={toggleMenu}>Messages</a>
+              <a href="/settings" onClick={toggleMenu}>Settings</a>
+              <button onClick={handleLogout} className="logout-btn">Logout</button>
+            </div>
+          </div>
+        )}
       </div>
+      <ToastContainer />
     </>
   );
 };

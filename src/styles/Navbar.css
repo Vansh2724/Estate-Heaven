@@ -79,12 +79,27 @@ body {
 /* User Profile and Dropdown */
 .user-profile {
   position: relative;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 
-.user-icon {
-  font-size: 24px;
+.user-name {
+  margin-right: 10px;
+  font-size: 16px;
   color: #2c3e50;
+}
+
+.user-avatar {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .user-dropdown {
@@ -94,11 +109,12 @@ body {
   background-color: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 200px;
   padding: 10px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  width: 200px;
-  z-index: 1002;
 }
 
 .user-dropdown a,
@@ -110,30 +126,31 @@ body {
   cursor: pointer;
   border: none;
   background: none;
-  text-align: left;
 }
 
-.user-dropdown a:hover,
-.logout-btn:hover {
+.user-dropdown a:hover {
   background-color: #f0f0f0;
+  border-radius: 5px;
 }
-
 .logout-btn {
-  border-top: 1px solid #eaeaea;
+  color: #ffffff;
+  background-color: #e74c3c;  /* Red background for logout */
+  padding: 10px 15px;
+  border-radius: 5px;
   margin-top: 10px;
-  padding-top: 10px;
+  text-align: center;
 }
 
+.logout-btn:hover {
+  background-color: #c0392b;  /* Darker red on hover */
+}
+
+
+/* Mobile Styles */
 .menu-icon {
-  display: none;
-  cursor: pointer;
   font-size: 24px;
-  color: #2c3e50;
-  transition: transform 0.3s ease-in-out;
-}
-
-.menu-icon.open {
-  transform: rotate(90deg);
+  cursor: pointer;
+  display: none;
 }
 
 .side-panel {
@@ -194,29 +211,13 @@ body {
   text-align: center;
 }
 
-/* Hide the menu and buttons on larger screens */
-@media (min-width: 769px) {
-  .menu-icon {
-    display: none;
-  }
-
-  .side-panel {
-    display: none;
-  }
-
-  .auth-buttons-desktop {
-    display: flex; /* Show buttons in desktop */
-  }
-}
-
-/* Hide the main nav links and auth buttons in mobile view */
 @media (max-width: 768px) {
   .nav-links {
-    display: none; /* Hide main nav links in mobile view */
+    display: none;
   }
 
   .auth-buttons-desktop {
-    display: none; /* Hide desktop buttons in mobile */
+    display: none;
   }
 
   .menu-icon {
