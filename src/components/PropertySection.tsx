@@ -20,7 +20,6 @@ const PropertySection: React.FC = () => {
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Modern Family Home',
-      description: 'A beautiful 4-bedroom house located in a serene neighborhood with modern amenities.',
       price: '₹45,00,000',
       type: 'For Sale',
       location: 'Mumbai, India',
@@ -36,7 +35,6 @@ const PropertySection: React.FC = () => {
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Cozy Apartment',
-      description: 'A stylish apartment in the heart of the city, close to all major attractions.',
       price: '₹90,000/month',
       type: 'For Rent',
       location: 'New Delhi, India',
@@ -52,7 +50,6 @@ const PropertySection: React.FC = () => {
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Luxury Villa',
-      description: 'An exquisite villa with a stunning view and luxurious facilities.',
       price: '₹1,20,00,000',
       type: 'For Sale',
       location: 'Bangalore, India',
@@ -89,7 +86,6 @@ const PropertySection: React.FC = () => {
                 <span className="property-location"><FaMapMarkerAlt /> {property.location}</span>
                 <span className="property-owner">{property.owner}</span>
               </div>
-              <p className="property-description">{property.description}</p>
 
               <div className="property-bhkbs">
                 <span><FaBed /> {property.bhkbs.bedrooms} BHK</span>

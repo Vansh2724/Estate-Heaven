@@ -1,0 +1,168 @@
+/* About Us Hero Section */
+.about-hero {
+    background-image: url('https://via.placeholder.com/1200x500.png?text=About+Us+Hero+Image');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .about-hero .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .about-hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  
+  .about-hero p {
+    font-size: 18px;
+  }
+  
+  /* Our Mission Section */
+  .our-mission {
+    background-color: #f9f9f9;
+    padding: 60px 20px;
+  }
+  
+  .our-mission .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .mission-content {
+    flex: 1;
+  }
+  
+  .mission-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  /* Our Team Section */
+  .our-team {
+    background-color: #fff;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .our-team .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .our-team h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  
+  .team-members {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .team-member {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .team-member img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .team-member h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+  
+  /* Core Values Section */
+  .core-values {
+    background-color: #f9f9f9;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .core-values .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .values-list {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .value-item {
+    flex: 1;
+    max-width: 250px;
+    text-align: center;
+  }
+  
+  .value-item img {
+    width: 80px;
+    height: auto;
+    margin-bottom: 15px;
+  }
+  
+  .value-item h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  /* Testimonials Section */
+  .testimonials {
+    background-color: #fff;
+    padding: 60px 20px;
+  }
+  
+  .testimonials .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .testimonials h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 36px;
+  }
+  
+  .testimonials-carousel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .testimonial-item {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .testimonial-item p {
+    font-size: 18px;
+    font-style: italic;
+  }
+  
+  .testimonial-item h4 {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  

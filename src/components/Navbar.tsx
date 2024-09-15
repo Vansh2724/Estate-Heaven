@@ -58,10 +58,10 @@ const Navbar: React.FC = () => {
             <a href="/">Estate Heaven</a>
           </div>
           <div className="nav-links">
-            <a href="#home">Home</a>
-            <a href="#search">Search Properties</a>
-            <a href="#list">List Property</a>
-            <a href="#about">About Us</a>
+            <a href="/">Home</a>
+            <a href="search">Search Properties</a>
+            <a href="list">List Property</a>
+            <a href="aboutus">About Us</a>
           </div>
           <div className="auth-section">
             {isAuthenticated ? (

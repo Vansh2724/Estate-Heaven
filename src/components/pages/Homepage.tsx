@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from './Navbar';
-import HeroSection from './HeroSection';
-import PropertySection from './PropertySection';
-import FeaturesSection from './FeaturesSection';
-import TestimonialsSection from './TestimonialsSection';
-import Footer from './Footer';
+import Navbar from '../Navbar';
+import HeroSection from '../HeroSection';
+import PropertySection from '../PropertySection';
+import FeaturesSection from '../FeaturesSection';
+import TestimonialsSection from '../TestimonialsSection';
+import Footer from '../Footer';
 
 const Homepage: React.FC = () => {
   // Sample property data to demonstrate multiple PropertyCard components
