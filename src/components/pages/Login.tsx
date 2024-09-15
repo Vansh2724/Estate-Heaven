@@ -1,15 +1,15 @@
 // src/components/Login.tsx
 
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
-import "../styles/Login.css";
+import "../../styles/Login.css";
 import axios from 'axios';
-import openEyeIcon from '../img/lgsp/openeye.svg';
-import closeEyeIcon from '../img/lgsp/closeeye.svg';
-import googleLogo from '../img/lgsp/googlelogo.png';
+import openEyeIcon from '../../img/lgsp/openeye.svg';
+import closeEyeIcon from '../../img/lgsp/closeeye.svg';
+import googleLogo from '../../img/lgsp/googlelogo.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext  } from '../contexts/AuthContext';
+import { AuthContext  } from '../../contexts/AuthContext';
 
 const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);

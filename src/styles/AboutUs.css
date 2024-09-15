@@ -1,168 +1,183 @@
-/* About Us Hero Section */
+html {
+  scroll-behavior: smooth;
+}
+
+/* General Styles */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
 .about-hero {
-    background-image: url('https://via.placeholder.com/1200x500.png?text=About+Us+Hero+Image');
-    background-size: cover;
-    background-position: center;
-    padding: 100px 20px;
-    color: white;
-    text-align: center;
-  }
-  
-  .about-hero .hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .about-hero h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-  }
-  
-  .about-hero p {
-    font-size: 18px;
-  }
-  
-  /* Our Mission Section */
-  .our-mission {
-    background-color: #f9f9f9;
-    padding: 60px 20px;
-  }
-  
-  .our-mission .container {
-    display: flex;
+  background-color: #f7f7f7;
+  padding: 100px 20px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: #333;
+}
+
+.about-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.about-hero p {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+/* Our Mission */
+.our-mission {
+  background-color: #fff;
+  padding: 80px 20px;
+}
+
+.our-mission h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.mission-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 100px; /* Increased gap for better spacing */
+}
+
+.mission-content-wrapper p {
+  flex: 1;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  text-align: justify; /* Better readability with justified text */
+  margin: 0; /* Remove default margin */
+}
+
+.image-responsive {
+  width: 300px; /* Increased image size */
+  height: auto;
+  object-fit: contain; /* Adjust the image to fit without cropping */
+  border-radius: 10px;
+}
+
+/* Team Section */
+.our-team {
+  background-color: #f7f7f7;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.our-team h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+.team-members {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.team-member {
+  text-align: center;
+  max-width: 220px; /* Added max-width for each team member block */
+}
+
+.team-member img {
+  width: 200px; /* Set a standard width */
+  height: 200px; /* Set a standard height */
+  border-radius: 50%; /* Perfectly round shape */
+  object-fit: cover; /* Ensures that images are properly fitted without distortion */
+}
+
+.team-member h3 {
+  font-size: 1.25rem;
+  margin-top: 15px;
+}
+
+.team-member p {
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+/* Core Values */
+.core-values {
+  background-color: #fff;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.core-values h2 {
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+}
+
+.values-list {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.value-item {
+  text-align: center;
+  max-width: 300px;
+}
+
+.value-item img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.value-item h4 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+.about-hero{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .mission-content-wrapper {
+    flex-direction: column; /* Stack text and image vertically */
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
   }
-  
-  .mission-content {
-    flex: 1;
+
+  .image-responsive {
+    width: 250px; /* Adjust image size for smaller screens */
+    margin-top: 20px; /* Add space between image and text */
   }
-  
-  .mission-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  /* Our Team Section */
-  .our-team {
-    background-color: #fff;
-    padding: 60px 20px;
-    text-align: center;
-  }
-  
-  .our-team .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .our-team h2 {
-    font-size: 36px;
-    margin-bottom: 40px;
-  }
-  
+
   .team-members {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  
-  .team-member {
-    flex: 1;
-    max-width: 200px;
-    text-align: center;
-  }
-  
-  .team-member img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    margin-bottom: 15px;
-  }
-  
-  .team-member h3 {
-    font-size: 20px;
-    margin-bottom: 5px;
-  }
-  
-  /* Core Values Section */
-  .core-values {
-    background-color: #f9f9f9;
-    padding: 60px 20px;
-    text-align: center;
-  }
-  
-  .core-values .container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .values-list {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  
-  .value-item {
-    flex: 1;
-    max-width: 250px;
-    text-align: center;
-  }
-  
-  .value-item img {
-    width: 80px;
-    height: auto;
-    margin-bottom: 15px;
-  }
-  
-  .value-item h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  
-  /* Testimonials Section */
-  .testimonials {
-    background-color: #fff;
-    padding: 60px 20px;
-  }
-  
-  .testimonials .container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .testimonials h2 {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 36px;
-  }
-  
-  .testimonials-carousel {
-    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .team-member img {
+    width: 120px; /* Reduced size for smaller screens */
+    height: 120px;
   }
   
-  .testimonial-item {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    text-align: center;
+  .values-list{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  
-  .testimonial-item p {
-    font-size: 18px;
-    font-style: italic;
+
+  .value-item img{
+    width: 120px; /* Reduced size for smaller screens */
+    height: 120px;
   }
-  
-  .testimonial-item h4 {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
+}

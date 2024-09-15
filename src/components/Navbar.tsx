@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Navbar.css';
@@ -55,13 +55,13 @@ const Navbar: React.FC = () => {
       <nav className="navbar">
         <div className="navbar-container">
           <div className="brand-logo">
-            <a href="/">Estate Heaven</a>
+           <Link to="/"> Estate Heaven</Link>
           </div>
           <div className="nav-links">
-            <a href="/">Home</a>
-            <a href="search">Search Properties</a>
-            <a href="list">List Property</a>
-            <a href="aboutus">About Us</a>
+          <Link to="/">Home</Link>
+          <Link to="/search">Search Properties</Link>
+          <Link to="/list">List Property</Link>
+          <Link to="/aboutus">About Us</Link>
           </div>
           <div className="auth-section">
             {isAuthenticated ? (
@@ -73,10 +73,10 @@ const Navbar: React.FC = () => {
                   </div>
                   {showDropdown && (
                      <div className="user-dropdown" ref={dropdownRef}>
-                      <a href="/dashboard">Dashboard</a>
-                      <a href="/my-properties">My Properties</a>
-                      <a href="/messages">Messages</a>
-                      <a href="/settings">Settings</a>
+                      <Link to="/dashboard">Dashboard</Link>
+                      <Link to="/my-properties">My Properties</Link>
+                      <Link to="//messages">Messages</Link>
+                      <Link to="/settings">Settings</Link>
                       <button onClick={handleLogout} className="logout-btn">Logout</button>
                     </div>
                   )}
@@ -84,8 +84,8 @@ const Navbar: React.FC = () => {
               </>
             ) : (
               <div className="auth-buttons-desktop">
-                <a href="/signup" className="nav-btn signup">Sign Up</a>
-                <a href="/login" className="nav-btn login">Login</a>
+                <Link to='/signup'className="nav-btn signup">Sign Up</Link>
+                <Link to='/login'className="nav-btn login">Login</Link>
               </div>
             )}
           </div>
@@ -99,15 +99,15 @@ const Navbar: React.FC = () => {
           <FaTimes />
         </div>
         <div className="side-panel-content">
-          <a href="#home" onClick={toggleMenu}>Home</a>
-          <a href="#search" onClick={toggleMenu}>Search Properties</a>
-          <a href="#list" onClick={toggleMenu}>List Property</a>
-          <a href="#about" onClick={toggleMenu}>About Us</a>
+        <Link to="/">Home</Link>
+          <Link to="/search">Search Properties</Link>
+          <Link to="/list">List Property</Link>
+          <Link to="/aboutus">About Us</Link>
         </div>
         {!isAuthenticated ? (
           <div className="auth-buttons">
-            <a href="/signup" className="nav-btn signup" onClick={toggleMenu}>Sign Up</a>
-            <a href="/login" className="nav-btn login" onClick={toggleMenu}>Login</a>
+           <Link to='/signup'className="nav-btn signup">Sign Up</Link>
+           <Link to='/login'className="nav-btn login">Login</Link>
           </div>
         ) : (
               <button onClick={handleLogout} className="logout-btn">Logout</button>
