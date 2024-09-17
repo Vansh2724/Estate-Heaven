@@ -25,7 +25,7 @@
   background: rgba(255, 255, 255, 0.9); /* Softer background for calmness */
   padding: 40px;
   border-radius: 12px;
-  backdrop-filter: blur(10px); /* Enhanced blur effect */
+  backdrop-filter: blur(1px); /*Enhanced blur effect*/
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   color: #333; /* Text color for readability */
   z-index: 2; /* Ensures content is above the overlay */
