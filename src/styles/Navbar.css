@@ -216,6 +216,10 @@ body {
     display: none;
   }
 
+  .navbar-container{
+    justify-content: space-between;
+  }
+
   .user-name{
     display: none;
   }

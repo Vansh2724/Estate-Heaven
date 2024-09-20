@@ -1,7 +1,5 @@
-// src/components/Navbar.tsx
-
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useNavigate, Link  } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Navbar.css';
@@ -13,6 +11,7 @@ const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false); // User dropdown visibility
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   if (!authContext) {
@@ -21,22 +20,30 @@ const Navbar: React.FC = () => {
 
   const { isAuthenticated, userName, avatarColor, logout } = authContext;
 
+  const toggleMenu = () => {
+    setIsOpen(prev => !prev);
+    document.body.style.overflow = isOpen ? 'auto' : 'hidden';
+  };
+
+  useEffect(() => {
+    // Close side panel and reset overflow on navigation
+    if (isOpen) {
+      setIsOpen(false);
+    }
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+  }, [location]);
 
   useEffect(() => {
     // Reset dropdown visibility when authentication status changes
     setShowDropdown(false);
   }, [isAuthenticated]);
 
-  const toggleMenu = () => {
-    setIsOpen(prev => !prev);
-    document.body.style.overflow = isOpen ? 'auto' : 'hidden'; // Prevent scrolling when side panel is open
-  };
-
   const handleLogout = () => {
     logout();
     toast.success('Successfully logged out!');
     navigate('/'); // Redirect to home page after logout
   };
+
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setShowDropdown(false);
@@ -55,13 +62,13 @@ const Navbar: React.FC = () => {
       <nav className="navbar">
         <div className="navbar-container">
           <div className="brand-logo">
-           <Link to="/"> Estate Heaven</Link>
+            <Link to="/">Estate Heaven</Link>
           </div>
           <div className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/search">Search Properties</Link>
-          <Link to="/list">List Property</Link>
-          <Link to="/aboutus">About Us</Link>
+            <Link to="/">Home</Link>
+            <Link to="/search">Search Properties</Link>
+            <Link to="/list">List Property</Link>
+            <Link to="/aboutus">About Us</Link>
           </div>
           <div className="auth-section">
             {isAuthenticated ? (
@@ -72,10 +79,10 @@ const Navbar: React.FC = () => {
                     {userName[0]?.toUpperCase()}
                   </div>
                   {showDropdown && (
-                     <div className="user-dropdown" ref={dropdownRef}>
+                    <div className="user-dropdown" ref={dropdownRef}>
                       <Link to="/dashboard">Dashboard</Link>
                       <Link to="/my-properties">My Properties</Link>
-                      <Link to="//messages">Messages</Link>
+                      <Link to="/messages">Messages</Link>
                       <Link to="/settings">Settings</Link>
                       <button onClick={handleLogout} className="logout-btn">Logout</button>
                     </div>
@@ -84,8 +91,8 @@ const Navbar: React.FC = () => {
               </>
             ) : (
               <div className="auth-buttons-desktop">
-                <Link to='/signup'className="nav-btn signup">Sign Up</Link>
-                <Link to='/login'className="nav-btn login">Login</Link>
+                <Link to='/signup' className="nav-btn signup">Sign Up</Link>
+                <Link to='/login' className="nav-btn login">Login</Link>
               </div>
             )}
           </div>
@@ -99,18 +106,18 @@ const Navbar: React.FC = () => {
           <FaTimes />
         </div>
         <div className="side-panel-content">
-        <Link to="/">Home</Link>
+          <Link to="/">Home</Link>
           <Link to="/search">Search Properties</Link>
           <Link to="/list">List Property</Link>
           <Link to="/aboutus">About Us</Link>
         </div>
         {!isAuthenticated ? (
           <div className="auth-buttons">
-           <Link to='/signup'className="nav-btn signup">Sign Up</Link>
-           <Link to='/login'className="nav-btn login">Login</Link>
+            <Link to='/signup' className="nav-btn signup">Sign Up</Link>
+            <Link to='/login' className="nav-btn login">Login</Link>
           </div>
         ) : (
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
         )}
       </div>
       <ToastContainer />

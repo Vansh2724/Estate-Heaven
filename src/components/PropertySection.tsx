@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/PropertySection.css'; // Import the CSS styles
-import { FaBed, FaBath, FaHome, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt } from 'react-icons/fa'; // Importing icons
+import { FaBed, FaBath, FaHome, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt,FaUtensils } from 'react-icons/fa'; // Importing icons
 
 const PropertySection: React.FC = () => {
   // State to manage favorite status for each property
@@ -88,9 +88,9 @@ const PropertySection: React.FC = () => {
               </div>
 
               <div className="property-bhkbs">
-                <span><FaBed /> {property.bhkbs.bedrooms} BHK</span>
+                <span><FaBed /> {property.bhkbs.bedrooms} Bedrooms</span>
                 <span><FaCouch /> {property.bhkbs.hall} Hall</span>
-                <span><FaHome /> {property.bhkbs.kitchen} Kitchen</span>
+                <span><FaUtensils /> {property.bhkbs.kitchen} Kitchen</span>
                 <span><FaBath /> {property.bhkbs.bathrooms} Bathrooms</span>
                 <span><FaRulerCombined /> {property.bhkbs.area} sq. ft.</span>
               </div>

@@ -7,6 +7,7 @@ import Login from './components/pages/Login';
 import AboutUs from './components/pages/AboutUs';
 import ForgotPassword from './components/ForgotPassword';
 import PrivateRoute from './components/PrivateRoute'; 
+import SearchProperty from './components/pages/SearchProperty'; 
 import './App.css'; // Import global styles
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           {/* Route for the homepage */}
           <Route path="/" element={<Homepage />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/search" element={<SearchProperty />} />
           {/* Route for the Signup page */}
           <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
           <Route path="/login" element={<PrivateRoute><Login /></PrivateRoute>} />

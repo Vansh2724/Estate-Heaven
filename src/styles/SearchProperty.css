@@ -1,0 +1,159 @@
+/* Overall Page Styles */
+.search-property-page {
+  padding: 30px 15px;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.search-container {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid #e0e4e8;
+}
+
+/* Title */
+.search-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333333;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Service Type Toggle */
+.service-type-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.service-type-box {
+  width: 90px;
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #F76C6C;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-weight: 400;
+  color: #F76C6C;
+}
+
+.service-type-box.active {
+  background-color: #F76C6C;
+  color: #ffffff;
+  border-color: #F76C6C;
+}
+
+/* Search Form */
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search-input-group {
+  flex: 1 1 calc(33.33% - 10px);
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 8px;
+  gap: 8px;
+  border: 1px solid #e0e4e8;
+}
+
+.search-input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #333333;
+}
+
+.search-icon {
+  color: #F76C6C;
+}
+
+/* Filters Section */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.filter-group {
+  flex: 1 1 calc(33.33% - 10px);
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 8px;
+  border-radius: 6px;
+  gap: 8px;
+  border: 1px solid #e0e4e8;
+}
+
+.filter-group input,
+.filter-group select {
+  flex: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #333333;
+}
+
+.filter-icon {
+  color: #F76C6C;
+}
+
+/* Show Filters Button */
+.toggle-filters {
+  background: none;
+  border: none;
+  color: #4a90e2;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+/* Search Button */
+.search-button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-button:hover {
+  background-color: #357ab7;
+}
+
+/* Sorting Section */
+.sorting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.sort-icon {
+  color: #F76C6C;
+  margin-left: 10px;
+}
