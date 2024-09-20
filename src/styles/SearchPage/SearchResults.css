@@ -1,0 +1,237 @@
+/* Property Grid */
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible column width */
+  gap: 20px;
+  justify-items: center;
+  align-items: stretch;
+  padding: 20px;
+}
+
+/* Property Card */
+.property-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 350px; /* Restrict card width to a reasonable size */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.property-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* Heart Icon */
+.heart-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.8rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.heart-icon.favorite {
+  color: #ff4757;
+}
+
+/* Property Type Badge */
+.property-type-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #ff6b81;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Property Image */
+.property-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* Property Info */
+.property-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.property-title {
+  font-size: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.property-location-owner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+/* Property Details: BHK, Bathrooms, etc. */
+.property-bhkbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+/* Property Footer */
+.property-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.property-price {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+.property-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.property-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  background-color: #4a90e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Media Queries for Responsive Design */
+
+/* Small devices (phones, less than 600px) */
+@media (max-width: 599px) {
+  .property-grid {
+      grid-template-columns: 1fr; /* Single column on very small screens */
+      gap: 15px;
+  }
+
+  .property-card {
+      max-width: 100%; /* Take full width on smaller devices */
+  }
+
+  .property-title {
+      font-size: 1.2rem;
+  }
+
+  .property-info {
+      padding: 15px;
+  }
+
+  .property-bhkbs span {
+      font-size: 0.8rem;
+  }
+
+  .property-price {
+      font-size: 1.1rem;
+  }
+
+  .pagination button {
+      padding: 6px 10px;
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .property-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust columns based on screen size */
+      gap: 20px;
+  }
+
+  .property-card {
+      max-width: 300px;
+  }
+
+  .property-title {
+      font-size: 1.4rem;
+  }
+
+  .property-info {
+      padding: 20px;
+  }
+
+  .property-bhkbs span {
+      font-size: 0.85rem;
+  }
+
+  .property-price {
+      font-size: 1.2rem;
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1025px) {
+  .property-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+  }
+
+  .property-card {
+      max-width: 350px;
+  }
+
+  .property-title {
+      font-size: 1.5rem;
+  }
+
+  .property-info {
+      padding: 25px;
+  }
+
+  .property-bhkbs span {
+      font-size: 0.9rem;
+  }
+
+  .property-price {
+      font-size: 1.3rem;
+  }
+}

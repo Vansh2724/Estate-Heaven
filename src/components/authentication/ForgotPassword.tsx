@@ -1,12 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import "../styles/ForgotPassword.css";
+import "../../styles/authentication/ForgotPassword.css";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../img/lgsp/Loader.gif'; // You can use a modern loader image
-import openEyeIcon from '../img/lgsp/openeye.svg'; // Import open eye icon
-import closeEyeIcon from '../img/lgsp/closeeye.svg'; // Import close eye icon
+import Loader from '../../img/lgsp/Loader.gif'; // You can use a modern loader image
+import openEyeIcon from '../../img/lgsp/openeye.svg'; // Import open eye icon
+import closeEyeIcon from '../../img/lgsp/closeeye.svg'; // Import close eye icon
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>('');

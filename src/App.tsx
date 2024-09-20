@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import Navbar from './components/Navbar';
 import Homepage from './components/pages/Homepage';
-import Signup from './components/pages/Signup';
-import Login from './components/pages/Login';
+import Signup from './components/authentication/Signup';
+import Login from './components/authentication/Login';
 import AboutUs from './components/pages/AboutUs';
-import ForgotPassword from './components/ForgotPassword';
+import ForgotPassword from './components/authentication/ForgotPassword';
 import PrivateRoute from './components/PrivateRoute'; 
 import SearchProperty from './components/pages/SearchProperty'; 
 import './App.css'; // Import global styles

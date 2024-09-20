@@ -1,7 +1,7 @@
 // src/components/Login.tsx
 
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
-import "../../styles/Login.css";
+import "../../styles/authentication/Login.css";
 import axios from 'axios';
 import openEyeIcon from '../../img/lgsp/openeye.svg';
 import closeEyeIcon from '../../img/lgsp/closeeye.svg';

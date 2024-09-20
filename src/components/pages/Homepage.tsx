@@ -1,9 +1,9 @@
 import React from 'react';
 import Navbar from '../Navbar';
-import HeroSection from '../HeroSection';
-import PropertySection from '../PropertySection';
-import FeaturesSection from '../FeaturesSection';
-import TestimonialsSection from '../TestimonialsSection';
+import HeroSection from '../ForHomepage/HeroSection';
+import PropertySection from '../ForHomepage/PropertySection';
+import FeaturesSection from '../ForHomepage/FeaturesSection';
+import TestimonialsSection from '../ForHomepage/TestimonialsSection';
 import Footer from '../Footer';
 
 const Homepage: React.FC = () => {

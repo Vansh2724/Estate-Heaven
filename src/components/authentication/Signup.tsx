@@ -3,7 +3,7 @@ import axios from 'axios'; // Import axios
 import { useNavigate } from 'react-router-dom'; // For redirection after signup
 import { ToastContainer, toast } from 'react-toastify'; // Import Toast for notifications
 import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
-import '../../styles/Signup.css'; // Import custom styles
+import '../../styles/authentication/Signup.css'; // Import custom styles
 import openEyeIcon from '../../img/lgsp/openeye.svg'; // Import open eye icon
 import closeEyeIcon from '../../img/lgsp/closeeye.svg'; // Import close eye icon
 import googleLogo from '../../img/lgsp/googlelogo.png'; // Import Google logo

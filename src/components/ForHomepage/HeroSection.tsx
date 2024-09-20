@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/HeroSection.css'; // Importing the CSS file for styling
+import '../../styles/Homepage/HeroSection.css'; // Importing the CSS file for styling
 
 
 const HeroSection: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import '../styles/TestimonialsSection.css';
+import '../../styles/Homepage/TestimonialsSection.css';
 
 const TestimonialsSection: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);

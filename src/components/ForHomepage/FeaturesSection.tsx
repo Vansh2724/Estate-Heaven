@@ -1,10 +1,10 @@
 import React from 'react';
-import '../styles/FeaturesSection.css';
-import Filter from '../img/images/filter.png'
-import Secure from '../img/images/secure.png'
-import Verified from '../img/images/verified.png'
-import Customer from '../img/images/customer-service.png'
-import Chat from '../img/images/chat.png'
+import '../../styles/Homepage/FeaturesSection.css';
+import Filter from '../../img/images/filter.png'
+import Secure from '../../img/images/secure.png'
+import Verified from '../../img/images/verified.png'
+import Customer from '../../img/images/customer-service.png'
+import Chat from '../../img/images/chat.png'
 
 const FeaturesSection: React.FC = () => {
   const features = [
