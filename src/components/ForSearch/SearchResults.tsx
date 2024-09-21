@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaBed, FaBath, FaCouch, FaUtensils, FaRulerCombined, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
-import './SearchResults.css';
+import '../../styles/SearchPage/SearchResults.css';
+
 
 interface Property {
   id: number;

@@ -7,8 +7,8 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // Side panel visibility
-  const [showDropdown, setShowDropdown] = useState(false); // User dropdown visibility
+  const [isOpen, setIsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +26,6 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
-    // Close side panel and reset overflow on navigation
     if (isOpen) {
       setIsOpen(false);
     }
@@ -34,7 +33,6 @@ const Navbar: React.FC = () => {
   }, [location]);
 
   useEffect(() => {
-    // Reset dropdown visibility when authentication status changes
     setShowDropdown(false);
   }, [isAuthenticated]);
 
@@ -57,6 +55,13 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  const handleListPropertyClick = (e: React.MouseEvent) => {
+    if (!isAuthenticated) {
+      e.preventDefault(); // Prevent default link behavior
+      navigate('/login'); // Redirect to login page immediately
+    }
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -67,7 +72,7 @@ const Navbar: React.FC = () => {
           <div className="nav-links">
             <Link to="/">Home</Link>
             <Link to="/search">Search Properties</Link>
-            <Link to="/list">List Property</Link>
+            <Link to="/list" onClick={handleListPropertyClick}>List Property</Link>
             <Link to="/aboutus">About Us</Link>
           </div>
           <div className="auth-section">
@@ -108,7 +113,7 @@ const Navbar: React.FC = () => {
         <div className="side-panel-content">
           <Link to="/">Home</Link>
           <Link to="/search">Search Properties</Link>
-          <Link to="/list">List Property</Link>
+          <Link to="/list" onClick={handleListPropertyClick}>List Property</Link>
           <Link to="/aboutus">About Us</Link>
         </div>
         {!isAuthenticated ? (
