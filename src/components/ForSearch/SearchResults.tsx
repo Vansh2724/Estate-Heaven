@@ -27,9 +27,11 @@ interface Property {
 
 interface SearchResultsProps {
   properties: Property[];
+  favorites: number[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  toggleFavorite: (index: number) => void;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ properties, currentPage, totalPages, onPageChange }) => {

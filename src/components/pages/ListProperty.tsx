@@ -5,11 +5,6 @@ import PropertyForm from '../../components/ForListing/PropertyForm';
 import '../../styles/ListProperty/ListProperty.css';
 
 const ListProperty: React.FC = () => {
-    const handleSubmit = (data: any) => {
-        console.log(data);
-        // Handle form data submission logic
-    };
-
     return (
       <>
         <Navbar />

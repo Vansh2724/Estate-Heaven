@@ -21,7 +21,9 @@ const SearchProperty: React.FC = () => {
       <div className="search-property-page">
         <div className="content">
           <SearchSection setProperties={setProperties} />
-          <SearchResults properties={properties} favorites={favorites} toggleFavorite={toggleFavorite} />
+          <SearchResults properties={properties} favorites={favorites} toggleFavorite={toggleFavorite} currentPage={0} totalPages={0} onPageChange={function (page: number): void {
+            throw new Error('Function not implemented.');
+          } } />
         </div>
       </div>
       <Footer />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/Homepage/PropertySection.css'; // Import the CSS styles
-import { FaBed, FaBath, FaHome, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt,FaUtensils } from 'react-icons/fa'; // Importing icons
+import { FaBed, FaBath, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt,FaUtensils } from 'react-icons/fa'; // Importing icons
 
 const PropertySection: React.FC = () => {
   // State to manage favorite status for each property

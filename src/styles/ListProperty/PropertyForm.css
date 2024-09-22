@@ -8,15 +8,23 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-h2 {
+.listproperty-h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-h3 {
+.loading-spinner {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  color: #007bff;
+}
+
+
+.listproperty-h3 {
   margin-top: 20px;
   margin-bottom: 10px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #8f8f8f;
   padding-bottom: 5px;
 }
 
@@ -96,6 +104,14 @@ h3 {
 
 .real-estate-form-submit-button:hover {
   background-color: #0056b3;
+}
+
+.real-estate-form-image-remove{
+  color: #fff;
+  background-color: #ff0000;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
 }
 
 /* Placeholder image */

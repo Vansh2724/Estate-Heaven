@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import "../../styles/ListProperty/PropertyForm.css";
-import { useDropzone } from "react-dropzone";
-import { FaUpload } from "react-icons/fa";
+import PropertyDetails from "./PropertyDetails";
+import LocationDetails from "./LocationDetails";
+import OwnerDetails from "./OwnerDetails";
+import Specifications from "./Specifications";
+import ImageUpload from "./ImageUpload";
+import LoadingOverlay from "./LoadingOverlay";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface ImageFile extends File {
   preview?: string;
@@ -11,7 +17,7 @@ interface ImageFile extends File {
 interface FormData {
   title: string;
   description: string;
-  price: number | string;
+  price: string;
   type: string;
   for: string;
   city: string;
@@ -21,11 +27,11 @@ interface FormData {
   ownerName: string;
   ownerContact: string;
   ownerEmail: string;
-  bedrooms: number | string;
-  hall: number | string;
-  kitchen: number | string;
-  bathrooms: number | string;
-  area: number | string;
+  bedrooms: string;
+  hall: string;
+  kitchen: string;
+  bathrooms: string;
+  area: string;
   images: ImageFile[];
 }
 
@@ -51,286 +57,116 @@ const PropertyForm: React.FC = () => {
     images: [],
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const onDrop = (acceptedFiles: File[]) => {
-    const validFiles: ImageFile[] = []; // Explicitly define the type
-    const invalidFiles: string[] = []; // Also define the type here
-
-    acceptedFiles.forEach((file) => {
-      if (file.size <= 5 * 1024 * 1024) {
-        // 5 MB limit
-        validFiles.push(
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          }) as ImageFile
-        );
-      } else {
-        invalidFiles.push(file.name);
-      }
-    });
-
-    if (invalidFiles.length > 0) {
-      toast.error(
-        `Files not uploaded: ${invalidFiles.join(", ")} (Exceeds 5MB)`
-      );
-    }
-
-    setFormData({ ...formData, images: [...formData.images, ...validFiles] });
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    maxFiles: 15,
-    accept: {
-      "image/*": [],
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const fields = [
-      "title",
-      "description",
-      "price",
-      "type",
-      "for",
-      "city",
-      "state",
-      "pincode",
-      "address",
-      "ownerName",
-      "ownerContact",
-      "ownerEmail",
-      "bedrooms",
-      "hall",
-      "kitchen",
-      "bathrooms",
-      "area",
-    ];
-    const emptyFields = fields.filter(
-      (field) => !formData[field as keyof FormData]
-    );
-
+    const emptyFields = Object.keys(formData).filter((field) => !formData[field as keyof FormData]);
     if (emptyFields.length > 0) {
       emptyFields.forEach((field) => {
-        toast.error(
-          `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`
-        );
+        toast.error(`${field} is required.`);
       });
       return;
     }
 
-    console.log(formData);
-    // Handle form submission
+    // Sanitize the price input
+    const sanitizedPrice = formData.price.replace(/,/g, "");
+
+    let userId;
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const user = JSON.parse(userString);
+      userId = user.id;
+    } else {
+      toast.error("User not found. Please log in.");
+      return;
+    }
+
+    // Create FormData object
+    const data = new FormData();
+    data.append("userId", userId);
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("price", sanitizedPrice); // Use sanitized price
+    data.append("type", formData.type);
+    data.append("for", formData.for);
+    data.append("city", formData.city);
+    data.append("state", formData.state);
+    data.append("pincode", formData.pincode);
+    data.append("address", formData.address);
+    data.append("ownerName", formData.ownerName);
+    data.append("ownerContact", formData.ownerContact);
+    data.append("ownerEmail", formData.ownerEmail);
+    data.append("bedrooms", formData.bedrooms);
+    data.append("hall", formData.hall);
+    data.append("kitchen", formData.kitchen);
+    data.append("bathrooms", formData.bathrooms);
+    data.append("area", formData.area);
+
+    // Append images
+    formData.images.forEach((image) => {
+      data.append("images", image);
+    });
+
+ // Show loading overlay
+ setIsLoading(true);
+
+ // Simulate a delay
+ setTimeout(async () => {
+   try {
+     const response = await axios.post("http://localhost:5000/api/property/list", data, {
+       headers: { "Content-Type": "multipart/form-data" },
+     });
+     toast.success("Property listed successfully!");
+     setTimeout(() => {
+       navigate("/");
+     }, 2000);
+   } catch (error) {
+     console.error("Error listing property:", error);
+     toast.error("Error listing property.");
+   } finally {
+     setIsLoading(false); // Hide loading overlay
+   }
+ }, 5000); // 3-second delay for testing
+
+    // try {
+    //   setIsLoading(true);
+    //   const response = await axios.post("http://localhost:5000/api/property/creat", data, {
+    //     headers: { "Content-Type": "multipart/form-data" },
+    //   });
+    //   toast.success("Property listed successfully!");
+    //   setTimeout(() => {
+    //     navigate("/");
+    //   }, 2000);
+    // } catch (error) {
+    //   console.error("Error listing property:", error);
+    //   toast.error("Error listing property.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
-    <form className="real-estate-form-container" onSubmit={handleSubmit}>
-      <ToastContainer />
-      <h2>Real Estate Listing Form</h2>
-
-      {/* Section: Property Details */}
-      <div className="real-estate-form-section">
-        <h3>Property Details</h3>
-        <input
-          className="real-estate-form-input"
-          type="text"
-          name="title"
-          placeholder="Title"
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          className="real-estate-form-textarea"
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          required
-        />
-        <div className="real-estate-form-two-column">
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="price"
-            placeholder="Price"
-            onChange={handleChange}
-            required
-          />
-          <select
-            className="real-estate-form-select"
-            name="type"
-            onChange={handleChange}
-            required
-          >
-            <option value="">Type</option>
-            <option value="house">House</option>
-            <option value="apartment">Apartment</option>
-          </select>
-        </div>
-        <div className="real-estate-form-two-column">
-          <select
-            className="real-estate-form-select"
-            name="for"
-            onChange={handleChange}
-            required
-          >
-            <option value="">For</option>
-            <option value="sale">Sale</option>
-            <option value="rent">Rent</option>
-          </select>
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="area"
-            placeholder="Area (sq ft)"
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-
-      {/* Section: Location Details */}
-      <div className="real-estate-form-section">
-        <h3>Location Details</h3>
-        <input
-          className="real-estate-form-input"
-          type="text"
-          name="address"
-          placeholder="Address"
-          onChange={handleChange}
-          required
-        />
-        <div className="real-estate-form-two-column">
-          <input
-            className="real-estate-form-input"
-            type="text"
-            name="city"
-            placeholder="City"
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="real-estate-form-input"
-            type="text"
-            name="state"
-            placeholder="State"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <input
-          className="real-estate-form-input"
-          type="text"
-          name="pincode"
-          placeholder="Pincode"
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      {/* Section: Owner Details */}
-      <div className="real-estate-form-section">
-        <h3>Owner Details</h3>
-        <div className="real-estate-form-two-column">
-          <input
-            className="real-estate-form-input"
-            type="text"
-            name="ownerName"
-            placeholder="Owner Name"
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="real-estate-form-input"
-            type="tel"
-            name="ownerContact"
-            placeholder="Owner Contact"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <input
-          className="real-estate-form-input"
-          type="email"
-          name="ownerEmail"
-          placeholder="Owner Email"
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      {/* Section: Property Specifications */}
-      <div className="real-estate-form-section">
-        <h3>Specifications</h3>
-        <div className="real-estate-form-two-column">
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="bedrooms"
-            placeholder="Bedrooms"
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="hall"
-            placeholder="Hall"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="real-estate-form-two-column">
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="kitchen"
-            placeholder="Kitchen"
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="real-estate-form-input"
-            type="number"
-            name="bathrooms"
-            placeholder="Bathrooms"
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </div>
-
-      {/* Image Upload Section */}
-      <div className="real-estate-form-section">
-        <h3>Upload Images (max 15)</h3>
-        <div {...getRootProps({ className: "real-estate-form-dropzone" })}>
-          <input {...getInputProps()} />
-          <FaUpload size={40} />
-          <p>Drag & drop or click to select images</p>
-        </div>
-        <p className="real-estate-form-image-limit">Max 15 images, 5MB each</p>
-        <div className="real-estate-form-image-preview">
-          {formData.images.map((file, index) => (
-            <div key={index} className="real-estate-form-image-container">
-              <img src={file.preview} alt="Preview" />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <button className="real-estate-form-submit-button" type="submit">
-        Submit
-      </button>
-    </form>
+    <>
+      {isLoading && <LoadingOverlay />} {/* Show loading overlay when isLoading is true */}
+      <form className="real-estate-form-container" onSubmit={handleSubmit}>
+        <ToastContainer />
+        <h2 className="listproperty-h2">Real Estate Listing Form</h2>
+        <PropertyDetails formData={formData} handleChange={handleChange} />
+        <LocationDetails formData={formData} handleChange={handleChange} />
+        <OwnerDetails formData={formData} handleChange={handleChange} />
+        <Specifications formData={formData} handleChange={handleChange} />
+        <ImageUpload images={formData.images} setImages={(images) => setFormData({ ...formData, images })} />
+        <button className="real-estate-form-submit-button" type="submit">Submit</button>
+      </form>
+    </>
   );
 };
 
