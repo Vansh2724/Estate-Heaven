@@ -9,6 +9,7 @@ import ForgotPassword from './components/authentication/ForgotPassword';
 import PrivateRoute from './components/PrivateRoute'; 
 import SearchProperty from './components/pages/SearchProperty'; 
 import ListProperty from './components/pages/ListProperty';
+import Dashboard from './components/pages/Dashboard';
 import './App.css'; // Import global styles
 
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/search" element={<SearchProperty />} />
           <Route path="/list" element={<ListProperty />} />
+          <Route path="/dashboard-profile" element={<Dashboard />} />
           {/* Route for the Signup page */}
           <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
           <Route path="/login" element={<PrivateRoute><Login /></PrivateRoute>} />

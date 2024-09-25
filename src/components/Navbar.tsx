@@ -85,10 +85,10 @@ const Navbar: React.FC = () => {
                   </div>
                   {showDropdown && (
                     <div className="user-dropdown" ref={dropdownRef}>
-                      <Link to="/dashboard">Dashboard</Link>
-                      <Link to="/my-properties">My Properties</Link>
-                      <Link to="/messages">Messages</Link>
-                      <Link to="/settings">Settings</Link>
+                      <Link to="/dashboard-profile">Profile</Link>
+                      <Link to="/dashboard-myproperties">My Properties</Link>
+                      <Link to="/dashboard-messages">Messages</Link>
+                      <Link to="/dashboard-settings">Settings</Link>
                       <button onClick={handleLogout} className="logout-btn">Logout</button>
                     </div>
                   )}
