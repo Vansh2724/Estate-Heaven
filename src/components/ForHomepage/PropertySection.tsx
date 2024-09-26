@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import '../../styles/Homepage/PropertySection.css'; // Import the CSS styles
-import { FaBed, FaBath, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt,FaUtensils } from 'react-icons/fa'; // Importing icons
+import { FaBed, FaBath, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt, FaUtensils } from 'react-icons/fa'; // Importing icons
 
 const PropertySection: React.FC = () => {
-  // State to manage favorite status for each property
   const [favorites, setFavorites] = useState<number[]>([]);
 
-  // Toggle favorite status for a property
   const toggleFavorite = (index: number) => {
     setFavorites((prevFavorites) =>
       prevFavorites.includes(index)
-        ? prevFavorites.filter((i) => i !== index) // Remove from favorites
-        : [...prevFavorites, index] // Add to favorites
+        ? prevFavorites.filter((i) => i !== index)
+        : [...prevFavorites, index]
     );
   };
 
-  // Sample data for properties
   const properties = [
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
@@ -24,13 +21,13 @@ const PropertySection: React.FC = () => {
       type: 'House',
       location: 'Mumbai, India',
       owner: 'John Doe',
-      for:'For Sale',
+      for: 'For Sale',
       bhkbs: {
         bedrooms: 4,
         hall: 1,
         kitchen: 1,
         bathrooms: 2,
-        area: 2500, // in sq. ft.
+        area: 2500,
       },
     },
     {
@@ -40,29 +37,29 @@ const PropertySection: React.FC = () => {
       type: 'Villa',
       location: 'New Delhi, India',
       owner: 'Jane Smith',
-      for:'For Rent',
+      for: 'For Rent',
       bhkbs: {
         bedrooms: 2,
         hall: 1,
         kitchen: 1,
         bathrooms: 1,
-        area: 1200, // in sq. ft.
+        area: 1200,
       },
     },
     {
       image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU5ODk5Nzcy&ixlib=rb-1.2.1&q=80&w=1080',
       title: 'Luxury Villa',
       price: '₹1,20,00,000',
-      type: 'Appartment',
+      type: 'Apartment',
       location: 'Bangalore, India',
       owner: 'Michael Johnson',
-      for:'For Sale',
+      for: 'For Sale',
       bhkbs: {
         bedrooms: 5,
         hall: 2,
         kitchen: 2,
         bathrooms: 4,
-        area: 5000, // in sq. ft.
+        area: 5000,
       },
     },
   ];
@@ -73,42 +70,40 @@ const PropertySection: React.FC = () => {
       <p className="property-section-description">
         Discover a variety of properties that match your lifestyle. Whether you are looking for a family home, a cozy apartment, or a luxurious villa, we have it all.
       </p>
-      <div className="property-grid">
+      <div className="property-section-grid">
         {properties.map((property, index) => (
-          <div className="property-card">
-          <div className="property-header">
-            <div className="property-type-for">
-              <span className="property-type-badge">{property.type}</span>
-              <span className="property-for-badge">{property.for}</span>
+          <div className="property-section-card" key={index}>
+            <div className="property-section-header">
+              <div className="property-section-type-for">
+                <span className="property-section-type-badge">{property.type}</span>
+                <span className="property-section-for-badge">{property.for}</span>
+              </div>
+              <FaHeart
+                className={`property-section-heart-icon ${favorites.includes(index) ? 'favorite' : ''}`}
+                onClick={() => toggleFavorite(index)}
+              />
             </div>
-            <FaHeart
-              className={`heart-icon ${favorites.includes(index) ? 'favorite' : ''}`}
-              onClick={() => toggleFavorite(index)}
-            />
+            <img src={property.image} alt={property.title} className="property-section-image" />
+            <div className="property-section-info">
+              <h3 className="property-section-title">{property.title}</h3>
+              <hr />
+              <div className="property-section-location-owner">
+                <span className="property-section-location"><FaMapMarkerAlt /> {property.location}</span>
+                <span className="property-section-owner">{property.owner}</span>
+              </div>
+              <div className="property-section-bhkbs">
+                <span><FaBed /> {property.bhkbs.bedrooms} Bedrooms</span>
+                <span><FaCouch /> {property.bhkbs.hall} Hall</span>
+                <span><FaUtensils /> {property.bhkbs.kitchen} Kitchen</span>
+                <span><FaBath /> {property.bhkbs.bathrooms} Bathrooms</span>
+                <span><FaRulerCombined /> {property.bhkbs.area} sq. ft.</span>
+              </div>
+              <div className="property-section-footer">
+                <span className="property-section-price">{property.price}</span>
+                <button className="property-section-btn">View Details</button>
+              </div>
+            </div>
           </div>
-          <img src={property.image} alt={property.title} className="property-image" />
-          <div className="property-info">
-            <h3 className="property-title">{property.title}</h3>
-            <hr />
-            <div className="property-location-owner">
-              <span className="property-location"><FaMapMarkerAlt /> {property.location}</span>
-              <span className="property-owner">{property.owner}</span>
-            </div>
-        
-            <div className="property-bhkbs">
-              <span><FaBed /> {property.bhkbs.bedrooms} Bedrooms</span>
-              <span><FaCouch /> {property.bhkbs.hall} Hall</span>
-              <span><FaUtensils /> {property.bhkbs.kitchen} Kitchen</span>
-              <span><FaBath /> {property.bhkbs.bathrooms} Bathrooms</span>
-              <span><FaRulerCombined /> {property.bhkbs.area} sq. ft.</span>
-            </div>
-            <div className="property-footer">
-              <span className="property-price">{property.price}</span>
-              <button className="property-btn">View Details</button>
-            </div>
-          </div>
-        </div>
-        
         ))}
       </div>
     </section>

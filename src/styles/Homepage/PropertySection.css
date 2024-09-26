@@ -19,17 +19,26 @@
   text-align: center;
 }
 
-/* Property Grid */
-.property-grid {
+/* property-section Grid */
+.property-section-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* Ensure 3 columns */
   gap: 30px;
-  justify-items: center;
-  align-items: stretch; /* Ensures all cards have equal height */
+  justify-items: center; /* Center items horizontally */
+  align-items: stretch;
+  max-width: 1200px; /* Set a max width for larger screens */
+  margin: 0 auto; /* Center the grid itself */
+  padding: 0 20px; /* Optional: add some padding */
 }
 
-/* Property Card */
-.property-card {
+/* Center the cards */
+.property-section-grid > div {
+  display: flex;
+  justify-content: center; /* Center each card */
+}
+
+/* property-section Card */
+.property-section-card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
@@ -44,13 +53,13 @@
   position: relative;
 }
 
-.property-card:hover {
+.property-section-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
 }
 
-/* Property Header with Badges and Heart Icon */
-.property-header {
+/* property-section Header with Badges and Heart Icon */
+.property-section-header {
   position: absolute;
   top: 10px;
   left: 15px;
@@ -61,12 +70,12 @@
   z-index: 2;
 }
 
-.property-type-for {
+.property-section-type-for {
   display: flex;
   gap: 10px;
 }
 
-.property-type-badge, .property-for-badge {
+.property-section-type-badge, .property-section-for-badge {
   background-color: #ff6b81;
   color: white;
   padding: 6px 12px;
@@ -75,40 +84,40 @@
   font-weight: bold;
 }
 
-.heart-icon {
+.property-section-heart-icon {
   font-size: 1.8rem;
   color: #ccc;
   cursor: pointer;
   transition: color 0.3s ease;
   position: absolute;
-  right: 10px; /* Adjusted positioning */
+  right: 10px;
 }
 
-.heart-icon.favorite {
+.property-section-heart-icon.favorite {
   color: #ff4757;
 }
 
-/* Property Image */
-.property-image {
+/* property-section Image */
+.property-section-image {
   width: 100%;
   height: 220px;
   object-fit: cover;
 }
 
-/* Property Info Section */
-.property-info {
+/* property-section Info Section */
+.property-section-info {
   padding: 25px;
   text-align: left;
 }
 
-.property-title {
+.property-section-title {
   font-size: 1.5rem;
   font-family: 'Poppins', sans-serif;
   margin-bottom: 10px;
   color: #34495e;
 }
 
-.property-location-owner {
+.property-section-location-owner {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -116,8 +125,8 @@
   color: #000000;
 }
 
-/* Property Details: BHK, Bathrooms, etc. */
-.property-bhkbs {
+/* property-section Details: BHK, Bathrooms, etc. */
+.property-section-bhkbs {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -126,20 +135,20 @@
   color: #000000;
 }
 
-/* Property Footer: Price and Button */
-.property-footer {
+/* property-section Footer: Price and Button */
+.property-section-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.property-price {
+.property-section-price {
   font-size: 1.3rem;
   font-weight: bold;
   color: #27ae60;
 }
 
-.property-btn {
+.property-section-btn {
   background-color: #3498db;
   color: white;
   padding: 10px 20px;
@@ -149,7 +158,7 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.property-btn:hover {
+.property-section-btn:hover {
   background-color: #2980b9;
   transform: translateY(-2px);
 }
