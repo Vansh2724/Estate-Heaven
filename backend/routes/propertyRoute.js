@@ -1,13 +1,14 @@
 const express = require('express');
-const multer = require('multer');
-const { listProperty } = require('../controllers/propertyController');
+const multer = require('multer'); // Import multer
+const { listProperty, searchProperties } = require('../controllers/propertyController');
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() }); // Configure multer for memory storage
 
-// Set up multer for file uploads (image handling)
-const upload = multer({ dest: 'uploads/' });  // Temp folder for storing uploaded files
+// Create a property listing (upload images directly to Cloudinary)
+router.post('/list', upload.array('images', 15), listProperty); // Ensure multer handles file uploads
 
-// Create a property listing (upload up to 15 images)
-router.post('/list', upload.array('images', 15), listProperty);
+// Search for properties
+router.post('/search', searchProperties);
 
 module.exports = router;

@@ -1,25 +1,15 @@
 /* Overall Page Styles */
-.search-property-page {
-  padding: 30px 15px;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-.search-container {
-  background: #ffffff;
+.custom-search-container {
   padding: 25px;
+  background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   max-width: 500px;
   width: 100%;
-  border: 1px solid #e0e4e8;
 }
 
 /* Title */
-.search-title {
+.custom-search-title {
   font-size: 1.8rem;
   font-weight: 800;
   text-align: center;
@@ -29,14 +19,14 @@
 }
 
 /* Service Type Toggle */
-.service-type-toggle {
+.custom-service-type-toggle {
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
   gap: 10px;
 }
 
-.service-type-box {
+.custom-service-type-box {
   width: 90px;
   padding: 10px;
   text-align: center;
@@ -48,20 +38,20 @@
   color: #F76C6C;
 }
 
-.service-type-box.active {
+.custom-service-type-box.active {
   background-color: #F76C6C;
   color: #ffffff;
   border-color: #F76C6C;
 }
 
 /* Search Form */
-.search-form {
+.custom-search-form {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.search-input-group {
+.custom-search-input-group {
   flex: 1 1 calc(33.33% - 10px);
   display: flex;
   align-items: center;
@@ -72,7 +62,7 @@
   border: 1px solid #e0e4e8;
 }
 
-.search-input-group input {
+.custom-search-input-group input {
   flex: 1;
   border: none;
   outline: none;
@@ -80,19 +70,19 @@
   color: #333333;
 }
 
-.search-icon {
+.custom-search-icon {
   color: #F76C6C;
 }
 
 /* Filters Section */
-.filters {
+.custom-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 15px;
 }
 
-.filter-group {
+.custom-filter-group {
   flex: 1 1 calc(33.33% - 10px);
   display: flex;
   align-items: center;
@@ -103,8 +93,8 @@
   border: 1px solid #e0e4e8;
 }
 
-.filter-group input,
-.filter-group select {
+.custom-filter-group input,
+.custom-filter-group select {
   flex: 1;
   border: none;
   outline: none;
@@ -112,12 +102,12 @@
   color: #333333;
 }
 
-.filter-icon {
+.custom-filter-icon {
   color: #F76C6C;
 }
 
 /* Show Filters Button */
-.toggle-filters {
+.custom-toggle-filters {
   background: none;
   border: none;
   color: #4a90e2;
@@ -131,7 +121,7 @@
 }
 
 /* Search Button */
-.search-button {
+.custom-search-button {
   background-color: #4a90e2;
   color: white;
   border: none;
@@ -143,12 +133,12 @@
   transition: background 0.3s ease;
 }
 
-.search-button:hover {
+.custom-search-button:hover {
   background-color: #3d7bc2;
 }
 
 /* Sorting Section */
-.sorting {
+.custom-sorting {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -156,19 +146,19 @@
   gap: 8px;
 }
 
-.sorting label {
+.custom-sorting label {
   font-weight: 400;
   color: #333333;
 }
 
-.sorting select {
+.custom-sorting select {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #e0e4e8;
   outline: none;
 }
 
-.sort-icon {
+.custom-sort-icon {
   color: #F76C6C;
   font-size: 1rem;
 }
@@ -177,54 +167,54 @@
 
 /* Tablets */
 @media (max-width: 1024px) {
-  .search-form {
+  .custom-search-form {
     gap: 15px;
   }
 
-  .search-input-group, .filter-group {
+  .custom-search-input-group, .custom-filter-group {
     flex: 1 1 calc(50% - 10px);
   }
 
-  .sorting {
+  .custom-sorting {
     justify-content: space-between;
   }
 }
 
 /* Mobile Devices */
 @media (max-width: 768px) {
-  .search-title {
+  .custom-search-title {
     font-size: 1.6rem;
   }
 
-  .search-form {
+  .custom-search-form {
     flex-direction: column;
   }
 
-  .search-input-group, .filter-group {
+  .custom-search-input-group, .custom-filter-group {
     flex: 1 1 100%;
   }
 
-  .sorting {
+  .custom-sorting {
     justify-content: center;
     margin-top: 10px;
   }
 }
 
 @media (max-width: 480px) {
-  .search-title {
+  .custom-search-title {
     font-size: 1.4rem;
     margin-bottom: 15px;
   }
 
-  .search-container {
+  .custom-search-container {
     padding: 20px;
   }
 
-  .service-type-box {
+  .custom-service-type-box {
     width: 80px;
   }
 
-  .search-button {
+  .custom-search-button {
     padding: 8px 16px;
   }
 }

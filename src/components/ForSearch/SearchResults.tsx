@@ -2,83 +2,78 @@ import React from 'react';
 import { FaBed, FaBath, FaCouch, FaUtensils, FaRulerCombined, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
 import '../../styles/SearchPage/SearchResults.css';
 
-
 interface Property {
-  id: number;
+  _id: string; // MongoDB uses _id as the identifier
   title: string;
-  location: string;
   price: number;
-  beds: number;
-  baths: number;
+  type: string;
+  for: string; // For sale or rent
+  city: string;
+  state: string;
+  pincode: string;
+  bedrooms: number;
+  hall: number;
+  kitchen: number;
+  bathrooms: number;
   area: number;
-  image: string;
-  isFavorite: boolean;
-  type: string; // Assuming type is included
-  owner: string;
-  for:string, // Assuming owner is included
-  bhkbs: {
-    bedrooms: number;
-    bathrooms: number;
-    hall: number;
-    kitchen: number;
-    area: number;
-  };
+  ownerName: string;
+  ownerContact: string;
+  ownerEmail: string;
+  images: string[]; // Assuming it's an array of image URLs
+  isFavorite: boolean; // Local state for favorites
 }
 
 interface SearchResultsProps {
   properties: Property[];
-  favorites: number[];
+  favorites: string[]; // Using string for MongoDB ObjectId
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  toggleFavorite: (index: number) => void;
+  toggleFavorite: (id: string) => void; // Using string for MongoDB ObjectId
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ properties, currentPage, totalPages, onPageChange }) => {
-  const toggleFavorite = (id: number) => {
-    // Implement favorite toggle logic here
-  };
+const SearchResults: React.FC<SearchResultsProps> = ({ properties, currentPage, totalPages, onPageChange, toggleFavorite }) => {
+  if (properties.length === 0) {
+    return <div className="no-properties">No properties found.</div>;
+  }
 
   return (
-    <div>
-      <div className="property-grid">
-        {properties.map((property) => (
-          <div key={property.id} className="property-card">
-            <div className="property-header">
-              <div className="property-type-for">
-                <span className="property-type-badge">{property.type}</span>
-                {/* Assuming a 'for' field for sale/rent indication */}
-                <span className="property-for-badge">{property.for}</span>
-              </div>
-              <FaHeart
-                className={`heart-icon ${property.isFavorite ? 'favorite' : ''}`}
-                onClick={() => toggleFavorite(property.id)}
-              />
+    <div className="custom-property-grid">
+      {properties.map((property) => (
+        <div key={property._id} className="custom-property-card">
+          <div className="custom-property-header">
+            <div className="custom-property-type-for">
+              <span className="custom-property-type-badge">{property.type}</span>
+              <span className="custom-property-for-badge">{property.for}</span>
             </div>
-            <img src={property.image} alt={property.title} className="property-image" />
-            <div className="property-info">
-              <h3 className="property-title">{property.title}</h3>
-              <hr />
-              <div className="property-location-owner">
-                <span className="property-location"><FaMapMarkerAlt /> {property.location}</span>
-                <span className="property-owner">{property.owner}</span>
-              </div>
-              <div className="property-bhkbs">
-                <span><FaBed /> {property.bhkbs.bedrooms} Bedrooms</span>
-                <span><FaCouch /> {property.bhkbs.hall} Hall</span>
-                <span><FaUtensils /> {property.bhkbs.kitchen} Kitchen</span>
-                <span><FaBath /> {property.bhkbs.bathrooms} Bathrooms</span>
-                <span><FaRulerCombined /> {property.bhkbs.area} sq. ft.</span>
-              </div>
-              <div className="property-footer">
-                <span className="property-price">${property.price}</span>
-                <button className="property-btn">View Details</button>
-              </div>
+            <FaHeart
+              className={`custom-heart-icon ${property.isFavorite ? 'favorite' : ''}`}
+              onClick={() => toggleFavorite(property._id)}
+            />
+          </div>
+          <img src={property.images[0]} alt={property.title} className="custom-property-image" />
+          <div className="custom-property-info">
+            <h3 className="custom-property-title">{property.title}</h3>
+            <hr />
+            <div className="custom-property-location-owner">
+              <span className="custom-property-location"><FaMapMarkerAlt /> {property.city}, {property.state}</span>
+              <span className="custom-property-owner">{property.ownerName}</span>
+            </div>
+            <div className="custom-property-bhkbs">
+              <span><FaBed /> {property.bedrooms} Bedrooms</span>
+              <span><FaCouch /> {property.hall} Hall</span>
+              <span><FaUtensils /> {property.kitchen} Kitchen</span>
+              <span><FaBath /> {property.bathrooms} Bathrooms</span>
+              <span><FaRulerCombined /> {property.area} sq. ft.</span>
+            </div>
+            <div className="custom-property-footer">
+              <span className="custom-property-price">${property.price}</span>
+              <button className="custom-property-btn">View Details</button>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="pagination">
+        </div>
+      ))}
+      <div className="custom-pagination">
         <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
           Prev
         </button>
