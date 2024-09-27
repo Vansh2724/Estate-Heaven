@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaBed, FaBath, FaHome, FaRulerCombined, FaUtensils, FaCouch, FaMapMarkerAlt, FaFilter, FaSortAmountDown } from 'react-icons/fa';
 import '../../styles/SearchPage/SearchSection.css';
@@ -19,9 +18,11 @@ interface SearchParams {
 
 interface SearchSectionProps {
   setProperties: React.Dispatch<React.SetStateAction<any[]>>;
+  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+  setSearchExecuted: React.Dispatch<React.SetStateAction<boolean>>; // New prop to track search execution
 }
 
-const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
+const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPages, setSearchExecuted }) => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [serviceType, setServiceType] = useState('buy');
   const [searchParams, setSearchParams] = useState<SearchParams>({
@@ -57,39 +58,40 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
       const result = await response.json();
   
       if (response.ok) {
-        setProperties(result.data); // Assuming properties are in result.data
-        toast.success(result.message); // Show success toast
+        setProperties(result.data);
+        setTotalPages(result.totalPages);
+        setSearchExecuted(true); // Set searchExecuted to true
       } else {
-        toast.error(result.message); // Show error toast
+        toast.error(result.message);
       }
     } catch (error) {
-      toast.error('Network error: Unable to fetch properties.'); // Handle network errors
+      toast.error('Network error: Unable to fetch properties.');
     }
   };
   
-
+  
   return (
-    <div className="custom-search-container">
-      <h1 className="custom-search-title">Find Your Dream Property</h1>
+    <div className="search-section-search-container">
+      <h1 className="search-section-search-title">Find Your Dream Property</h1>
 
-      <div className="custom-service-type-toggle">
+      <div className="search-section-service-type-toggle">
         <div 
-          className={`custom-service-type-box ${serviceType === 'buy' ? 'active' : ''}`} 
+          className={`search-section-service-type-box ${serviceType === 'buy' ? 'active' : ''}`} 
           onClick={() => setServiceType('buy')}
         >
           Buy
         </div>
         <div 
-          className={`custom-service-type-box ${serviceType === 'rent' ? 'active' : ''}`} 
+          className={`search-section-service-type-box ${serviceType === 'rent' ? 'active' : ''}`} 
           onClick={() => setServiceType('rent')}
         >
           Rent
         </div>
       </div>
 
-      <div className="custom-search-form">
-        <div className="custom-search-input-group">
-          <FaMapMarkerAlt className="custom-search-icon" />
+      <div className="search-section-search-form">
+        <div className="search-section-search-input-group">
+          <FaMapMarkerAlt className="search-section-search-icon" />
           <input
             type="text"
             name="city"
@@ -99,7 +101,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
             aria-label="City"
           />
         </div>
-        <div className="custom-search-input-group">
+        <div className="search-section-search-input-group">
           <input
             type="text"
             name="pinCode"
@@ -111,17 +113,17 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
         </div>
 
         {filtersOpen && (
-          <div className="custom-filters">
-            <div className="custom-filter-group">
-              <FaHome className="custom-filter-icon" />
+          <div className="search-section-filters">
+            <div className="search-section-filter-group">
+              <FaHome className="search-section-filter-icon" />
               <select name="propertyType" onChange={handleFilterChange} aria-label="Property Type">
                 <option value="">Select Property Type</option>
                 <option value="house">House</option>
                 <option value="apartment">Apartment</option>
               </select>
             </div>
-            <div className="custom-filter-group">
-              <FaBed className="custom-filter-icon" />
+            <div className="search-section-filter-group">
+              <FaBed className="search-section-filter-icon" />
               <input
                 type="number"
                 name="bedrooms"
@@ -131,8 +133,8 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
                 aria-label="Bedrooms"
               />
             </div>
-            <div className="custom-filter-group">
-              <FaBath className="custom-filter-icon" />
+            <div className="search-section-filter-group">
+              <FaBath className="search-section-filter-icon" />
               <input
                 type="number"
                 name="bathrooms"
@@ -142,8 +144,8 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
                 aria-label="Bathrooms"
               />
             </div>
-            <div className="custom-filter-group">
-              <FaCouch className="custom-filter-icon" />
+            <div className="search-section-filter-group">
+              <FaCouch className="search-section-filter-icon" />
               <input
                 type="number"
                 name="halls"
@@ -153,8 +155,8 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
                 aria-label="Halls"
               />
             </div>
-            <div className="custom-filter-group">
-              <FaUtensils className="custom-filter-icon" />
+            <div className="search-section-filter-group">
+              <FaUtensils className="search-section-filter-icon" />
               <input
                 type="number"
                 name="kitchens"
@@ -164,8 +166,8 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
                 aria-label="Kitchens"
               />
             </div>
-            <div className="custom-filter-group">
-              <FaRulerCombined className="custom-filter-icon" />
+            <div className="search-section-filter-group">
+              <FaRulerCombined className="search-section-filter-icon" />
               <input
                 type="text"
                 name="area"
@@ -178,21 +180,21 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties }) => {
           </div>
         )}
 
-        <button className="custom-toggle-filters" onClick={toggleFilters}>
+        <button className="search-section-toggle-filters" onClick={toggleFilters}>
           <FaFilter /> {filtersOpen ? 'Hide Filters' : 'Show Filters'}
         </button>
       </div>
 
-      <button className="custom-search-button" onClick={handleSearch}>Search</button>
+      <button className="search-section-search-button" onClick={handleSearch}>Search</button>
 
-      <div className="custom-sorting">
+      <div className="search-section-sorting">
         <label>Sort by:</label>
         <select name="sort" onChange={handleFilterChange} aria-label="Sort Options">
           <option value="">Select</option>
           <option value="priceAsc">Price: Low to High</option>
           <option value="priceDesc">Price: High to Low</option>
         </select>
-        <FaSortAmountDown className="custom-sort-icon" />
+        <FaSortAmountDown className="search-section-sort-icon" />
       </div>
     </div>
   );

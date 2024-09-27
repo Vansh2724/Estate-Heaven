@@ -4,34 +4,68 @@ import Footer from '../Footer';
 import SearchSection from '../ForSearch/SearchSection';
 import SearchResults from '../ForSearch/SearchResults';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import the styles
-import '../../styles/SearchPage/SearchProperty.css'; // Custom styles for the entire search page
+import 'react-toastify/dist/ReactToastify.css';
+import '../../styles/SearchPage/SearchProperty.css';
+
+interface Property {
+  _id: string;
+  title: string;
+  price: number;
+  type: string;
+  for: string;
+  city: string;
+  state: string;
+  bedrooms: number;
+  hall: number;
+  kitchen: number;
+  bathrooms: number;
+  area: number;
+  ownerName: string;
+  images: string[];
+  isFavorite: boolean;
+}
 
 const SearchProperty: React.FC = () => {
-  const [properties, setProperties] = useState<any[]>([]);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
 
-  const toggleFavorite = (index: number) => {
-    setFavorites(prev =>
-      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
-    );
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev => prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]);
+  };
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+    // Fetch new properties based on the page number if applicable
   };
 
   return (
     <>
       <Navbar />
       <div className="search-property-page">
-        <ToastContainer /> {/* Add the ToastContainer here */}
-        <div className="search-property-content">
-          <SearchSection setProperties={setProperties} />
-          <SearchResults 
-            properties={properties} 
-            favorites={favorites} 
-            toggleFavorite={toggleFavorite} 
-            currentPage={0} 
-            totalPages={0} 
-            onPageChange={() => {}} // Placeholder for onPageChange function
-          />
+        <ToastContainer />
+        <SearchSection 
+          setProperties={setProperties} 
+          setTotalPages={setTotalPages} 
+          setSearchExecuted={setSearchExecuted} 
+        />
+        <div className="search-property-search-result">
+          {searchExecuted && properties.length > 0 && (
+            <SearchResults 
+              properties={properties}
+              favorites={favorites}
+              toggleFavorite={toggleFavorite}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange} 
+              searchExecuted={searchExecuted} // Pass searchExecuted correctly
+            />
+          )}
+          {searchExecuted && properties.length === 0 && (
+            <div className="no-properties">No properties found.</div>
+          )}
         </div>
       </div>
       <Footer />

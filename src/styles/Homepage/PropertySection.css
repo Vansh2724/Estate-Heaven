@@ -22,13 +22,11 @@
 /* property-section Grid */
 .property-section-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Ensure 3 columns */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
   justify-items: center; /* Center items horizontally */
   align-items: stretch;
-  max-width: 1200px; /* Set a max width for larger screens */
   margin: 0 auto; /* Center the grid itself */
-  padding: 0 20px; /* Optional: add some padding */
 }
 
 /* Center the cards */
@@ -162,3 +160,4 @@
   background-color: #2980b9;
   transform: translateY(-2px);
 }
+

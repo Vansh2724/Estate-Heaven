@@ -4,6 +4,7 @@ import Footer from '../Footer';
 import PropertyForm from '../../components/ForListing/PropertyForm';
 import '../../styles/ListProperty/ListProperty.css';
 
+
 const ListProperty: React.FC = () => {
     return (
       <>

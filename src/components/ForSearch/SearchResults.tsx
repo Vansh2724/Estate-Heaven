@@ -3,77 +3,87 @@ import { FaBed, FaBath, FaCouch, FaUtensils, FaRulerCombined, FaMapMarkerAlt, Fa
 import '../../styles/SearchPage/SearchResults.css';
 
 interface Property {
-  _id: string; // MongoDB uses _id as the identifier
+  _id: string;
   title: string;
   price: number;
   type: string;
-  for: string; // For sale or rent
+  for: string;
   city: string;
   state: string;
-  pincode: string;
   bedrooms: number;
   hall: number;
   kitchen: number;
   bathrooms: number;
   area: number;
   ownerName: string;
-  ownerContact: string;
-  ownerEmail: string;
-  images: string[]; // Assuming it's an array of image URLs
-  isFavorite: boolean; // Local state for favorites
+  images: string[];
+  isFavorite: boolean;
 }
 
 interface SearchResultsProps {
   properties: Property[];
-  favorites: string[]; // Using string for MongoDB ObjectId
+  favorites: string[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  toggleFavorite: (id: string) => void; // Using string for MongoDB ObjectId
+  toggleFavorite: (id: string) => void;
+  searchExecuted: boolean;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ properties, currentPage, totalPages, onPageChange, toggleFavorite }) => {
-  if (properties.length === 0) {
-    return <div className="no-properties">No properties found.</div>;
-  }
-
+const SearchResults: React.FC<SearchResultsProps> = ({
+  properties,
+  favorites,
+  currentPage,
+  totalPages,
+  onPageChange,
+  toggleFavorite,
+  searchExecuted,
+}) => {
   return (
-    <div className="custom-property-grid">
-      {properties.map((property) => (
-        <div key={property._id} className="custom-property-card">
-          <div className="custom-property-header">
-            <div className="custom-property-type-for">
-              <span className="custom-property-type-badge">{property.type}</span>
-              <span className="custom-property-for-badge">{property.for}</span>
+    <section className="search-result">
+      <h2 className="search-result-title">Search Results</h2>
+      {searchExecuted && properties.length === 0 && (
+        <div className="no-properties">No properties found.</div>
+      )}
+      <div className="search-result-grid">
+        {properties.map((property) => (
+          <div key={property._id} className="search-result-card">
+            <div className="search-result-header">
+              <div className="search-result-type-for">
+                <span className="search-result-type-badge">{property.type}</span>
+                <span className="search-result-for-badge">{property.for}</span>
+              </div>
+              <FaHeart
+                className={`search-result-heart-icon ${favorites.includes(property._id) ? 'favorite' : ''}`}
+                onClick={() => toggleFavorite(property._id)}
+              />
             </div>
-            <FaHeart
-              className={`custom-heart-icon ${property.isFavorite ? 'favorite' : ''}`}
-              onClick={() => toggleFavorite(property._id)}
-            />
+            <img src={property.images[0]} alt={property.title} className="search-result-image" />
+            <div className="search-result-info">
+              <h3 className="search-result-title-2">{property.title}</h3>
+              <hr />
+              <div className="search-result-location-owner">
+                <span className="search-result-location">
+                  <FaMapMarkerAlt /> {property.city}, {property.state}
+                </span>
+                <span className="search-result-owner">{property.ownerName}</span>
+              </div>
+              <div className="search-result-bhkbs">
+                <span><FaBed /> {property.bedrooms} Bedrooms</span>
+                <span><FaCouch /> {property.hall} Hall</span>
+                <span><FaUtensils /> {property.kitchen} Kitchen</span>
+                <span><FaBath /> {property.bathrooms} Bathrooms</span>
+                <span><FaRulerCombined /> {property.area} sq. ft.</span>
+              </div>
+              <div className="search-result-footer">
+                <span className="search-result-price">${property.price}</span>
+                <button className="search-result-btn">View Details</button>
+              </div>
+            </div>
           </div>
-          <img src={property.images[0]} alt={property.title} className="custom-property-image" />
-          <div className="custom-property-info">
-            <h3 className="custom-property-title">{property.title}</h3>
-            <hr />
-            <div className="custom-property-location-owner">
-              <span className="custom-property-location"><FaMapMarkerAlt /> {property.city}, {property.state}</span>
-              <span className="custom-property-owner">{property.ownerName}</span>
-            </div>
-            <div className="custom-property-bhkbs">
-              <span><FaBed /> {property.bedrooms} Bedrooms</span>
-              <span><FaCouch /> {property.hall} Hall</span>
-              <span><FaUtensils /> {property.kitchen} Kitchen</span>
-              <span><FaBath /> {property.bathrooms} Bathrooms</span>
-              <span><FaRulerCombined /> {property.area} sq. ft.</span>
-            </div>
-            <div className="custom-property-footer">
-              <span className="custom-property-price">${property.price}</span>
-              <button className="custom-property-btn">View Details</button>
-            </div>
-          </div>
-        </div>
-      ))}
-      <div className="custom-pagination">
+        ))}
+      </div>
+      <div className="search-result-pagination">
         <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
           Prev
         </button>
@@ -82,7 +92,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ properties, currentPage, 
           Next
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

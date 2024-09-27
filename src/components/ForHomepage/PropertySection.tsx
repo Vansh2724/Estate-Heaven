@@ -3,7 +3,7 @@ import '../../styles/Homepage/PropertySection.css'; // Import the CSS styles
 import { FaBed, FaBath, FaRulerCombined, FaCouch, FaHeart, FaMapMarkerAlt, FaUtensils } from 'react-icons/fa'; // Importing icons
 
 const PropertySection: React.FC = () => {
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [setfavorites, setFavorites] = useState<number[]>([]);
 
   const toggleFavorite = (index: number) => {
     setFavorites((prevFavorites) =>
@@ -79,7 +79,7 @@ const PropertySection: React.FC = () => {
                 <span className="property-section-for-badge">{property.for}</span>
               </div>
               <FaHeart
-                className={`property-section-heart-icon ${favorites.includes(index) ? 'favorite' : ''}`}
+                className={`property-section-heart-icon ${setfavorites.includes(index) ? 'favorite' : ''}`}
                 onClick={() => toggleFavorite(index)}
               />
             </div>

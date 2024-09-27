@@ -1,21 +1,30 @@
 .search-property-page {
-    padding: 30px 15px;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    margin-top: 70px;
-    margin-bottom: 70px;
+  padding: 20px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 80px;
+  margin-bottom: 110px;
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box; /* Prevent overflow */
 }
 
-.search-property-content {
-  padding: 20px; /* Spacing for content area */
-}
-
-.search-property-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-  gap: 20px; /* Space between property cards */
+.search-property-search-result {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 
-/* Additional styles for Navbar and Footer if needed */
+@media (max-width: 768px) {
+  .search-property-page {
+    padding: 10px; /* Reduce padding on smaller screens */
+  }
+  
+  .search-property-search-result {
+    flex-direction: column; /* Stack results vertically on smaller screens */
+    align-items: center; /* Center items */
+  }
+}
