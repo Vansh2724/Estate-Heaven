@@ -67,7 +67,7 @@ const PropertyForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const emptyFields = Object.keys(formData).filter((field) => !formData[field as keyof FormData]);
     if (emptyFields.length > 0) {
       emptyFields.forEach((field) => {
@@ -75,26 +75,28 @@ const PropertyForm: React.FC = () => {
       });
       return;
     }
-
+  
     // Sanitize the price input
     const sanitizedPrice = formData.price.replace(/,/g, "");
-
+  
     let userId;
     const userString = localStorage.getItem("user");
     if (userString) {
       const user = JSON.parse(userString);
-      userId = user.id;
+      // Check if the user is a Google user and access the correct ID
+      userId = user.isGoogleUser ? user._id : user.id; // Use _id for Google users and id for regular users
+      console.log("User ID:", userId); // Console log the user ID
     } else {
       toast.error("User not found. Please log in.");
       return;
     }
-
+  
     // Create FormData object
     const data = new FormData();
     data.append("userId", userId);
     data.append("title", formData.title);
     data.append("description", formData.description);
-    data.append("price", sanitizedPrice); // Use sanitized price
+    data.append("price", sanitizedPrice);
     data.append("type", formData.type);
     data.append("for", formData.for);
     data.append("city", formData.city);
@@ -109,49 +111,29 @@ const PropertyForm: React.FC = () => {
     data.append("kitchen", formData.kitchen);
     data.append("bathrooms", formData.bathrooms);
     data.append("area", formData.area);
-
+  
     // Append images
     formData.images.forEach((image) => {
       data.append("images", image);
     });
-
- // Show loading overlay
- setIsLoading(true);
-
- // Simulate a delay
- setTimeout(async () => {
-   try {
-     const response = await axios.post("http://localhost:5000/api/property/list", data, {
-       headers: { "Content-Type": "multipart/form-data" },
-     });
-     toast.success("Property listed successfully!");
-     setTimeout(() => {
-       navigate("/");
-     }, 2000);
-   } catch (error) {
-     console.error("Error listing property:", error);
-     toast.error("Error listing property.");
-   } finally {
-     setIsLoading(false); // Hide loading overlay
-   }
- }, 5000); // 3-second delay for testing
-
-    // try {
-    //   setIsLoading(true);
-    //   const response = await axios.post("http://localhost:5000/api/property/creat", data, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   });
-    //   toast.success("Property listed successfully!");
-    //   setTimeout(() => {
-    //     navigate("/");
-    //   }, 2000);
-    // } catch (error) {
-    //   console.error("Error listing property:", error);
-    //   toast.error("Error listing property.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
-  };
+  
+    setIsLoading(true); // Start loading overlay
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/property/list", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      toast.success("Property listed successfully!");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.error("Error listing property:", error);
+      toast.error("Error listing property. Please try again.");
+    } finally {
+      setIsLoading(false); // Hide loading overlay
+    }
+  };  
 
   return (
     <>

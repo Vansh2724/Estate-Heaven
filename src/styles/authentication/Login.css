@@ -181,7 +181,7 @@ body {
   margin-top: 1.25rem;
 }
 
-.google-btn {
+/* .google-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,6 +203,13 @@ body {
 .google-icon {
   width: 1.25rem;
   margin-right: 0.5rem;
+} */
+
+.google-login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .notification {

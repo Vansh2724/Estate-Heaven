@@ -5,6 +5,7 @@
   justify-content: center;
   padding: 50px 20px;
   background-color: white; /* No background color for the page */
+  scroll-behavior: smooth;
 }
 
 /* Form Container */

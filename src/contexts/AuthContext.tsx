@@ -5,7 +5,7 @@ interface User {
   id: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType { // Export the type here
   isAuthenticated: boolean;
   userName: string;
   avatarColor: string;

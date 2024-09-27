@@ -39,6 +39,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   toggleFavorite,
   searchExecuted,
 }) => {
+  const itemsPerPage = 15; // 5 rows x 3 columns
+  const paginatedProperties = properties.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <section className="search-result">
       <h2 className="search-result-title">Search Results</h2>
@@ -46,7 +49,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         <div className="no-properties">No properties found.</div>
       )}
       <div className="search-result-grid">
-        {properties.map((property) => (
+        {paginatedProperties.map((property) => (
           <div key={property._id} className="search-result-card">
             <div className="search-result-header">
               <div className="search-result-type-for">
@@ -88,7 +91,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
           Prev
         </button>
         <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages || properties.length <= itemsPerPage}>
           Next
         </button>
       </div>

@@ -229,12 +229,12 @@ body {
   text-align: center;
   margin-top: 20px; /* Increased spacing */
 }
-
+/* 
 .google-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px; /* Increased padding */
+  padding: 14px; 
   background-color: #fff;
   border: 1px solid #000000;
   border-radius: 8px;
@@ -252,6 +252,13 @@ body {
 .google-icon {
   width: 20px;
   margin-right: 8px;
+} */
+
+.google-login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Responsive Styling */

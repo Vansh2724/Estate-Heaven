@@ -46,6 +46,11 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
   const toggleFilters = () => setFiltersOpen(prev => !prev);
 
   const handleSearch = async () => {
+    if (!searchParams.city.trim()) {
+      toast.error('Please enter at least the city information.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/property/search', {
         method: 'POST',
@@ -54,9 +59,9 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
         },
         body: JSON.stringify(searchParams),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
         setProperties(result.data);
         setTotalPages(result.totalPages);
@@ -68,8 +73,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
       toast.error('Network error: Unable to fetch properties.');
     }
   };
-  
-  
+
   return (
     <div className="search-section-search-container">
       <h1 className="search-section-search-title">Find Your Dream Property</h1>

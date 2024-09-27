@@ -1,13 +1,14 @@
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
-import axios from 'axios'; // Import axios
-import { useNavigate } from 'react-router-dom'; // For redirection after signup
-import { ToastContainer, toast } from 'react-toastify'; // Import Toast for notifications
-import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
-import '../../styles/authentication/Signup.css'; // Import custom styles
-import openEyeIcon from '../../img/lgsp/openeye.svg'; // Import open eye icon
-import closeEyeIcon from '../../img/lgsp/closeeye.svg'; // Import close eye icon
-import googleLogo from '../../img/lgsp/googlelogo.png'; // Import Google logo
-import { AuthContext } from '../../contexts/AuthContext'; // Import AuthContext for user authentication
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../../styles/authentication/Signup.css';
+import openEyeIcon from '../../img/lgsp/openeye.svg';
+import closeEyeIcon from '../../img/lgsp/closeeye.svg';
+import { AuthContext } from '../../contexts/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
+import { handleGoogleAuth } from './googleAuth'; // Updated import
 
 interface FormFields {
   firstName: string;
@@ -18,16 +19,16 @@ interface FormFields {
 }
 
 const Signup: React.FC = () => {
-  const navigate = useNavigate(); // Initialize useNavigate for redirection
-  const authContext = useContext(AuthContext); // Use AuthContext for managing authentication state
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   if (!authContext) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }
 
-  const { login } = authContext; // Destructure login from context
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false); // State for password visibility
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false); // State for confirm password visibility
+  const { login } = authContext;
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [formFields, setFormFields] = useState<FormFields>({
     firstName: '',
     lastName: '',
@@ -35,31 +36,29 @@ const Signup: React.FC = () => {
     password: '',
     confirmPassword: '',
   });
-  const [passwordFocused, setPasswordFocused] = useState<boolean>(false); // State for password input focus
-  const [passwordValid, setPasswordValid] = useState<boolean>(false); // Password validation state
+  const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
+  const [passwordValid, setPasswordValid] = useState<boolean>(false);
 
-  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible); // Toggle password visibility
-  const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible); // Toggle confirm password visibility
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+  const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormFields((prevFields) => ({ ...prevFields, [name]: value })); // Update form fields state
+    setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
 
     if (name === 'password') {
-      validatePassword(value); // Validate password on input change
+      validatePassword(value);
     }
   };
 
-  const handlePasswordFocus = () => setPasswordFocused(true); // Handle password input focus
-  const handlePasswordBlur = () => setPasswordFocused(false); // Handle password input blur
+  const handlePasswordFocus = () => setPasswordFocused(true);
+  const handlePasswordBlur = () => setPasswordFocused(false);
 
-  // Function to validate email format
   const isValidEmail = (email: string) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
-  // Function to validate password strength
   const validatePassword = (password: string) => {
     const lengthValid = password.length >= 10;
     const upperCaseValid = /[A-Z]/.test(password);
@@ -70,80 +69,69 @@ const Signup: React.FC = () => {
     setPasswordValid(lengthValid && upperCaseValid && lowerCaseValid && numberValid && specialCharValid);
   };
 
-  // Handle form submission
-const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
-  // Validate email format
-  if (!isValidEmail(formFields.email)) {
-    toast.error('Invalid email format. Please enter a valid email address.');
-    return;
-  }
-
-  // Check if passwords match
-  if (formFields.password !== formFields.confirmPassword) {
-    toast.error('Passwords do not match!');
-    return;
-  }
-
-  // Validate password strength
-  if (!passwordValid) {
-    toast.error('Password does not meet the criteria for strength.');
-    return;
-  }
-
-  try {
-    // Make API request for signup
-    const response = await axios.post('http://localhost:5000/api/auth/signup', {
-      firstName: formFields.firstName,
-      lastName: formFields.lastName,
-      email: formFields.email,
-      password: formFields.password,
-    });
-
-    if (response.status === 201) { // Assume 201 is the success status
-      toast.success('Signup successful!');
-
-      // Ensure response contains token and user
-      const { token, user } = response.data;
-      
-      if (token && user) {
-        // Log the user in after successful signup
-        login(token, user); // Use login function from AuthContext to set authentication state
-        navigate('/'); // Redirect to homepage after successful signup
-      } else {
-        console.error('Signup response does not contain token or user data:', response.data);
-        toast.error('Signup failed. Invalid server response. Please try again.');
-      }
-    } else if (response.status === 400) {
-      toast.error('Invalid input. Please check your details and try again.');
-    } else if (response.status === 409) {
-      toast.error('An account with this email already exists.');
-    } else {
-      toast.error('Signup failed. Please try again.');
+    if (!isValidEmail(formFields.email)) {
+      toast.error('Invalid email format. Please enter a valid email address.');
+      return;
     }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.response) {
-        console.error('API error response:', error.response);
-        toast.error(error.response.data.message || 'An error occurred during signup. Please try again.');
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-        toast.error('No response from server. Please try again later.');
-      } else {
-        console.error('Error setting up request:', error.message);
-        toast.error('An error occurred. Please try again.');
-      }
-    } else {
-      console.error('Unexpected error:', error);
-      toast.error('An unexpected error occurred. Please try again.');
+
+    if (formFields.password !== formFields.confirmPassword) {
+      toast.error('Passwords do not match!');
+      return;
     }
-  }
-};
+
+    if (!passwordValid) {
+      toast.error('Password does not meet the criteria for strength.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        firstName: formFields.firstName,
+        lastName: formFields.lastName,
+        email: formFields.email,
+        password: formFields.password,
+      });
+
+      if (response.status === 201) {
+        toast.success('Signup successful!');
+
+        const { token, user } = response.data;
+
+        if (token && user) {
+          login(token, user);
+          navigate('/');
+        } else {
+          toast.error('Signup failed. Invalid server response. Please try again.');
+        }
+      } else {
+        toast.error('Signup failed. Please try again.');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message || 'An error occurred during signup. Please try again.');
+      } else {
+        toast.error('An unexpected error occurred. Please try again.');
+      }
+    }
+  };
+
+  const handleGoogleSignup = async (credentialResponse: any) => {
+    const { credential } = credentialResponse;
+    const success = await handleGoogleAuth(credential, authContext, true); // Pass true for signup
+
+    if (success) {
+      navigate('/');
+    } else {
+      toast.error('Google signup failed. Please try again.');
+    }
+  };
 
   return (
     <div className="signup-wrapper">
-      <ToastContainer /> {/* Toast Container for notifications */}
+      <ToastContainer />
       <div className="signup-box">
         <h1 className="signup-header">Estate Heaven</h1>
         <h3 className="signup-header2">Create Account</h3>
@@ -247,10 +235,13 @@ const handleSubmit = async (e: FormEvent) => {
           <div className="divider">
             <span className="divider-text">Or sign up with</span>
           </div>
-          <button className="google-btn">
-            <img src={googleLogo} alt="Google Logo" className="google-icon" />
-            Google
-          </button>
+          <div className="google-login-container">
+            <GoogleLogin
+              onSuccess={handleGoogleSignup}
+              onError={() => toast.error('Google signup failed. Please try again.')}
+              containerProps={{ style: { display: 'flex', alignItems: 'center' } }}
+            />
+          </div>
         </div>
       </div>
     </div>

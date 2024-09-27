@@ -1,15 +1,14 @@
-// src/components/Login.tsx
-
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import "../../styles/authentication/Login.css";
 import axios from 'axios';
 import openEyeIcon from '../../img/lgsp/openeye.svg';
 import closeEyeIcon from '../../img/lgsp/closeeye.svg';
-import googleLogo from '../../img/lgsp/googlelogo.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext  } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
+import { handleGoogleAuth } from './googleAuth'; // Updated import
 
 const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -37,7 +36,6 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
   
-    // Validate email format
     if (!isValidEmail(formData.email)) {
       toast.error("Invalid email format. Please enter a valid email address.");
       return;
@@ -46,15 +44,9 @@ const Login: React.FC = () => {
     try {
       const response = await axios.post("http://localhost:5000/api/auth/login", formData);
   
-      // Handle success
       if (response.status === 200) {
-        // Store token and user info in localStorage
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        const token = localStorage.getItem("token") || "";
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        login(token,user);
-        // toast.success("Login successful!");
+        const { token, user } = response.data;
+        login(token, user);
         navigate("/");
       }
     } catch (error: any) {
@@ -72,6 +64,17 @@ const Login: React.FC = () => {
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
+    }
+  };
+
+  const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+    const { credential } = credentialResponse;
+    const success = await handleGoogleAuth(credential, authContext, false); // Pass false for login
+
+    if (success) {
+      navigate("/");
+    } else {
+      toast.error("Google login failed. Please try again.");
     }
   };
 
@@ -133,10 +136,12 @@ const Login: React.FC = () => {
           <div className="divider">
             <span className="divider-text">Or login with</span>
           </div>
-          <button className="google-btn">
-            <img src={googleLogo} alt="Google Logo" className="google-icon" />
-            Google
-          </button>
+          <div className="google-login-container">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={() => toast.error('Google login failed. Please try again.')}
+            />
+          </div>
         </div>
       </div>
     </div>
