@@ -1,46 +1,51 @@
-.dashboard-my-properties-container {
-    padding: 20px;
-  }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333; /* Dark gray */
-  }
-  
-  .dashboard-my-properties-container ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .dashboard-my-properties-container li {
-    margin: 15px 0;
-    padding: 15px;
-    border: 1px solid #e0e0e0; /* Light gray border */
-    border-radius: 4px;
-    background-color: #f7f7f7; /* Very light gray for contrast */
-  }
-  
-  .dashboard-my-properties-container button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .dashboard-my-properties-container button:hover {
-    background-color: #e0e0e0; /* Light hover effect */
-  }
-  
-  @media (max-width: 768px) {
-    .dashboard-my-properties-container {
-      padding: 10px;
-    }
-  
-    h2 {
-      font-size: 20px;
-    }
-  }
-  
+.my-properties-wrapper {
+  padding: 20px;
+  background-color: #f7f9fc; /* Light background for contrast */
+}
+
+.my-properties-title {
+  font-size: 2em;
+  color: #333; /* Dark text for visibility */
+  margin-bottom: 20px;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+.property-card {
+  background-color: #ffffff; /* White card for content */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 20px;
+  text-align: center; /* Center text */
+}
+
+.property-title {
+  font-size: 1.5em;
+  color: #007bff; /* Primary color */
+  margin-bottom: 10px;
+}
+
+.property-status {
+  margin-bottom: 15px;
+  color: #555; /* Muted status color */
+}
+
+.property-details-button {
+  background-color: #007bff; /* Primary color */
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.property-details-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}

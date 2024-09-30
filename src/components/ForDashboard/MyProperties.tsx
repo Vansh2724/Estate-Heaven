@@ -1,26 +1,23 @@
 import React from 'react';
 import '../../styles/Dashboard/MyProperties.css';
-import { FaListAlt, FaTrash } from 'react-icons/fa';
 
 const MyProperties: React.FC = () => {
-  const properties = [
-    { id: 1, title: 'Beautiful Apartment', description: 'A lovely place to live' },
-    { id: 2, title: 'Cozy House', description: 'Perfect for a small family' },
-  ];
-
   return (
-    <div className="dashboard-my-properties-container">
-      <h2><FaListAlt /> My Properties</h2>
-      <ul>
-        {properties.map(property => (
-          <li key={property.id}>
-            <h3>{property.title}</h3>
-            <p>{property.description}</p>
-            <button>Edit</button>
-            <button className="delete-button"><FaTrash /></button>
-          </li>
-        ))}
-      </ul>
+    <div className="my-properties-wrapper">
+      <h2 className="my-properties-title">My Properties</h2>
+      <div className="properties-grid">
+        <div className="property-card">
+          <h3 className="property-title">123 Main St, Cityville</h3>
+          <p className="property-status">Status: Listed</p>
+          <button className="property-details-button">View Details</button>
+        </div>
+        <div className="property-card">
+          <h3 className="property-title">456 Oak Ave, Townsville</h3>
+          <p className="property-status">Status: Sold</p>
+          <button className="property-details-button">View Details</button>
+        </div>
+        {/* More properties can be added here */}
+      </div>
     </div>
   );
 };

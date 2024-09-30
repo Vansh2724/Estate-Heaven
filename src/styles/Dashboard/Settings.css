@@ -1,0 +1,51 @@
+.settings-wrapper {
+    padding: 20px;
+    background-color: #f7f9fc; /* Light background for contrast */
+  }
+  
+  .settings-title {
+    font-size: 2em;
+    color: #333; /* Dark text for visibility */
+    margin-bottom: 20px;
+  }
+  
+  .settings-card {
+    background-color: #ffffff; /* White card for content */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 30px;
+  }
+  
+  .setting-field {
+    margin-bottom: 20px;
+  }
+  
+  .setting-label {
+    font-weight: 600; /* Bold labels */
+    color: #555; /* Slightly lighter text for labels */
+    margin-bottom: 5px; /* Space below label */
+  }
+  
+  .setting-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .settings-save-button {
+    background-color: #007bff; /* Primary color */
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  }
+  
+  .settings-save-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+  }
+  

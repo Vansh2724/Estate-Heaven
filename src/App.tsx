@@ -16,19 +16,18 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-        {/* Navbar will be present on all pages */}
-        {/* <Navbar /> */}
         <Routes>
-          {/* Route for the homepage */}
+          {/* Public routes */}
           <Route path="/" element={<Homepage />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/search" element={<SearchProperty />} />
           <Route path="/list" element={<ListProperty />} />
-          <Route path="/dashboard-profile" element={<Dashboard />} />
-          {/* Route for the Signup page */}
-          <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
-          <Route path="/login" element={<PrivateRoute><Login /></PrivateRoute>} />
-          <Route path="/forgot-password" element={<PrivateRoute><ForgotPassword /></PrivateRoute>} /> {/* Add the new route */}
+
+          {/* Protected Routes */}
+          <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </div>
     </Router>
