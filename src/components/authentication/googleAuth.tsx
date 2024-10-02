@@ -18,9 +18,17 @@ export const handleGoogleAuth = async (credential: string, authContext: AuthCont
       localStorage.setItem('user', JSON.stringify({ id: user._id, ...user }));
       localStorage.setItem('token', token);
 
-      // Call the context's login method
-      authContext.login(token, user);
-      
+      // Call the context's login or googleLogin method
+      if (isSignup) {
+        authContext.login(token, user); // Call login for regular signup
+      } else {
+        // If it's a login from Google, call googleLogin
+        authContext.googleLogin({
+          firstName: user.firstName,
+          id: user._id, // Assuming you have the user ID
+        });
+      }
+
       return true; // Successful login/signup
     }
   } catch (error) {

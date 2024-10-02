@@ -1,15 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Navbar from './components/Navbar';
 import Homepage from './components/pages/Homepage';
 import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 import AboutUs from './components/pages/AboutUs';
 import ForgotPassword from './components/authentication/ForgotPassword';
 import PrivateRoute from './components/PrivateRoute'; 
+import PublicRoute from './components/PublicRoute'; // Import the PublicRoute component
 import SearchProperty from './components/pages/SearchProperty'; 
 import ListProperty from './components/pages/ListProperty';
 import Dashboard from './components/pages/Dashboard';
+import PropertyDetailsPage from './components/pages/PropertyDetailsOverlay';
 import './App.css'; // Import global styles
 
 const App: React.FC = () => {
@@ -23,11 +24,29 @@ const App: React.FC = () => {
           <Route path="/search" element={<SearchProperty />} />
           <Route path="/list" element={<ListProperty />} />
 
-          {/* Protected Routes */}
-          <Route path="/dashboard/*" element={<Dashboard />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Private routes */}
+          <Route path="/dashboard/*" element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } />
+          
+          {/* Public routes for signup and login wrapped in PublicRoute */}
+          <Route path="/signup" element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          } />
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
+          <Route path="/forgot-password" element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          } />
         </Routes>
       </div>
     </Router>

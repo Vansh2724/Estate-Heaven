@@ -6,6 +6,7 @@ require('dotenv').config();  // To load environment variables
 
 const authRoutes = require('./routes/auth');
 const propertyRoutes = require('./routes/propertyRoute');  // Import property routes
+const propertyView = require('./routes/propertyView');  // Import property routes
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));  // Support URL-encoded bodi
 // Routes
 app.use('/api/auth', authRoutes);  // Authentication routes
 app.use('/api/property', propertyRoutes);  // Property listing routes
+app.use('/api/propertyview', propertyView);  // Property listing routes
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {

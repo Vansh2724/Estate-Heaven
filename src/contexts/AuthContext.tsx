@@ -5,11 +5,12 @@ interface User {
   id: string;
 }
 
-export interface AuthContextType { // Export the type here
+export interface AuthContextType {
   isAuthenticated: boolean;
   userName: string;
   avatarColor: string;
   login: (token: string, user: User) => void;
+  googleLogin: (user: User) => void; // Add googleLogin method
   logout: () => void;
 }
 
@@ -22,11 +23,13 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const googleUserData = localStorage.getItem('googleUser');
     const userData = localStorage.getItem('user');
-  
-    if (token && userData) {
+
+    // Handle both normal login and Google login
+    if (token || googleUserData) {
       try {
-        const user = JSON.parse(userData);
+        const user = googleUserData ? JSON.parse(googleUserData) : JSON.parse(userData!);
         setIsAuthenticated(true);
         setUserName(user.firstName);
         generateAvatarColor(user.id);
@@ -47,29 +50,38 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.error('Invalid login data');
       return;
     }
-  
-    try {
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-  
-      setIsAuthenticated(true);
-      setUserName(user.firstName);
-      generateAvatarColor(user.id); // Generate a new color each login
-    } catch (error) {
-      console.error('Error saving to localStorage:', error);
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    setIsAuthenticated(true);
+    setUserName(user.firstName);
+    generateAvatarColor(user.id);
+  };
+
+  const googleLogin = (user: User) => {
+    if (!user) {
+      console.error('Invalid Google login data');
+      return;
     }
+
+    localStorage.setItem('googleUser', JSON.stringify(user));
+    setIsAuthenticated(true);
+    setUserName(user.firstName);
+    generateAvatarColor(user.id);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('googleUser');
     setIsAuthenticated(false);
     setUserName('');
     setAvatarColor('#000');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userName, avatarColor, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userName, avatarColor, login, googleLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );

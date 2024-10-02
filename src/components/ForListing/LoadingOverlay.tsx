@@ -1,7 +1,7 @@
 // src/components/LoadingOverlay.tsx
 import React from 'react';
 import '../../styles/ListProperty/LoadingOverlay.css'; // CSS for styles
-import LoaderGif from '../../img/lgsp/Loader.gif'; // Correct import for the GIF
+import LoaderGif from '../../img//images/Loaders.gif'; // Correct import for the GIF
 
 const LoadingOverlay: React.FC = () => {
   return (

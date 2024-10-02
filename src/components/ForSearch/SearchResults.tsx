@@ -28,6 +28,7 @@ interface SearchResultsProps {
   onPageChange: (page: number) => void;
   toggleFavorite: (id: string) => void;
   searchExecuted: boolean;
+  openPropertyDetails: (id: string) => void; // Add this prop for opening the overlay
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -38,6 +39,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   onPageChange,
   toggleFavorite,
   searchExecuted,
+  openPropertyDetails, // Destructure the new prop
 }) => {
   const itemsPerPage = 15; // 5 rows x 3 columns
   const paginatedProperties = properties.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -80,7 +82,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
               </div>
               <div className="search-result-footer">
                 <span className="search-result-price">${property.price}</span>
-                <button className="search-result-btn">View Details</button>
+                <button
+                  className="search-result-btn"
+                  onClick={() => openPropertyDetails(property._id)} // Use the openPropertyDetails prop to trigger the overlay
+                >
+                  View Details
+                </button>
               </div>
             </div>
           </div>

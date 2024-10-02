@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext'; // Ensure the path is correct
 
 interface PrivateRouteProps {
   children: React.ReactElement;
@@ -9,14 +9,12 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const authContext = useContext(AuthContext);
   
-  if (authContext?.isAuthenticated) {
-    // Redirect logged-in users away from login and signup pages
-    return <Navigate to="/" />;
+  // If not authenticated, redirect to login
+  if (!authContext?.isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
-//   else{
-//     return <Navigate to="/" />;
-//   }
 
+  // If authenticated, render the children
   return children;
 };
 
