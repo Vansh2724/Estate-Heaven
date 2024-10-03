@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaBed, FaBath, FaHome, FaRulerCombined, FaUtensils, FaCouch, FaMapMarkerAlt, FaFilter, FaSortAmountDown } from 'react-icons/fa';
+import axios from 'axios';
 import '../../styles/SearchPage/SearchSection.css';
 
 interface SearchParams {
@@ -19,7 +20,7 @@ interface SearchParams {
 interface SearchSectionProps {
   setProperties: React.Dispatch<React.SetStateAction<any[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
-  setSearchExecuted: React.Dispatch<React.SetStateAction<boolean>>; // New prop to track search execution
+  setSearchExecuted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPages, setSearchExecuted }) => {
@@ -52,25 +53,23 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/property/search', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/api/property/search', searchParams, {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(searchParams),
+        }
       });
 
-      const result = await response.json();
+      const result = response.data;
 
-      if (response.ok) {
-        setProperties(result.data);
-        setTotalPages(result.totalPages);
-        setSearchExecuted(true); // Set searchExecuted to true
-      } else {
-        toast.error(result.message);
-      }
+      setProperties(result.data);
+      setTotalPages(result.totalPages);
+      setSearchExecuted(true);
     } catch (error) {
-      toast.error('Network error: Unable to fetch properties.');
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Network error: Unable to fetch properties.');
+      }
     }
   };
 

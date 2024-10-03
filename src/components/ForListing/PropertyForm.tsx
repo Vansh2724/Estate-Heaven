@@ -120,7 +120,7 @@ const PropertyForm: React.FC = () => {
     setIsLoading(true); // Start loading overlay
   
     try {
-      const response = await axios.post("http://localhost:5000/api/property/list", data, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/list`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("Property listed successfully!");

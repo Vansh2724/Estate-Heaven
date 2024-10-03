@@ -24,7 +24,12 @@ interface Property {
   ownerName: string;
   images: string[];
   isFavorite: boolean;
+  pincode: string;           // Add these missing fields
+  address: string;
+  ownerContact: string;
+  ownerEmail: string;
 }
+
 
 const SearchProperty: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -92,12 +97,12 @@ const SearchProperty: React.FC = () => {
         </div>
 
         {/* Overlay for Property Details */}
-        {selectedPropertyId && (
-          <PropertyDetailsOverlay
-            propertyId={selectedPropertyId}
-            onClose={closeOverlay}
-          />
-        )}
+        <PropertyDetailsOverlay
+  property={properties.find(p => p._id === selectedPropertyId) || null}
+  onClose={closeOverlay}
+/>
+
+
       </div>
 
       {/* Footer remains unchanged */}
