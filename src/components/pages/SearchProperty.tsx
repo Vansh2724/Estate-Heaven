@@ -28,6 +28,7 @@ interface Property {
   address: string;
   ownerContact: string;
   ownerEmail: string;
+  description: string; // Add the missing description field
 }
 
 

@@ -1,98 +1,121 @@
-.overlay {
+.property-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  overflow-y: auto; /* Allow scrolling within the overlay */
-  animation: fadeIn 0.3s ease; /* Fade-in animation */
-}
-
-.overlay-content {
-  background: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 800px; /* Set a max width for the overlay */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  position: relative;
 }
 
-.close-btn {
+.property-overlay-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+.property-overlay-close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 10px; /* Adjusted to be clearly visible */
+  right: 10px; /* Adjusted to be clearly visible */
+  font-size: 1.5rem;
+  color: #333;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px;
-  color: #333;
+  z-index: 1;
 }
 
-.close-btn:hover {
-  color: #e67e22; /* Change color on hover */
+.property-overlay-image-section {
+  margin-bottom: 20px;
+  margin-top: 25px;
 }
 
-.overlay-header {
-  text-align: center;
-}
-
-.price {
-  color: #e67e22; /* Highlight price color */
-}
-
-.overlay-body {
-  display: flex;
-  flex-direction: column; /* Use column for better alignment */
-  align-items: center;
-}
-
-.image-gallery {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.property-overlay-main-image {
   width: 100%;
-}
-
-.main-image img {
-  width: 100%; /* Ensure main image takes full width */
-  border-radius: 8px; /* Rounded corners */
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
 }
 
-.other-images {
+.property-overlay-small-images {
   display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Allow images to wrap */
+  gap: 10px; /* Space between images */
 }
 
-.other-images img {
-  width: 100px; /* Set fixed width for thumbnails */
-  margin: 0 5px;
-  border-radius: 4px;
-  cursor: pointer;
+.property-overlay-small-image {
+  flex: 1 1 calc(33.33% - 10px); /* Three images per row with gap */
+  position: relative; /* For positioning the image */
+  overflow: hidden; /* Ensure image does not overflow */
+  border-radius: 8px; /* Added border-radius for smooth edges */
 }
 
-.property-details {
-  width: 100%; /* Full width for property details */
-  text-align: left; /* Align text to the left */
+.property-overlay-small-image img {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure image covers the container */
+  border-radius: 8px; /* Ensure images have smooth edges */
 }
 
-.property-details h4 {
-  margin-bottom: 10px; /* Space below the title */
+.property-overlay-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
-.property-details p {
-  margin: 5px 0; /* Space between paragraphs */
+.property-overlay-title {
+  font-size: 1.5rem;
+  color: #2c3e50;
 }
 
-/* Full-Screen Slider Styles */
-.slider-overlay {
+.property-overlay-price {
+  font-size: 1.4rem;
+  color: #27ae60;
+  margin: 10px 0;
+}
+
+.property-overlay-description {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.property-overlay-location h4,
+.property-overlay-utilities h4,
+.property-overlay-owner-info h4 {
+  color: #34495e;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.property-overlay-location p,
+.property-overlay-utilities p,
+.property-overlay-owner-info p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.property-overlay-slider {
   position: fixed;
   top: 0;
   left: 0;
@@ -102,59 +125,81 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Higher z-index for slider */
+  z-index: 1100;
 }
 
-.slider-overlay .close-slider-btn {
+.property-overlay-slider-close-btn {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 15px;
+  right: 15px;
+  font-size: 2rem;
+  color: #fff;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 30px;
-  color: white;
 }
 
-.slider-image img {
-  width: 100%; /* Ensure images take full width in slider */
-  border-radius: 8px; /* Rounded corners */
+.property-overlay-slider-image-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 
-/* Scrollbar customization */
-.overlay {
-  scrollbar-width: thin;
-}
-
-.overlay::-webkit-scrollbar {
-  width: 8px;
-}
-
-.overlay::-webkit-scrollbar-thumb {
-  background-color: #888; /* Custom scrollbar color */
-  border-radius: 10px;
-}
-
-.overlay::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Track color */
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .property-overlay-content {
+    padding: 15px;
   }
-  to {
-    opacity: 1;
+
+  .property-overlay-main-image {
+    height: 200px; /* Adjusted for responsiveness */
+  }
+
+  .property-overlay-small-image {
+    flex: 1 1 calc(48% - 10px); /* Two images per row */
+    margin-bottom: 10px; /* Space between rows */
+  }
+
+  .property-overlay-title {
+    font-size: 1.3rem;
+  }
+
+  .property-overlay-price {
+    font-size: 1.1rem;
+  }
+
+  .property-overlay-description {
+    font-size: 0.85rem;
   }
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .overlay-content {
+@media (max-width: 480px) {
+  .property-overlay-content {
     padding: 10px;
   }
 
-  .close-btn, .close-slider-btn {
-    font-size: 20px;
+  .property-overlay-close-btn {
+    top: 10px; /* Further adjustment for mobile */
+    right: 10px; /* Further adjustment for mobile */
+  }
+
+  .property-overlay-main-image {
+    height: 150px; /* Adjusted for smaller screens */
+  }
+
+  .property-overlay-small-image {
+    flex: 1 1 100%; /* Stack images vertically on small screens */
+  }
+
+  .property-overlay-title {
+    font-size: 1.2rem;
+  }
+
+  .property-overlay-price {
+    font-size: 1rem;
+  }
+
+  .property-overlay-description {
+    font-size: 0.75rem;
   }
 }

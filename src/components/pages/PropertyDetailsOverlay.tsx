@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaTimes, FaMapMarkerAlt, FaBed, FaBath, FaPhone, FaEnvelope } from 'react-icons/fa';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -9,21 +9,18 @@ interface Property {
   _id: string;
   title: string;
   price: number;
-  type: string;
-  for: string;
   city: string;
   state: string;
   bedrooms: number;
-  hall: number;
-  kitchen: number;
   bathrooms: number;
   area: number;
   ownerName: string;
   images: string[];
   ownerContact: string;
   ownerEmail: string;
-  address: string;
+  description: string;
   pincode: string;
+  address: string;
 }
 
 interface PropertyOverlayProps {
@@ -32,24 +29,45 @@ interface PropertyOverlayProps {
 }
 
 const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onClose }) => {
-  const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [isSliderOpen, setSliderOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<number>(0);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+    document.body.style.overflow = property ? 'hidden' : 'auto';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [property]);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if ((e.target as Element).classList.contains('property-overlay')) {
         onClose();
       }
     };
-    
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('click', handleOutsideClick);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleOutsideClick);
     };
   }, [onClose]);
 
   if (!property) return null;
 
-  const settings = {
+  const openSlider = (index: number) => {
+    setSelectedImage(index);
+    setSliderOpen(true);
+  };
+
+  const closeSlider = () => {
+    setSliderOpen(false);
+  };
+
+  const formatPrice = (price: number) => {
+    return `₹${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
+
+  const sliderSettings = {
+    initialSlide: selectedImage,
     dots: true,
     infinite: true,
     speed: 500,
@@ -57,72 +75,76 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
     slidesToScroll: 1,
   };
 
-  const openSlider = () => {
-    setIsSliderOpen(true);
-  };
-
-  const closeSlider = () => {
-    setIsSliderOpen(false);
-  };
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
-    <div className="overlay" onClick={handleOverlayClick}>
-      <div className="overlay-content">
-        <button className="close-btn" onClick={onClose}>
+    <div className="property-overlay">
+      <div className="property-overlay-content">
+        <button className="property-overlay-close-btn" onClick={onClose}>
           <FaTimes />
         </button>
 
-        <div className="overlay-header">
-          <h2>{property.title}</h2>
-          <h3 className="price">${property.price}</h3>
+        <div className="property-overlay-image-section">
+          <img
+            src={property.images[0]}
+            alt="Main Property"
+            className="property-overlay-main-image"
+            onClick={() => openSlider(0)}
+          />
+          <div className="property-overlay-small-images">
+            {property.images.slice(1, 4).map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Property Thumbnail ${index + 1}`}
+                className="property-overlay-small-image"
+                onClick={() => openSlider(index + 1)}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="overlay-body">
-          <div className="image-gallery">
-            <div className="main-image">
-              <img src={property.images[0]} alt="Main Property" onClick={openSlider} />
-            </div>
-            <div className="other-images">
-              {property.images.slice(1, 4).map((image, index) => (
-                <img key={index} src={image} alt={`Property Image ${index + 2}`} onClick={openSlider} />
-              ))}
-            </div>
-          </div>
+        <div className="property-overlay-section">
+          <h2 className="property-overlay-title">{property.title}</h2>
+          <h3 className="property-overlay-price">{formatPrice(property.price)}</h3>
+          <p className="property-overlay-description">{property.description}</p>
+        </div>
 
-          <div className="property-details">
-            <h4>Property Details</h4>
-            <p><strong>Type:</strong> {property.type}</p>
-            <p><strong>For:</strong> {property.for}</p>
-            <p><strong>Location:</strong> {property.city}, {property.state} - {property.pincode}</p>
-            <p><strong>Address:</strong> {property.address}</p>
-            <p><strong>Owner Name:</strong> {property.ownerName}</p>
-            <p><strong>Contact:</strong> {property.ownerContact}</p>
-            <p><strong>Email:</strong> {property.ownerEmail}</p>
-            <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
-            <p><strong>Bathrooms:</strong> {property.bathrooms}</p>
-            <p><strong>Hall:</strong> {property.hall}</p>
-            <p><strong>Kitchen:</strong> {property.kitchen}</p>
-            <p><strong>Area:</strong> {property.area} sq. ft.</p>
-          </div>
+        <div className="property-overlay-location property-overlay-section">
+          <h4>Location Details</h4>
+          <p><FaMapMarkerAlt /> <strong>City:</strong> {property.city}</p>
+          <p><strong>State:</strong> {property.state}</p>
+          <p><strong>Pincode:</strong> {property.pincode}</p>
+          <p><strong>Address:</strong> {property.address}</p>
+        </div>
+
+        <div className="property-overlay-utilities property-overlay-section">
+          <h4>Utilities</h4>
+          <p><FaBed /> <strong>Bedrooms:</strong> {property.bedrooms}</p>
+          <p><FaBath /> <strong>Bathrooms:</strong> {property.bathrooms}</p>
+          <p><strong>Area:</strong> {property.area} sq. ft.</p>
+        </div>
+
+        <div className="property-overlay-owner-info property-overlay-section">
+          <h4>Owner Information</h4>
+          <p><strong>Owner:</strong> {property.ownerName}</p>
+          <p><FaPhone /> <strong>Contact:</strong> {property.ownerContact}</p>
+          <p><FaEnvelope /> <strong>Email:</strong> {property.ownerEmail}</p>
         </div>
       </div>
 
-      {/* Full-Screen Slider */}
       {isSliderOpen && (
-        <div className="slider-overlay">
-          <button className="close-slider-btn" onClick={closeSlider}>
+        <div className="property-overlay-slider">
+          <button className="property-overlay-slider-close-btn" onClick={closeSlider}>
             <FaTimes />
           </button>
-          <Slider {...settings}>
+          <Slider {...sliderSettings}>
             {property.images.map((image, index) => (
-              <div key={index} className="slider-image">
-                <img src={image} alt={`Slider Image ${index + 1}`} />
+              <div key={index} className="property-overlay-slider-image-container">
+                <img
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="property-overlay-slider-image"
+                  onError={(e) => { e.currentTarget.src = '/path/to/default/image.jpg'; }} // Fallback image
+                />
               </div>
             ))}
           </Slider>
