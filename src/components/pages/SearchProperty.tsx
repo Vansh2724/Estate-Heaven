@@ -24,12 +24,15 @@ interface Property {
   ownerName: string;
   images: string[];
   isFavorite: boolean;
-  pincode: string;           // Add these missing fields
+  pincode: string;
   address: string;
   ownerContact: string;
   ownerEmail: string;
-  description: string; // Add the missing description field
+  description: string;
+  latitude: number;  // Add latitude
+  longitude: number; // Add longitude
 }
+
 
 
 const SearchProperty: React.FC = () => {

@@ -4,8 +4,8 @@ import { AuthContextType } from '../../contexts/AuthContext'; // Make sure to im
 export const handleGoogleAuth = async (credential: string, authContext: AuthContextType, isSignup: boolean) => {
   try {
     const endpoint = isSignup 
-      ? 'http://localhost:5000/api/auth/google-signup' 
-      : 'http://localhost:5000/api/auth/google-login';
+      ? `${process.env.REACT_APP_SERVER_API_URL}/api/auth/google-signup` 
+      : `${process.env.REACT_APP_SERVER_API_URL}/api/auth/google-login`;
 
     // Send a POST request to the API with the Google token
     const response = await axios.post(endpoint, { token: credential });

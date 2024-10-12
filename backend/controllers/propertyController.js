@@ -12,21 +12,30 @@ exports.listProperty = async (req, res) => {
             return res.status(400).json({ success: false, message: "User ID is required." });
         }
 
+        // Validate latitude and longitude
+        if (!req.body.latitude || !req.body.longitude) {
+            return res.status(400).json({ success: false, message: "Latitude and longitude are required." });
+        }
+
         // Handle images upload to Cloudinary
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ success: false, message: "At least one image is required." });
+        }
+
         const imageUploadPromises = req.files.map(file => {
-          return new Promise((resolve, reject) => {
-              cloudinary.uploader.upload_stream(
-                  {
-                      resource_type: 'auto',
-                      folder: 'property_images' // Specify the folder here
-                  }, 
-                  (error, result) => {
-                      if (error) return reject(error);
-                      resolve(result.secure_url); // Get the URL of the uploaded image
-                  }
-              ).end(file.buffer); // Use buffer for the stream
-          });
-      });
+            return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream(
+                    { resource_type: 'auto', folder: 'property_images' },
+                    (error, result) => {
+                        if (error) {
+                            console.error("Cloudinary upload error:", error);
+                            return reject(new Error("Image upload failed."));
+                        }
+                        resolve(result.secure_url);
+                    }
+                ).end(file.buffer);
+            });
+        });
 
         const imageUrls = await Promise.all(imageUploadPromises);
 
@@ -48,8 +57,10 @@ exports.listProperty = async (req, res) => {
             ownerName: req.body.ownerName,
             ownerContact: req.body.ownerContact,
             ownerEmail: req.body.ownerEmail,
-            images: imageUrls, // Save the uploaded image URLs
+            images: imageUrls,
             userId: userId,
+            latitude: req.body.latitude,   // Added latitude
+            longitude: req.body.longitude,  // Added longitude
             createdAt: Date.now(),
         });
 
@@ -57,7 +68,7 @@ exports.listProperty = async (req, res) => {
         res.status(201).json({ success: true, message: "Property listed successfully", data: savedProperty });
 
     } catch (err) {
-        console.error(err);
+        console.error("Error listing property:", err);
         res.status(500).json({ success: false, message: "Something went wrong." });
     }
 };

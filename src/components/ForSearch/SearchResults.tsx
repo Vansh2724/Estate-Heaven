@@ -18,7 +18,15 @@ interface Property {
   ownerName: string;
   images: string[];
   isFavorite: boolean;
+  pincode: string;
+  address: string;
+  ownerContact: string;
+  ownerEmail: string;
+  description: string;
+  latitude: number;  // Add latitude
+  longitude: number; // Add longitude
 }
+
 
 interface SearchResultsProps {
   properties: Property[];

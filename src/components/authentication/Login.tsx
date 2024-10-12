@@ -42,7 +42,7 @@ const Login: React.FC = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/auth/login`, formData);
   
       if (response.status === 200) {
         const { token, user } = response.data;

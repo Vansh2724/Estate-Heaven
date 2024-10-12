@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    toast.success("Successfully logged out!");
+    // toast.success("Successfully logged out!");
     navigate("/"); // Redirect to home page after logout
   };
 

@@ -27,6 +27,14 @@ const propertySchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  latitude: {  // Latitude field
+    type: Number,  // Changed to Number for better handling of coordinates
+    required: true  // Keep as required if necessary
+  },
+  longitude: {  // Longitude field
+    type: Number,  // Changed to Number for better handling of coordinates
+    required: true  // Keep as required if necessary
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import "../../styles/ListProperty/PropertyForm.css";
 import PropertyDetails from "./PropertyDetails";
 import LocationDetails from "./LocationDetails";
@@ -33,6 +33,8 @@ interface FormData {
   bathrooms: string;
   area: string;
   images: ImageFile[];
+  latitude: string;  // Add latitude
+  longitude: string; // Add longitude
 }
 
 const PropertyForm: React.FC = () => {
@@ -55,6 +57,8 @@ const PropertyForm: React.FC = () => {
     bathrooms: "",
     area: "",
     images: [],
+    latitude: "",  // Initialize latitude
+    longitude: "", // Initialize longitude
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +71,7 @@ const PropertyForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     const emptyFields = Object.keys(formData).filter((field) => !formData[field as keyof FormData]);
     if (emptyFields.length > 0) {
       emptyFields.forEach((field) => {
@@ -75,22 +79,21 @@ const PropertyForm: React.FC = () => {
       });
       return;
     }
-  
+
     // Sanitize the price input
     const sanitizedPrice = formData.price.replace(/,/g, "");
-  
+
     let userId;
     const userString = localStorage.getItem("user");
     if (userString) {
       const user = JSON.parse(userString);
-      // Check if the user is a Google user and access the correct ID
-      userId = user.isGoogleUser ? user._id : user.id; // Use _id for Google users and id for regular users
-      console.log("User ID:", userId); // Console log the user ID
+      userId = user.isGoogleUser ? user._id : user.id;
+      console.log("User ID:", userId);
     } else {
       toast.error("User not found. Please log in.");
       return;
     }
-  
+
     // Create FormData object
     const data = new FormData();
     data.append("userId", userId);
@@ -111,14 +114,16 @@ const PropertyForm: React.FC = () => {
     data.append("kitchen", formData.kitchen);
     data.append("bathrooms", formData.bathrooms);
     data.append("area", formData.area);
-  
+    data.append("latitude", formData.latitude);
+    data.append("longitude", formData.longitude);
     // Append images
     formData.images.forEach((image) => {
       data.append("images", image);
     });
-  
     setIsLoading(true); // Start loading overlay
-  
+    data.forEach((value, key) => {
+      console.log(key, value);
+    });
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/list`, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -133,11 +138,11 @@ const PropertyForm: React.FC = () => {
     } finally {
       setIsLoading(false); // Hide loading overlay
     }
-  };  
+  };
 
   return (
     <>
-      {isLoading && <LoadingOverlay />} {/* Show loading overlay when isLoading is true */}
+      {isLoading && <LoadingOverlay />}
       <form className="real-estate-form-container" onSubmit={handleSubmit}>
         <ToastContainer />
         <h2 className="listproperty-h2">Real Estate Listing Form</h2>

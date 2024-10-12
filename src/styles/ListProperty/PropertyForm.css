@@ -121,6 +121,56 @@
   max-width: 150px;
 }
 
+.add-map-point-button {
+  background-color: #28a745; /* Green for adding */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.add-map-point-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.select-location-button {
+  background-color: #007bff; /* Blue for selecting */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.select-location-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.remove-map-point-button {
+  background-color: #dc3545; /* Red for removing */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.remove-map-point-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
   .real-estate-form-container {
