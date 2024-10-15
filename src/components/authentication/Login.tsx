@@ -5,7 +5,7 @@ import openEyeIcon from '../../img/lgsp/openeye.svg';
 import closeEyeIcon from '../../img/lgsp/closeeye.svg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { handleGoogleAuth } from './googleAuth'; // Updated import
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
 
         <div className="signup-text-container">
           <p className="signup-text">
-            Don't have an account? <a href="/signup" className="signup-link">Sign up now</a>
+            Don't have an account? <Link to="/signup" className="signup-link">Sign up now</Link>
           </p>
           <p className="forgot-password-text">
             <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>

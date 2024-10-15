@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../styles/authentication/Signup.css';
@@ -227,7 +227,7 @@ const Signup: React.FC = () => {
 
         <div className="login-text-container">
           <p className="login-text">
-            Already have an account? <a href="/login" className="login-link">Login now</a>
+            Already have an account? <Link to="/login" className="login-link">Login now</Link>
           </p>
         </div>
 
