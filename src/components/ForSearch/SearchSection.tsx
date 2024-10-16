@@ -53,7 +53,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/property/search', searchParams, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/search`, searchParams, {
         headers: {
           'Content-Type': 'application/json',
         }
