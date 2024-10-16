@@ -10,11 +10,24 @@ const propertyView = require('./routes/propertyView');  // Import property route
 
 const app = express();
 
+// Allowed origins (local development + deployed frontend)
+const allowedOrigins = [
+  'http://localhost:3000',  // Local development
+  'https://estate-heaven.onrender.com/'  // Replace with your deployed frontend URL
+];
+
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:3000', // Allow requests from this origin (React app)
-    methods: 'GET,POST,PUT,DELETE',  // Allowed HTTP methods
-    credentials: true,               // Allow cookies and authentication headers
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests) or check if origin is in the allowedOrigins list
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE',  // Allowed HTTP methods
+  credentials: true,  // Allow cookies and authentication headers
 }));
 
 app.use(bodyParser.json());  // Parse incoming JSON request bodies
@@ -23,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));  // Support URL-encoded bodi
 // Routes
 app.use('/api/auth', authRoutes);  // Authentication routes
 app.use('/api/property', propertyRoutes);  // Property listing routes
-app.use('/api/propertyview', propertyView);  // Property listing routes
+app.use('/api/propertyview', propertyView);  // Property view routes
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -36,4 +49,3 @@ mongoose.connect(process.env.MONGO_URI, {
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
-
