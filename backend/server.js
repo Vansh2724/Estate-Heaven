@@ -5,21 +5,20 @@ const bodyParser = require('body-parser');
 require('dotenv').config();  // To load environment variables
 
 const authRoutes = require('./routes/auth');
-const propertyRoutes = require('./routes/propertyRoute');  // Import property routes
-const propertyView = require('./routes/propertyView');  // Import property routes
+const propertyRoutes = require('./routes/propertyRoute');
+const propertyView = require('./routes/propertyView');
 
 const app = express();
 
 // Allowed origins (local development + deployed frontend)
 const allowedOrigins = [
   'http://localhost:3000',  // Local development
-  'https://estate-heaven.onrender.com/'  // Replace with your deployed frontend URL
+  'https://estate-heaven.onrender.com'  // Deployed frontend URL (without trailing slash)
 ];
 
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests) or check if origin is in the allowedOrigins list
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -30,13 +29,16 @@ app.use(cors({
   credentials: true,  // Allow cookies and authentication headers
 }));
 
-app.use(bodyParser.json());  // Parse incoming JSON request bodies
-app.use(bodyParser.urlencoded({ extended: true }));  // Support URL-encoded bodies
+// Handle preflight requests
+app.options('*', cors());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authRoutes);  // Authentication routes
-app.use('/api/property', propertyRoutes);  // Property listing routes
-app.use('/api/propertyview', propertyView);  // Property view routes
+app.use('/api/auth', authRoutes);
+app.use('/api/property', propertyRoutes);
+app.use('/api/propertyview', propertyView);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
