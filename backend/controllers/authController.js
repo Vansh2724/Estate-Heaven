@@ -43,7 +43,7 @@ exports.signup = async (req, res) => {
 
     const payload = { user: { id: newUser.id } };
 
-    jwt.sign(payload, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) {
         return res.status(500).json({ message: 'Error generating token' });
       }
@@ -76,7 +76,7 @@ exports.login = async (req, res) => {
 
     const payload = { user: { id: user.id } };
 
-    jwt.sign(payload, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
       res.json({
         message: 'Login successful',
