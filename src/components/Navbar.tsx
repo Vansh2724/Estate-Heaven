@@ -14,6 +14,11 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Get user info from localStorage
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const userId = user ? user.id : null; // Extract the user id
+
   if (!authContext) {
     throw new Error("AuthContext must be used within an AuthProvider");
   }
@@ -38,7 +43,6 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    // toast.success("Successfully logged out!");
     navigate("/"); // Redirect to home page after logout
   };
 
@@ -96,10 +100,17 @@ const Navbar: React.FC = () => {
                   </div>
                   {showDropdown && (
                     <div className="user-dropdown" ref={dropdownRef}>
-                      <Link to="/dashboard/profile">Profile</Link>
-                      <Link to="/dashboard/myproperties">My Properties</Link>
-                      <Link to="/dashboard/messages">Messages</Link>
-                      <Link to="/dashboard/settings">Settings</Link>
+                      {/* Append the user ID in the URLs */}
+                      <Link to={`/dashboard/profile/${userId}`}>Profile</Link>
+                      <Link to={`/dashboard/myproperties/${userId}`}>
+                        My Properties
+                      </Link>
+                      <Link to={`/dashboard/messages/${userId}`}>
+                        Messages
+                      </Link>
+                      <Link to={`/dashboard/settings/${userId}`}>
+                        Settings
+                      </Link>
                       <button onClick={handleLogout} className="logout-btn">
                         Logout
                       </button>
