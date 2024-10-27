@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: function() { return !this.isGoogleUser; } }, // Required only if not a Google user
+  phone: { type: String, trim: true }, // Optional field for phone number
   resetToken: { type: String }, // Field to store the reset token
   resetTokenExpiry: { type: Date }, // Field to store the token expiry time
   isGoogleUser: { type: Boolean, default: false } // Indicates if the user signed up with Google

@@ -1,59 +1,156 @@
-.profile-wrapper {
+.profile-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f7f9fc; /* Light background for contrast */
+  background-color: #f9f9fb;
+  min-height: 100vh;
 }
 
-.profile-title {
-  font-size: 2em;
-  color: #333; /* Dark text for visibility */
+.profile-heading {
+  font-size: 2.4rem;
+  color: #333;
   margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
 }
 
-.profile-card {
-  background-color: #ffffff; /* White card for content */
+.profile-card-box {
+  background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   padding: 30px;
+  max-width: 600px;
   width: 100%;
-  max-width: 600px; /* Responsive width */
+  transition: transform 0.3s;
 }
 
-.profile-info {
+.profile-card-box:hover {
+  transform: translateY(-5px);
+}
+
+.profile-information {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
 }
 
-.profile-field {
+.profile-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
 }
 
 .profile-label {
-  font-weight: 600; /* Bold labels */
-  color: #555; /* Slightly lighter text for labels */
+  font-weight: 700;
+  color: #555;
+  font-size: 1.1rem;
+  width: 35%;
 }
 
 .profile-value {
-  color: #777; /* Muted text for values */
+  font-size: 1.1rem;
+  color: #666;
+  width: 60%;
+  min-height: 40px; /* Maintain height for consistency */
+  display: flex;
+  align-items: center; /* Center vertically */
 }
 
-.profile-edit-button {
-  background-color: #007bff; /* Primary color */
-  color: #ffffff;
+.profile-input-field {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: calc(100% - 40px); /* Full width minus button space */
+  transition: border 0.3s;
+}
+
+.profile-input-field:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.profile-phone-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.profile-name-inputs {
+  display: flex;
+  width: 100%;
+  gap: 10px; /* Spacing between first and last name inputs */
+}
+
+.profile-trash-button {
+  background-color: #dc3545;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-trash-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.trash-icon {
+  color: white;
+}
+
+.profile-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.profile-edit-btn,
+.profile-save-btn {
+  background-color: #4a90e2;
+  color: #fff;
   border: none;
   padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 8px;
   font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 0 5px;
 }
 
-.profile-edit-button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
-  transform: translateY(-2px); /* Slight lift effect */
+.profile-edit-btn:hover,
+.profile-save-btn:hover {
+  background-color: #357ab8;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height while loading */
+}
+
+@media (max-width: 600px) {
+  .profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-label {
+    width: 100%; /* Full width on small screens */
+    margin-bottom: 5px;
+    font-weight: 600; /* Slightly bolder for better visibility */
+  }
+
+  .profile-value {
+    width: auto; /* Auto width for values */
+  }
+
+  .profile-phone-input-container,
+  .profile-name-inputs {
+    flex-direction: column;
+    width: 100%;
+  }
 }
