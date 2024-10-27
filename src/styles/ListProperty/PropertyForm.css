@@ -47,7 +47,7 @@
   resize: vertical;
 }
 
-.real-estate-form-two-column {
+.real-estate-form-two-column{
   display: flex;
   justify-content: space-between;
   gap: 10px;
