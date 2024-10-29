@@ -5,12 +5,15 @@ import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 import AboutUs from './components/pages/AboutUs';
 import ForgotPassword from './components/authentication/ForgotPassword';
-import PrivateRoute from './components/PrivateRoute'; 
-import PublicRoute from './components/PublicRoute'; // Import the PublicRoute component
-import SearchProperty from './components/pages/SearchProperty'; 
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
+import SearchProperty from './components/pages/SearchProperty';
 import ListProperty from './components/pages/ListProperty';
-import Dashboard from './components/pages/Dashboard';
-import PropertyDetailsPage from './components/pages/PropertyDetailsOverlay';
+import Dashboard from './components/pages/Dashboard'; // Ensure you import the Dashboard component
+import Profile from './components/ForDashboard/Profile'; // Import the Profile component
+import MyProperties from './components/ForDashboard/MyProperties'; // Import the MyProperties component
+import Premium from './components/ForDashboard/Premium'; // Import the Premium component
+import Settings from './components/ForDashboard/Settings'; // Import the Settings component
 import './App.css'; // Import global styles
 
 const App: React.FC = () => {
@@ -29,8 +32,13 @@ const App: React.FC = () => {
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>
-          } />
-          
+          }>
+            <Route path="profile/:id" element={<Profile />} />
+            <Route path="myproperties/:id" element={<MyProperties />} />
+            <Route path="premium/:id" element={<Premium />} />
+            <Route path="settings/:id" element={<Settings />} />
+          </Route>
+
           {/* Public routes for signup and login wrapped in PublicRoute */}
           <Route path="/signup" element={
             <PublicRoute>

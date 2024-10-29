@@ -1,63 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Routes, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import '../../styles/Dashboard/Dashboard.css';
-import Profile from '../ForDashboard/Profile';
-import MyProperties from '../ForDashboard/MyProperties';
-import Settings from '../ForDashboard/Settings';
-import { FaHome, FaUser, FaBuilding, FaEnvelope, FaCog } from 'react-icons/fa';
+import { FaHome, FaUser, FaCrown, FaSlidersH, FaBuilding, FaBars, FaTimes } from 'react-icons/fa';
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const userId = user ? user.id : null; // Extract the user ID
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+    document.body.style.overflow = isSidebarOpen ? 'auto' : 'hidden';
+  };
 
   useEffect(() => {
-    // Retrieve user info from localStorage
-    const user = localStorage.getItem('user');
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      setUserId(parsedUser.id); // Set the userId from the stored user data
-    }
-  }, []);
-
-  if (!userId) {
-    console.error('User ID not found in localStorage');
-    return null; // Early return if userId is not found
-  }
+    document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto';
+  }, [isSidebarOpen]);
 
   return (
-    <div className="dashboard-container">
-      <aside className="dashboard-sidebar">
-        <button className="home-button" onClick={() => navigate('/')}>
-          <FaHome style={{ marginRight: '10px' }} /> Home
-        </button>
-        <nav className="sidebar-nav">
-          {/* Always include the userId in the Link URLs */}
-          <Link className="sidebar-link" to={`/dashboard/profile/${userId}`}>
-            <FaUser style={{ marginRight: '10px' }} /> Profile
-          </Link>
-          <Link className="sidebar-link" to={`/dashboard/myproperties/${userId}`}>
-            <FaBuilding style={{ marginRight: '10px' }} /> My Properties
-          </Link>
-          <Link className="sidebar-link" to={`/dashboard/messages/${userId}`}>
-            <FaEnvelope style={{ marginRight: '10px' }} /> Messages
-          </Link>
-          <Link className="sidebar-link" to={`/dashboard/settings/${userId}`}>
-            <FaCog style={{ marginRight: '10px' }} /> Settings
-          </Link>
-        </nav>
-      </aside>
-
-      <main className="dashboard-content">
-        <Routes>
-          {/* Ensure all paths include the userId as a URL parameter */}
-          <Route path="profile/:userId" element={<Profile />} />
-          <Route path="myproperties/:userId" element={<MyProperties />} />
-          {/* <Route path="messages/:userId" element={<Messages />} /> */}
-          <Route path="settings/:userId" element={<Settings />} />
-          <Route path="*" element={<Profile />} /> {/* Default route */}
-        </Routes>
-      </main>
-    </div>
+    <>
+      <div className="dashboard-menu-icon" onClick={toggleSidebar}>
+        {isSidebarOpen ? <FaTimes /> : <FaBars />}
+      </div>
+      <div className={`dashboard-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+        <div className="dashboard-sidebar">
+          <h2 className="sidebar-title"> User Dashboard</h2>
+          <ul className="dashboard-sidebar-links">
+            <li>
+              <Link to={`/dashboard/profile/${userId}`} className="dashboard-sidebar-link"><FaUser /> Profile</Link>
+            </li>
+            <li>
+              <Link to={`/dashboard/myproperties/${userId}`} className="dashboard-sidebar-link"><FaBuilding /> My Properties</Link>
+            </li>
+            <li>
+              <Link to={`/dashboard/premium/${userId}`} className="dashboard-sidebar-link"><FaCrown /> Premium</Link>
+            </li>
+            <li>
+              <Link to={`/dashboard/settings/${userId}`} className="dashboard-sidebar-link"><FaSlidersH /> Settings</Link>
+            </li>
+            <li>
+              <Link to="/" className="dashboard-sidebar-link"><FaHome /> Home</Link>
+            </li>
+          </ul>
+        </div>
+        <div className="dashboard-main-content">
+          <Outlet />
+        </div>
+      </div>
+    </>
   );
 };
 

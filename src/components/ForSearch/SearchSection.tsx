@@ -41,26 +41,41 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSearchParams((prev) => ({ ...prev, [name]: value }));
+    const formattedValue = name === 'city' 
+      ? value.trim().charAt(0).toUpperCase() + value.trim().slice(1).toLowerCase() 
+      : value;
+
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: formattedValue,
+    }));
   };
 
   const toggleFilters = () => setFiltersOpen(prev => !prev);
 
   const handleSearch = async () => {
-    if (!searchParams.city.trim()) {
-      toast.error('Please enter at least the city information.');
+    // Remove empty fields from searchParams
+    const filteredParams = Object.entries(searchParams)
+      .filter(([key, value]) => value.trim() !== '')
+      .reduce((acc: { [key: string]: string }, [key, value]) => {
+        acc[key] = value.trim();
+        return acc;
+      }, {});
+  
+    // Check if at least one field has a non-empty value
+    if (Object.keys(filteredParams).length === 0) {
+      toast.error('Please enter at least one search filter.');
       return;
     }
-
+  
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/search`, searchParams, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/search`, filteredParams, {
         headers: {
           'Content-Type': 'application/json',
         }
       });
-
+  
       const result = response.data;
-
       setProperties(result.data);
       setTotalPages(result.totalPages);
       setSearchExecuted(true);
@@ -72,6 +87,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setProperties, setTotalPa
       }
     }
   };
+  
 
   return (
     <div className="search-section-search-container">
