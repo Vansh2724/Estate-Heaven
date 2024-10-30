@@ -121,9 +121,6 @@ const PropertyForm: React.FC = () => {
       data.append("images", image);
     });
     setIsLoading(true); // Start loading overlay
-    data.forEach((value, key) => {
-      console.log(key, value);
-    });
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/property/list`, data, {
         headers: { "Content-Type": "multipart/form-data" },

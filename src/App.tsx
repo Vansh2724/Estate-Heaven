@@ -25,6 +25,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Homepage />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/search" element={<SearchProperty />} />
+          <Route path="/search/:state/:city/:for" element={<SearchProperty />} /> {/* Updated route with 'for' */}
           <Route path="/list" element={<ListProperty />} />
 
           {/* Private routes */}

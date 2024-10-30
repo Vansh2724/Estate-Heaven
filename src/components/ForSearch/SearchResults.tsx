@@ -1,6 +1,16 @@
-import React from 'react';
-import { FaBed, FaBath, FaCouch, FaUtensils, FaRulerCombined, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
-import '../../styles/SearchPage/SearchResults.css';
+import React, { useState } from "react";
+import {
+  FaBed,
+  FaBath,
+  FaCouch,
+  FaUtensils,
+  FaRulerCombined,
+  FaMapMarkerAlt,
+  FaHeart,
+  FaSortAmountDown,
+  FaBuilding
+} from "react-icons/fa";
+import "../../styles/SearchPage/SearchResults.css";
 
 interface Property {
   _id: string;
@@ -23,21 +33,27 @@ interface Property {
   ownerContact: string;
   ownerEmail: string;
   description: string;
-  latitude: number;  // Add latitude
-  longitude: number; // Add longitude
+  latitude: number;
+  longitude: number;
 }
-
 
 interface SearchResultsProps {
   properties: Property[];
   favorites: string[];
+  toggleFavorite: (id: string) => void;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  toggleFavorite: (id: string) => void;
   searchExecuted: boolean;
-  openPropertyDetails: (id: string) => void; // Add this prop for opening the overlay
+  openPropertyDetails: (propertyId: string) => void;
+  onApplyFilters: (filters: any) => void;
+  filters: {
+    state: string | undefined;
+    city: string | undefined;
+    for: string;
+  };
 }
+
 
 const SearchResults: React.FC<SearchResultsProps> = ({
   properties,
@@ -47,19 +63,132 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   onPageChange,
   toggleFavorite,
   searchExecuted,
-  openPropertyDetails, // Destructure the new prop
+  openPropertyDetails,
+  onApplyFilters,
 }) => {
-  const itemsPerPage = 15; // 5 rows x 3 columns
-  const paginatedProperties = properties.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const [filters, setFilters] = useState({
+    propertyType: "",
+    bedrooms: "",
+    bathrooms: "",
+    halls: "",
+    kitchens: "",
+    area: "",
+    sort: "",
+  });
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+
+  const handleApplyFilters = () => {
+    if (Object.values(filters).some(filter => filter === "")) {
+      alert("Please fill out all fields before applying filters.");
+      return;
+    }
+    onApplyFilters(filters); // Send filters to the server
+    onPageChange(1); // Reset to the first page
+  };
 
   return (
     <section className="search-result">
       <h2 className="search-result-title">Search Results</h2>
+
+      {/* Filters Display */}
+      <div className="filter-container">
+        <div className="filter-inputs">
+          <div className="filter-item">
+            <FaBuilding />
+            <select
+              name="propertyType"
+              className="filter-select"
+              onChange={handleFilterChange}
+              aria-label="Property Type"
+            >
+              <option value="">Select Property Type</option>
+              <option value="house">House</option>
+              <option value="apartment">Apartment</option>
+            </select>
+          </div>
+          <div className="filter-item">
+            <FaBed />
+            <input
+              type="number"
+              name="bedrooms"
+              className="filter-input"
+              placeholder="Beds"
+              value={filters.bedrooms}
+              onChange={handleFilterChange}
+            />
+          </div>
+          <div className="filter-item">
+            <FaBath />
+            <input
+              type="number"
+              name="bathrooms"
+              className="filter-input"
+              placeholder="Baths"
+              value={filters.bathrooms}
+              onChange={handleFilterChange}
+            />
+          </div>
+          <div className="filter-item">
+            <FaCouch />
+            <input
+              type="number"
+              name="halls"
+              className="filter-input"
+              placeholder="Halls"
+              value={filters.halls}
+              onChange={handleFilterChange}
+            />
+          </div>
+          <div className="filter-item">
+            <FaUtensils />
+            <input
+              type="number"
+              name="kitchens"
+              className="filter-input"
+              placeholder="Kitchens"
+              value={filters.kitchens}
+              onChange={handleFilterChange}
+            />
+          </div>
+          <div className="filter-item">
+            <FaRulerCombined />
+            <input
+              type="number"
+              name="area"
+              className="filter-input"
+              placeholder="Area (sq. ft.)"
+              value={filters.area}
+              onChange={handleFilterChange}
+            />
+          </div>
+          <div className="filter-item">
+            <FaSortAmountDown />
+            <select
+              name="sort"
+              className="filter-select"
+              value={filters.sort}
+              onChange={handleFilterChange}
+            >
+              <option value="">Sort</option>
+              <option value="priceAsc">Price: Low to High</option>
+              <option value="priceDesc">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+        <button className="apply-button" onClick={handleApplyFilters}>
+          Apply
+        </button>
+      </div>
+
       {searchExecuted && properties.length === 0 && (
         <div className="no-properties">No properties found.</div>
       )}
       <div className="search-result-grid">
-        {paginatedProperties.map((property) => (
+        {properties.map((property) => (
           <div key={property._id} className="search-result-card">
             <div className="search-result-header">
               <div className="search-result-type-for">
@@ -67,7 +196,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                 <span className="search-result-for-badge">{property.for}</span>
               </div>
               <FaHeart
-                className={`search-result-heart-icon ${favorites.includes(property._id) ? 'favorite' : ''}`}
+                className={`search-result-heart-icon ${favorites.includes(property._id) ? "favorite" : ""}`}
                 onClick={() => toggleFavorite(property._id)}
               />
             </div>
@@ -90,10 +219,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
               </div>
               <div className="search-result-footer">
                 <span className="search-result-price">${property.price}</span>
-                <button
-                  className="search-result-btn"
-                  onClick={() => openPropertyDetails(property._id)} // Use the openPropertyDetails prop to trigger the overlay
-                >
+                <button className="search-result-btn" onClick={() => openPropertyDetails(property._id)}>
                   View Details
                 </button>
               </div>
@@ -105,8 +231,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
           Prev
         </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages || properties.length <= itemsPerPage}>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
           Next
         </button>
       </div>

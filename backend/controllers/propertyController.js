@@ -1,4 +1,4 @@
-const Property = require('../models/Property'); 
+const Property = require('../models/Property');
 const cloudinary = require('cloudinary').v2; // For image uploads
 const User = require('../models/User'); // Assuming you have a User model
 require('dotenv').config(); // Ensure .env file is loaded
@@ -9,16 +9,19 @@ exports.listProperty = async (req, res) => {
         const userId = req.user ? req.user._id : req.body.userId;
 
         if (!userId) {
+            console.error("User ID is required.");
             return res.status(400).json({ success: false, message: "User ID is required." });
         }
 
         // Validate latitude and longitude
         if (!req.body.latitude || !req.body.longitude) {
+            console.error("Latitude and longitude are required.");
             return res.status(400).json({ success: false, message: "Latitude and longitude are required." });
         }
 
         // Handle images upload to Cloudinary
         if (!req.files || req.files.length === 0) {
+            console.error("At least one image is required.");
             return res.status(400).json({ success: false, message: "At least one image is required." });
         }
 
@@ -59,12 +62,13 @@ exports.listProperty = async (req, res) => {
             ownerEmail: req.body.ownerEmail,
             images: imageUrls,
             userId: userId,
-            latitude: req.body.latitude,   // Added latitude
-            longitude: req.body.longitude,  // Added longitude
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
             createdAt: Date.now(),
         });
 
         const savedProperty = await newProperty.save();
+        console.log("Property listed successfully:", savedProperty);
         res.status(201).json({ success: true, message: "Property listed successfully", data: savedProperty });
 
     } catch (err) {
@@ -76,20 +80,39 @@ exports.listProperty = async (req, res) => {
 // Search properties based on parameters
 exports.searchProperties = async (req, res) => {
     try {
-        const { city, state, pinCode, propertyType, bedrooms, bathrooms, halls, kitchens, area } = req.body;
+        console.log("Incoming request body:", req.body);
+
+        const { city, state, pincode, propertyType, bedrooms, bathrooms, halls, kitchens, area, for: forParam, sort } = req.body;
 
         const query = {};
         if (city) query.city = city;
         if (state) query.state = state;
-        if (pinCode) query.pincode = pinCode;
+        if (pincode) query.pincode = pincode;
         if (propertyType) query.type = propertyType;
+        if (forParam) query.for = forParam;
         if (bedrooms) query.bedrooms = { $gte: Number(bedrooms) };
         if (bathrooms) query.bathrooms = { $gte: Number(bathrooms) };
         if (halls) query.hall = { $gte: Number(halls) };
         if (kitchens) query.kitchen = { $gte: Number(kitchens) };
         if (area) query.area = { $gte: Number(area) };
 
-        const properties = await Property.find(query);
+        console.log("Constructed query:", query);
+
+        const sortOptions = {};
+        if (sort === 'priceAsc') sortOptions.price = 1;
+        else if (sort === 'priceDesc') sortOptions.price = -1;
+        else if (sort === 'areaAsc') sortOptions.area = 1;
+        else if (sort === 'areaDesc') sortOptions.area = -1;
+
+        console.log("Sort options applied:", sortOptions);
+
+        const properties = await Property.find(query).sort(sortOptions);
+        console.log("Found properties:", properties);
+
+        if (properties.length === 0) {
+            console.warn("No properties found matching the criteria:", query);
+        }
+
         res.status(200).json({
             success: true,
             message: 'Properties retrieved successfully',
@@ -104,3 +127,4 @@ exports.searchProperties = async (req, res) => {
         });
     }
 };
+

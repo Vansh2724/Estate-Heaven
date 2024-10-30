@@ -33,67 +33,81 @@ interface LocationDetailsProps {
 const LocationDetails: React.FC<LocationDetailsProps> = memo(
   ({ formData, handleChange }) => {
     const [showMap, setShowMap] = useState(false);
-    // Set default coordinates for Ahmedabad
     const [latitude, setLatitude] = useState(23.0225);
     const [longitude, setLongitude] = useState(72.5714);
     const [isMapLoaded, setIsMapLoaded] = useState(false);
     const [mapError, setMapError] = useState(false);
-    const [states, setStates] = useState<string[]>([]);
+    const [states, setStates] = useState<{ name: string; iso2: string }[]>([]);
     const [cities, setCities] = useState<string[]>([]);
     const [selectedState, setSelectedState] = useState("");
     const [selectedCity, setSelectedCity] = useState("");
 
     useEffect(() => {
       const fetchStates = async () => {
-        const req = await fetch(
-          "https://www.universal-tutorial.com/api/states/India",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${process.env.REACT_APP_LOCATION_AUTHORIZATION_KEY}`,
-              Accept: "application/json",
-            },
-          }
-        );
-
-        if (req.ok) {
-          const stateData = await req.json();
-          const stateNames = stateData.map(
-            (state: { state_name: string }) => state.state_name
+        try {
+          const req = await fetch(
+            "https://api.countrystatecity.in/v1/countries/IN/states",
+            {
+              method: "GET",
+              headers: {
+                'X-CSCAPI-KEY': process.env.REACT_APP_LOCATION_AUTHORIZATION_KEY || '',
+              },
+            }
           );
-          setStates(stateNames);
+
+          if (req.ok) {
+            const stateData = await req.json();
+            const stateNames = stateData.map((state: { name: string; iso2: string }) => ({
+              name: state.name,
+              iso2: state.iso2,
+            }));
+            // Sort states alphabetically
+            stateNames.sort((a: { name: string }, b: { name: string}) => a.name.localeCompare(b.name));
+            setStates(stateNames);
+          } else {
+            throw new Error('Failed to fetch states');
+          }
+        } catch (error) {
+          console.error("Error fetching states:", error);
         }
       };
 
       fetchStates();
     }, []);
 
-    const fetchCities = async (state: string) => {
-      const req = await fetch(
-        `https://www.universal-tutorial.com/api/cities/${state}`,
-        {
-          method: "GET",
+    const fetchCities = async (stateIso2: string) => {
+      try {
+        const req = await fetch(`https://api.countrystatecity.in/v1/countries/IN/states/${stateIso2}/cities`, {
+          method: 'GET',
           headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_LOCATION_AUTHORIZATION_KEY}`,
-            Accept: "application/json",
+            'X-CSCAPI-KEY': process.env.REACT_APP_LOCATION_AUTHORIZATION_KEY || '',
           },
-        }
-      );
+        });
 
-      if (req.ok) {
-        const cityData = await req.json();
-        const cityNames = cityData.map((city: { city_name: string }) => city.city_name);
-        setCities(cityNames);
+        if (req.ok) {
+          const cityData = await req.json();
+          const cityNames = cityData.map((city: { name: string }) => city.name);
+          // Sort cities alphabetically
+          cityNames.sort((a: string, b: string) => a.localeCompare(b));
+          setCities(cityNames);
+        } else {
+          throw new Error('Failed to fetch cities');
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
       }
     };
 
     const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       const state = event.target.value;
-      setSelectedState(state);
-      handleChange({
-        target: { name: "state", value: state },
-      } as unknown as React.ChangeEvent<HTMLInputElement>);
-      fetchCities(state);
+      const selectedStateData = states.find(s => s.name === state);
+      if (selectedStateData) {
+        setSelectedState(selectedStateData.name);
+        handleChange({
+          target: { name: "state", value: selectedStateData.name },
+        } as React.ChangeEvent<HTMLInputElement>);
+        fetchCities(selectedStateData.iso2); // Pass the ISO code
+      }
     };
 
     const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -101,7 +115,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = memo(
       setSelectedCity(city);
       handleChange({
         target: { name: "city", value: city },
-      } as unknown as React.ChangeEvent<HTMLInputElement>);
+      } as React.ChangeEvent<HTMLInputElement>);
     };
 
     const handleMapClick = (event: google.maps.MapMouseEvent) => {
@@ -146,8 +160,8 @@ const LocationDetails: React.FC<LocationDetailsProps> = memo(
           >
             <option value="" disabled hidden>Select State</option>
             {states.map((state, index) => (
-              <option key={index} value={state}>
-                {state}
+              <option key={index} value={state.name}>
+                {state.name}
               </option>
             ))}
           </select>

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import SearchSection from '../ForSearch/SearchSection';
 import SearchResults from '../ForSearch/SearchResults';
-import PropertyDetailsOverlay from '../pages/PropertyDetailsOverlay'; // Import the overlay component
+import PropertyDetailsOverlay from '../pages/PropertyDetailsOverlay';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import loader from '../../img/images/Loaders.gif'; // Import the loader GIF
 import '../../styles/SearchPage/SearchProperty.css';
 
 interface Property {
@@ -29,19 +31,20 @@ interface Property {
   ownerContact: string;
   ownerEmail: string;
   description: string;
-  latitude: number;  // Add latitude
-  longitude: number; // Add longitude
+  latitude: number;
+  longitude: number;
 }
 
-
-
 const SearchProperty: React.FC = () => {
+  const { state, city } = useParams<{ state: string; city: string }>();
   const [properties, setProperties] = useState<Property[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null); // Overlay state
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
+  const [forValue, setForValue] = useState<string>('rent'); // Default value
 
   // Open the property details overlay
   const openPropertyDetails = (propertyId: string) => {
@@ -64,24 +67,47 @@ const SearchProperty: React.FC = () => {
     // Fetch new properties based on the page number if applicable
   };
 
+  // Function to fetch properties based on URL parameters
+  const fetchProperties = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`YOUR_API_ENDPOINT/search?state=${state}&city=${city}&for=${forValue}`);
+      const data = await response.json();
+      setProperties(data.properties); // Adjust based on your API response structure
+      setTotalPages(data.totalPages); // Adjust based on your API response structure
+      setSearchExecuted(true);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (state && city) {
+      fetchProperties();
+    }
+  }, [state, city, forValue]);
+
   return (
     <>
-      {/* Navbar is kept intact */}
       <Navbar />
       
-      {/* Main search section and results */}
       <div className="search-property-page">
-        {/* Toast notifications for feedback */}
         <ToastContainer />
         
-        {/* Search section for searching properties */}
         <SearchSection
-          setProperties={setProperties}
-          setTotalPages={setTotalPages}
-          setSearchExecuted={setSearchExecuted}
-        />
-        
-        {/* Search results */}
+      setProperties={setProperties}
+      setTotalPages={setTotalPages}
+      setSearchExecuted={setSearchExecuted}
+      loading={loading}
+      setLoading={setLoading}
+    />
+
+
+        {/* Show loader here */}
+        {loading && <img src={loader} alt="Loading..." className="loader" />}
+
         <div className="search-property-search-result">
           {searchExecuted && properties.length > 0 && (
             <SearchResults
@@ -92,7 +118,9 @@ const SearchProperty: React.FC = () => {
               totalPages={totalPages}
               onPageChange={onPageChange}
               searchExecuted={searchExecuted}
-              openPropertyDetails={openPropertyDetails} // Open overlay when property is clicked
+              openPropertyDetails={openPropertyDetails}
+              filters={{ state, city, for: forValue }} // Add the filters prop
+              onApplyFilters={() => { /* Implement the filter logic here */ }} // Add the onApplyFilters prop
             />
           )}
           {searchExecuted && properties.length === 0 && (
@@ -100,16 +128,12 @@ const SearchProperty: React.FC = () => {
           )}
         </div>
 
-        {/* Overlay for Property Details */}
         <PropertyDetailsOverlay
-  property={properties.find(p => p._id === selectedPropertyId) || null}
-  onClose={closeOverlay}
-/>
-
-
+          property={properties.find(p => p._id === selectedPropertyId) || null}
+          onClose={closeOverlay}
+        />
       </div>
 
-      {/* Footer remains unchanged */}
       <Footer />
     </>
   );
