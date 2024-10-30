@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import '../../styles/Dashboard/Dashboard.css';
 import { FaHome, FaUser, FaCrown, FaSlidersH, FaBuilding, FaBars, FaTimes } from 'react-icons/fa';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const userId = user ? user.id : null; // Extract the user ID
+  const userId = user ? user.id : null;
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -29,19 +30,19 @@ const Dashboard: React.FC = () => {
           <h2 className="sidebar-title"> User Dashboard</h2>
           <ul className="dashboard-sidebar-links">
             <li>
-              <Link to={`/dashboard/profile/${userId}`} className="dashboard-sidebar-link"><FaUser /> Profile</Link>
+              <Link to={`/dashboard/profile/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/profile') ? 'active' : ''}`}><FaUser /> Profile</Link>
             </li>
             <li>
-              <Link to={`/dashboard/myproperties/${userId}`} className="dashboard-sidebar-link"><FaBuilding /> My Properties</Link>
+              <Link to={`/dashboard/myproperties/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/myproperties') ? 'active' : ''}`}><FaBuilding /> My Properties</Link>
             </li>
             <li>
-              <Link to={`/dashboard/premium/${userId}`} className="dashboard-sidebar-link"><FaCrown /> Premium</Link>
+              <Link to={`/dashboard/premium/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/premium') ? 'active' : ''}`}><FaCrown /> Premium</Link>
             </li>
             <li>
-              <Link to={`/dashboard/settings/${userId}`} className="dashboard-sidebar-link"><FaSlidersH /> Settings</Link>
+              <Link to={`/dashboard/settings/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/settings') ? 'active' : ''}`}><FaSlidersH /> Settings</Link>
             </li>
             <li>
-              <Link to="/" className="dashboard-sidebar-link"><FaHome /> Home</Link>
+              <Link to="/" className={`dashboard-sidebar-link ${location.pathname === '/' ? 'active' : ''}`}><FaHome /> Home</Link>
             </li>
           </ul>
         </div>
