@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaBed,
   FaBath,
@@ -6,7 +6,7 @@ import {
   FaMapMarkerAlt,
   FaHeart,
 } from "react-icons/fa";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import PropertyDetailsOverlay from "../pages/PropertyDetailsOverlay";
 import "../../styles/SearchPage/SearchResults.css";
 
@@ -15,7 +15,7 @@ interface Property {
   title: string;
   price: number;
   type: string;
-  for: string; // This should specify whether it's for rent or sale
+  for: string;
   city: string;
   state: string;
   bedrooms: number;
@@ -55,16 +55,29 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 }) => {
   const { state, city, for: rentOrBuy } = useParams();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const itemsPerPage = 3; // Fixed for this example
-  const navigate = useNavigate(); // Initialize navigate
+  const [itemsPerPage, setItemsPerPage] = useState<number>(12); // Default to 12 for desktop
+  const navigate = useNavigate();
+
+  // Update itemsPerPage based on window width
+  const updateItemsPerPage = () => {
+    if (window.innerWidth < 768) { // Example breakpoint for mobile
+      setItemsPerPage(10);
+    } else {
+      setItemsPerPage(12);
+    }
+  };
+
+  useEffect(() => {
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
 
   const openPropertyDetails = (propertyId: string) => {
-    // Check for token in local storage
     const token = localStorage.getItem("token");
     if (token) {
-      setSelectedPropertyId(propertyId); // User is logged in, open property details
+      setSelectedPropertyId(propertyId);
     } else {
-      // Navigate to the login page if not logged in
       navigate("/login");
     }
   };
@@ -73,33 +86,25 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     setSelectedPropertyId(null);
   };
 
-  // Total pages calculation based on properties length and items per page
   const totalPagesCount = Math.ceil(properties.length / itemsPerPage);
 
-  // Paginated properties
   const displayedProperties = properties.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Create dynamic pagination numbers
   const createPaginationNumbers = () => {
     const paginationNumbers: number[] = [];
-    const maxDisplayed = 3; // Total buttons to display
+    const maxDisplayed = 3;
 
     let startPage = Math.max(1, currentPage - 1);
     let endPage = Math.min(totalPagesCount, currentPage + 1);
 
-    // Adjust start and end based on the current page
     if (totalPagesCount > maxDisplayed) {
       if (currentPage === 1) {
-        endPage = Math.min(maxDisplayed, totalPagesCount); // Show pages 1, 2, 3
+        endPage = Math.min(maxDisplayed, totalPagesCount);
       } else if (currentPage === totalPagesCount) {
-        startPage = Math.max(totalPagesCount - 2, 1); // Show last three pages
-      } else {
-        // For pages in between
-        startPage = Math.max(1, currentPage - 1);
-        endPage = Math.min(totalPagesCount, currentPage + 1);
+        startPage = Math.max(totalPagesCount - 2, 1);
       }
     }
 
@@ -112,20 +117,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
   const paginationNumbers = createPaginationNumbers();
 
-  // Function to format price in Indian currency style
   const formatPrice = (price: number, forRent: boolean) => {
-    // Convert price to string
     const priceStr = price.toString();
     const [integerPart, decimalPart] = priceStr.split(".");
-
-    // Format the integer part according to the Indian numbering system
-    const lastThreeDigits = integerPart.slice(-3); // Get the last three digits
-    const otherDigits = integerPart.slice(0, -3); // Get the rest of the digits
+    const lastThreeDigits = integerPart.slice(-3);
+    const otherDigits = integerPart.slice(0, -3);
     const formattedIntegerPart = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + (otherDigits.length ? "," : "") + lastThreeDigits;
-
-    const formattedPrice = `₹${formattedIntegerPart}` + (forRent ? " /month" : "");
-
-    return formattedPrice;
+    return `₹${formattedIntegerPart}` + (forRent ? " /month" : "");
   };
 
   return (
