@@ -80,8 +80,6 @@ exports.listProperty = async (req, res) => {
 // Search properties based on parameters
 exports.searchProperties = async (req, res) => {
     try {
-        console.log("Incoming request body:", req.body);
-
         const { city, state, pincode, propertyType, bedrooms, bathrooms, halls, kitchens, area, for: forParam, sort } = req.body;
 
         const query = {};
@@ -96,22 +94,17 @@ exports.searchProperties = async (req, res) => {
         if (kitchens) query.kitchen = { $gte: Number(kitchens) };
         if (area) query.area = { $gte: Number(area) };
 
-        console.log("Constructed query:", query);
-
         const sortOptions = {};
         if (sort === 'priceAsc') sortOptions.price = 1;
         else if (sort === 'priceDesc') sortOptions.price = -1;
         else if (sort === 'areaAsc') sortOptions.area = 1;
         else if (sort === 'areaDesc') sortOptions.area = -1;
 
-        console.log("Sort options applied:", sortOptions);
-
         const properties = await Property.find(query).sort(sortOptions);
-        console.log("Found properties:", properties);
 
-        if (properties.length === 0) {
-            console.warn("No properties found matching the criteria:", query);
-        }
+        // if (properties.length === 0) {
+        //     console.warn("No properties found matching the criteria:", query);
+        // }
 
         res.status(200).json({
             success: true,
@@ -119,7 +112,7 @@ exports.searchProperties = async (req, res) => {
             data: properties,
         });
     } catch (error) {
-        console.error('Error fetching properties:', error);
+        // console.error('Error fetching properties:', error);
         return res.status(500).json({
             success: false,
             message: 'Server error: Unable to fetch properties. Please try again later.',

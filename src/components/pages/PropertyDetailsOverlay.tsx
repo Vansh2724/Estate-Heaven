@@ -70,10 +70,10 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true, // Ensure arrows are enabled
-    nextArrow: <div className="slick-arrow next">▶</div>, // Next arrow
-    prevArrow: <div className="slick-arrow prev">◀</div>, // Previous arrow
-  };  
+    arrows: true,
+    nextArrow: <div className="slick-arrow next">▶</div>,
+    prevArrow: <div className="slick-arrow prev">◀</div>,
+  };
 
   if (!property) return null;
 
@@ -86,19 +86,25 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
 
         <div className="property-overlay-image-section">
           <Slider {...sliderSettings}>
-            {property.images.map((image, index) => (
-              <div
-                key={index}
-                className="property-overlay-slider-image-container"
-                onClick={() => handleImageClick(index)}
-              >
-                <img
-                  src={image}
-                  alt={`Property Image ${index + 1}`}
-                  className="property-overlay-slider-image"
-                />
+            {property.images.length === 0 ? (
+              <div className="property-overlay-slider-image-container">
+                <img src="/path/to/placeholder-image.jpg" alt="No images available" />
               </div>
-            ))}
+            ) : (
+              property.images.map((image, index) => (
+                <div
+                  key={index}
+                  className="property-overlay-slider-image-container"
+                  onClick={() => handleImageClick(index)}
+                >
+                  <img
+                    src={image}
+                    alt={`Property Image ${index + 1}`}
+                    className="property-overlay-slider-image"
+                  />
+                </div>
+              ))
+            )}
           </Slider>
         </div>
 

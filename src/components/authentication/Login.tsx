@@ -9,10 +9,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { handleGoogleAuth } from './googleAuth'; // Updated import
+import loader from '../../img/images/Loaders.gif'; // Import loader gif
 
 const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState<boolean>(false); // State for loading
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
@@ -40,7 +42,8 @@ const Login: React.FC = () => {
       toast.error("Invalid email format. Please enter a valid email address.");
       return;
     }
-  
+    
+    setLoading(true); // Set loading to true when the login request starts
     try {
       const response = await axios.post(`${process.env.REACT_APP_SERVER_API_URL}/api/auth/login`, formData);
   
@@ -64,6 +67,8 @@ const Login: React.FC = () => {
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false); // Set loading to false when the request is complete
     }
   };
 
@@ -118,8 +123,8 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <button type="submit" className="login-btn">
-            Login
+          <button type="submit" className="login-btn" disabled={loading}> {/* Disable button during loading */}
+            {loading ? <img src={loader} alt="Loading..." className="loader-icon" /> : "Login"}
           </button>
         </form>
 

@@ -9,6 +9,7 @@ import closeEyeIcon from '../../img/lgsp/closeeye.svg';
 import { AuthContext } from '../../contexts/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { handleGoogleAuth } from './googleAuth'; // Updated import
+import Loader from '../../img/images/Loaders.gif'; // Path to the loader GIF
 
 interface FormFields {
   firstName: string;
@@ -38,6 +39,7 @@ const Signup: React.FC = () => {
   });
   const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
   const [passwordValid, setPasswordValid] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false); // State to manage loading
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
@@ -71,19 +73,23 @@ const Signup: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Start loading
 
     if (!isValidEmail(formFields.email)) {
       toast.error('Invalid email format. Please enter a valid email address.');
+      setLoading(false); // Stop loading
       return;
     }
 
     if (formFields.password !== formFields.confirmPassword) {
       toast.error('Passwords do not match!');
+      setLoading(false); // Stop loading
       return;
     }
 
     if (!passwordValid) {
       toast.error('Password does not meet the criteria for strength.');
+      setLoading(false); // Stop loading
       return;
     }
 
@@ -115,6 +121,8 @@ const Signup: React.FC = () => {
       } else {
         toast.error('An unexpected error occurred. Please try again.');
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -224,6 +232,12 @@ const Signup: React.FC = () => {
           </div>
           <button type="submit" className="signup-btn">Sign Up</button>
         </form>
+
+        {loading && (
+          <div className="loader-container">
+            <img src={Loader} alt="Loading..." className="loader" />
+          </div>
+        )}
 
         <div className="login-text-container">
           <p className="login-text">

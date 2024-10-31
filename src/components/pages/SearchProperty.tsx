@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import SearchSection from '../ForSearch/SearchSection';
 import SearchResults from '../ForSearch/SearchResults';
+import SearchFilters from '../ForSearch/SearchFilter'; 
 import PropertyDetailsOverlay from '../pages/PropertyDetailsOverlay';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import loader from '../../img/images/Loaders.gif'; // Import the loader GIF
+import loader from '../../img/images/Loaders.gif';
 import '../../styles/SearchPage/SearchProperty.css';
 
 interface Property {
@@ -36,104 +37,157 @@ interface Property {
 }
 
 const SearchProperty: React.FC = () => {
-  const { state, city } = useParams<{ state: string; city: string }>();
+  const { state, city, for: forValue = '' } = useParams<{ state: string; city: string; for: string }>();
   const [properties, setProperties] = useState<Property[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
-  const [forValue, setForValue] = useState<string>('rent'); // Default value
+  const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState({
+    city: city || '',
+    state: state || '',
+    stateIso2: '',
+    for: forValue.toLowerCase() === 'sale' ? 'sale' : 'rent',
+  });
 
-  // Open the property details overlay
-  const openPropertyDetails = (propertyId: string) => {
-    setSelectedPropertyId(propertyId);
-  };
+  const [filterState, setFilterState] = useState({
+    propertyType: '',
+    bedrooms: '',
+    bathrooms: '',
+    halls: '',
+    kitchens: '',
+    area: '',
+    sort: '',
+  });
 
-  // Close the property details overlay
-  const closeOverlay = () => {
-    setSelectedPropertyId(null);
-  };
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const toggleFavorite = (id: string) => {
+  const fetchProperties = useCallback(async (params: any) => {
+    if (params.state && params.city && params.for) {
+      setLoading(true);
+      try {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_API_URL}/api/property/search`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(params),
+        });
+        
+        const result = await response.json();
+        if (response.ok) {
+          setProperties(result.data);
+          setSearchExecuted(true);
+          // if (result.data.length === 0) {
+          //   toast.info("No properties found."); // Toast message for no results
+          // }
+        } else {
+          toast.error(result.message); // Toast for server error messages
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching properties."); // Generic error message
+        console.error('Error fetching properties:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProperties(searchParams);
+  }, [searchParams, fetchProperties]);
+
+  useEffect(() => {
+    if (city && state && forValue) {
+      setSearchParams({
+        city,
+        state,
+        stateIso2: '',
+        for: forValue === 'sale' ? 'sale' : 'rent',
+      });
+    }
+  }, [city, state, forValue]);
+
+  const handleFavoriteToggle = (propertyId: string) => {
     setFavorites(prev =>
-      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
+      prev.includes(propertyId) ? prev.filter(id => id !== propertyId) : [...prev, propertyId]
     );
   };
 
-  const onPageChange = (page: number) => {
-    setCurrentPage(page);
-    // Fetch new properties based on the page number if applicable
+  const triggerFetch = (filters: any) => {
+    const filteredParams = {
+      ...searchParams,
+      ...filters,
+    };
+
+    Object.keys(filteredParams).forEach(key => {
+      if (filteredParams[key] === undefined || filteredParams[key] === '') {
+        delete filteredParams[key];
+      }
+    });
+
+    fetchProperties(filteredParams);
   };
 
-  // Function to fetch properties based on URL parameters
-  const fetchProperties = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`YOUR_API_ENDPOINT/search?state=${state}&city=${city}&for=${forValue}`);
-      const data = await response.json();
-      setProperties(data.properties); // Adjust based on your API response structure
-      setTotalPages(data.totalPages); // Adjust based on your API response structure
-      setSearchExecuted(true);
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleFilterChange = (filters: any) => {
+    setFilterState(filters);
   };
 
-  useEffect(() => {
-    if (state && city) {
-      fetchProperties();
-    }
-  }, [state, city, forValue]);
+  const applyFilters = () => {
+    const nonEmptyFilters = Object.keys(filterState)
+      .filter(key => filterState[key as keyof typeof filterState] !== '')
+      .reduce((obj, key) => {
+        obj[key as keyof typeof filterState] = filterState[key as keyof typeof filterState];
+        return obj;
+      }, {} as Partial<typeof filterState>);
+
+    triggerFetch(nonEmptyFilters);
+  };
+
+  const selectedProperty = properties.find(property => property._id === selectedPropertyId) || null;
 
   return (
     <>
       <Navbar />
-      
       <div className="search-property-page">
         <ToastContainer />
-        
         <SearchSection
-      setProperties={setProperties}
-      setTotalPages={setTotalPages}
-      setSearchExecuted={setSearchExecuted}
-      loading={loading}
-      setLoading={setLoading}
-    />
-
-
-        {/* Show loader here */}
-        {loading && <img src={loader} alt="Loading..." className="loader" />}
-
-        <div className="search-property-search-result">
-          {searchExecuted && properties.length > 0 && (
-            <SearchResults
-              properties={properties}
-              favorites={favorites}
-              toggleFavorite={toggleFavorite}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={onPageChange}
-              searchExecuted={searchExecuted}
-              openPropertyDetails={openPropertyDetails}
-              filters={{ state, city, for: forValue }} // Add the filters prop
-              onApplyFilters={() => { /* Implement the filter logic here */ }} // Add the onApplyFilters prop
-            />
-          )}
-          {searchExecuted && properties.length === 0 && (
-            <div className="no-properties">No properties found.</div>
-          )}
-        </div>
-
-        <PropertyDetailsOverlay
-          property={properties.find(p => p._id === selectedPropertyId) || null}
-          onClose={closeOverlay}
+          setSearchParams={setSearchParams}
+          triggerFetch={() => triggerFetch({})}
         />
+        {loading ? (
+          <img src={loader} alt="Loading..." className="loading-spinner" />
+        ) : (
+          searchExecuted && (
+            <>
+              <SearchFilters 
+                onApplyFilters={applyFilters} 
+                filterState={filterState} 
+                onFilterChange={handleFilterChange} 
+              />
+              {properties.length > 0 ? (
+                <SearchResults
+                  properties={properties}
+                  onFavoriteToggle={handleFavoriteToggle}
+                  toggleFavorite={handleFavoriteToggle}
+                  favorites={favorites}
+                  currentPage={currentPage}
+                  onPageChange={setCurrentPage}
+                  searchExecuted={searchExecuted}
+                />
+              ) : (
+                <p>No Properties Found.</p> // Message if no properties
+              )}
+            </>
+          )
+        )}
+        {selectedPropertyId && (
+          <PropertyDetailsOverlay
+            property={selectedProperty}
+            onClose={() => setSelectedPropertyId(null)}
+          />
+        )}
       </div>
-
       <Footer />
     </>
   );
