@@ -6,6 +6,7 @@ const {
     deleteProperty, 
     updateProperty, requestDeleteOtp , confirmDeleteAccount
 } = require('../controllers/dashboardController');
+const{ createOrder,checkPremium } = require('../controllers/paymentController');
 
 const router = express.Router();
 
@@ -26,5 +27,8 @@ router.put('/myproperties/:propertyId', updateProperty);
 
 router.post('/request-delete-otp/:userId', requestDeleteOtp);
 router.post('/confirm-delete/:userId', confirmDeleteAccount);
+
+router.post('/premium/payment/:userId', createOrder);
+router.get('/checkpremium/:userId', checkPremium);
 
 module.exports = router;
