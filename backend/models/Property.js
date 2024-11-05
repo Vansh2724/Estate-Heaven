@@ -35,6 +35,10 @@ const propertySchema = new mongoose.Schema({
   longitude: {  // Longitude field
     type: Number,  // Changed to Number for better handling of coordinates
     required: true  // Keep as required if necessary
+  },
+  isPremiumUser: {
+    type: Boolean,
+    default: false // This can be updated when a property is created by a premium user
   }
 });
 

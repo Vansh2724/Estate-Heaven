@@ -25,6 +25,10 @@ exports.listProperty = async (req, res) => {
             return res.status(400).json({ success: false, message: "At least one image is required." });
         }
 
+        // Check if user is premium
+        const user = await User.findById(userId); // Fetch user info to check premium status
+        const isPremiumUser = user ? user.isPremium : false;
+
         const imageUploadPromises = req.files.map(file => {
             return new Promise((resolve, reject) => {
                 cloudinary.uploader.upload_stream(
@@ -65,6 +69,7 @@ exports.listProperty = async (req, res) => {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             createdAt: Date.now(),
+            isPremiumUser: isPremiumUser // Set the isPremiumUser field
         });
 
         const savedProperty = await newProperty.save();
@@ -93,18 +98,26 @@ exports.searchProperties = async (req, res) => {
         if (kitchens) query.kitchen = { $gte: Number(kitchens) };
         if (area) query.area = { $gte: Number(area) };
 
-        const sortOptions = {};
-        if (sort === 'priceAsc') sortOptions.price = 1;
-        else if (sort === 'priceDesc') sortOptions.price = -1;
-        else if (sort === 'areaAsc') sortOptions.area = 1;
-        else if (sort === 'areaDesc') sortOptions.area = -1;
+        // Fetch properties
+        const properties = await Property.find(query);
 
-        const properties = await Property.find(query).sort(sortOptions);
+        // Sort properties
+        const sortedProperties = properties.sort((a, b) => {
+            // Priority to premium properties
+            if (a.isPremiumUser && !b.isPremiumUser) return -1; // a is premium
+            if (!a.isPremiumUser && b.isPremiumUser) return 1;  // b is premium
+            // If both are premium or both are not, sort by the requested sort order
+            if (sort === 'priceAsc') return a.price - b.price;
+            if (sort === 'priceDesc') return b.price - a.price;
+            if (sort === 'areaAsc') return a.area - b.area;
+            if (sort === 'areaDesc') return b.area - a.area;
+            return 0; // No sorting
+        });
 
         res.status(200).json({
             success: true,
             message: 'Properties retrieved successfully',
-            data: properties,
+            data: sortedProperties,
         });
     } catch (error) {
         return res.status(500).json({
