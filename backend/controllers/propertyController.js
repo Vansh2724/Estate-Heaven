@@ -68,7 +68,6 @@ exports.listProperty = async (req, res) => {
         });
 
         const savedProperty = await newProperty.save();
-        console.log("Property listed successfully:", savedProperty);
         res.status(201).json({ success: true, message: "Property listed successfully", data: savedProperty });
 
     } catch (err) {
@@ -102,17 +101,12 @@ exports.searchProperties = async (req, res) => {
 
         const properties = await Property.find(query).sort(sortOptions);
 
-        // if (properties.length === 0) {
-        //     console.warn("No properties found matching the criteria:", query);
-        // }
-
         res.status(200).json({
             success: true,
             message: 'Properties retrieved successfully',
             data: properties,
         });
     } catch (error) {
-        // console.error('Error fetching properties:', error);
         return res.status(500).json({
             success: false,
             message: 'Server error: Unable to fetch properties. Please try again later.',
@@ -121,3 +115,61 @@ exports.searchProperties = async (req, res) => {
     }
 };
 
+// Update a property
+exports.updateProperty = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+        const updates = req.body;
+
+        // Handle image uploads if provided
+        if (req.files && req.files.length > 0) {
+            const imageUploadPromises = req.files.map(file => {
+                return new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        { resource_type: 'auto', folder: 'property_images' },
+                        (error, result) => {
+                            if (error) {
+                                console.error("Cloudinary upload error:", error);
+                                return reject(new Error("Image upload failed."));
+                            }
+                            resolve(result.secure_url);
+                        }
+                    ).end(file.buffer);
+                });
+            });
+
+            const imageUrls = await Promise.all(imageUploadPromises);
+            updates.images = imageUrls; // Update images with new URLs
+        }
+
+        const updatedProperty = await Property.findByIdAndUpdate(propertyId, updates, { new: true });
+
+        if (!updatedProperty) {
+            return res.status(404).json({ success: false, message: "Property not found." });
+        }
+
+        res.status(200).json({ success: true, message: "Property updated successfully.", data: updatedProperty });
+
+    } catch (error) {
+        console.error("Error updating property:", error);
+        res.status(500).json({ success: false, message: "Something went wrong." });
+    }
+};
+
+// Delete a property
+exports.deleteProperty = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+        const deletedProperty = await Property.findByIdAndDelete(propertyId);
+
+        if (!deletedProperty) {
+            return res.status(404).json({ success: false, message: "Property not found." });
+        }
+
+        res.status(200).json({ success: true, message: "Property deleted successfully." });
+
+    } catch (error) {
+        console.error("Error deleting property:", error);
+        res.status(500).json({ success: false, message: "Something went wrong." });
+    }
+};

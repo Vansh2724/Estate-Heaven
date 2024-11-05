@@ -8,7 +8,7 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
 
   const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = storedUser ? JSON.parse(storedUser) : null; 
   const userId = user ? user.id : null;
 
   const toggleSidebar = () => {

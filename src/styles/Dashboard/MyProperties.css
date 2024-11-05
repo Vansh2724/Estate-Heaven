@@ -1,51 +1,187 @@
-.my-properties-wrapper {
+.myproperty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  background-color: #f7f9fc; /* Light background for contrast */
+  width: 100%;
 }
 
-.my-properties-title {
-  font-size: 2em;
-  color: #333; /* Dark text for visibility */
+.myproperty-h2 {
   margin-bottom: 20px;
+  font-size: 1.8em;
 }
 
-.properties-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-  gap: 20px;
+.myproperty-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 20px 0;
+  overflow: hidden;
 }
 
-.property-card {
-  background-color: #ffffff; /* White card for content */
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+.myproperty-image {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.myproperty-image img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+
+.myproperty-details {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
-  text-align: center; /* Center text */
 }
 
-.property-title {
-  font-size: 1.5em;
-  color: #007bff; /* Primary color */
-  margin-bottom: 10px;
+.myproperty-section-title {
+  font-size: 1.4em;
+  margin: 15px 0 10px;
 }
 
-.property-status {
+.myproperty-details-section {
+  display: flex;
+  flex-direction: column; /* Stack fields vertically */
+  gap: 10px; /* Space between fields */
   margin-bottom: 15px;
-  color: #555; /* Muted status color */
 }
 
-.property-details-button {
-  background-color: #007bff; /* Primary color */
-  color: #ffffff;
-  border: none;
+.myproperty-details-section label {
+  color: #333;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.myproperty-details-section input,
+.myproperty-details-section select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.myproperty-details input[disabled] {
+  color: #777;
+  background-color: #f4f4f4;
+}
+
+.myproperty-map-section {
+  width: 100%;
+  height: 300px;
+  margin-top: 15px;
+}
+
+.myproperty-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.myproperty-delete-button,
+.myproperty-edit-button,
+.myproperty-save-button,
+.myproperty-cancel-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 10px 15px;
-  border-radius: 5px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  transition: background-color 0.3s ease;
 }
 
-.property-details-button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
-  transform: translateY(-2px); /* Slight lift effect */
+.myproperty-delete-button {
+  background-color: #e74c3c;
+}
+
+.myproperty-delete-button:hover {
+  background-color: #c0392b;
+}
+
+.myproperty-edit-button {
+  background-color: #3498db;
+}
+
+.myproperty-edit-button:hover {
+  background-color: #2980b9;
+}
+
+.myproperty-save-button {
+  background-color: #28a745;
+}
+
+.myproperty-cancel-button {
+  background-color: #6c757d;
+}
+
+.myproperty-cancel-button:hover {
+  background-color: #5a6268;
+}
+
+.myproperty-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .myproperty-card {
+    margin: 10px;
+  }
+
+  .myproperty-details {
+    padding: 10px;
+  }
+
+  .myproperty-details-section {
+    flex-direction: column;
+  }
+
+  .myproperty-map-section {
+    height: 200px;
+  }
+
+  .myproperty-actions {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 10px;
+  }
+
+  .myproperty-delete-button,
+  .myproperty-edit-button,
+  .myproperty-save-button,
+  .myproperty-cancel-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .myproperty-h2 {
+    font-size: 1.5em;
+  }
+
+  .myproperty-delete-button,
+  .myproperty-edit-button,
+  .myproperty-save-button,
+  .myproperty-cancel-button {
+    padding: 10px;
+    font-size: 1em;
+  }
 }

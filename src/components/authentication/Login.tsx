@@ -123,9 +123,15 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <button type="submit" className="login-btn" disabled={loading}> {/* Disable button during loading */}
-            {loading ? <img src={loader} alt="Loading..." className="loader-icon" /> : "Login"}
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
+
+          {loading && (
+            <div className="login-loader-container">
+              <img src={loader} alt="Loading..." className="login-loader-icon" />
+            </div>
+          )}
         </form>
 
         <div className="signup-text-container">

@@ -230,14 +230,16 @@ const Signup: React.FC = () => {
               onClick={toggleConfirmPasswordVisibility}
             />
           </div>
-          <button type="submit" className="signup-btn">Sign Up</button>
+          <button type="submit" className="signup-btn" disabled={loading}>
+            {loading ? "Signing Up..." : "Signup"}
+          </button>
+          
+          {loading && (
+            <div className="signup-loader-container">
+              <img src={Loader} alt="Loading..." className="signup-loader-icon" />
+            </div>
+          )}
         </form>
-
-        {loading && (
-          <div className="loader-container">
-            <img src={Loader} alt="Loading..." className="loader" />
-          </div>
-        )}
 
         <div className="login-text-container">
           <p className="login-text">
