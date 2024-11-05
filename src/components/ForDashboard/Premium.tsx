@@ -1,28 +1,46 @@
 import React from 'react';
-import '../../styles/Dashboard/Settings.css';
+import '../../styles/Dashboard/Premium.css';
 
 const Premium: React.FC = () => {
+  const isPremiumUser = true; // Example; replace with actual data
+  const expiryDate = new Date();
+  expiryDate.setMonth(expiryDate.getMonth() + 1);
+
   return (
-    <div className="settings-wrapper">
-      <h2 className="settings-title">Settings</h2>
-      <div className="settings-card">
-        <div className="setting-field">
-          <label className="setting-label">Notification Preferences:</label>
-          <select className="setting-select">
-            <option value="all">All Notifications</option>
-            <option value="important">Important Only</option>
-            <option value="none">No Notifications</option>
-          </select>
+    <div className="premium-container">
+      <div className="premium-header">
+        <h2>{isPremiumUser ? 'Your Premium Membership' : 'Unlock Premium'}</h2>
+        {isPremiumUser && <p>Expires on: {expiryDate.toLocaleDateString()}</p>}
+      </div>
+
+      <div className="premium-plans">
+        <div className="premium-card monthly">
+          <div className="plan-header">
+            <h3>Monthly Plan</h3>
+            <p className="premium-price">₹50 / month</p>
+          </div>
+          <ul className="benefits-list">
+            <li>Enhanced Visibility</li>
+            <li>Top Search Ranking</li>
+            <li>40% Traffic Boost</li>
+            <li>+30% Buyer Engagement</li>
+          </ul>
+          <button className="subscribe-button">Choose Monthly</button>
         </div>
-        <div className="setting-field">
-          <label className="setting-label">Privacy Settings:</label>
-          <select className="setting-select">
-            <option value="public">Public</option>
-            <option value="friends">Friends Only</option>
-            <option value="private">Private</option>
-          </select>
+
+        <div className="premium-card yearly">
+          <div className="plan-header">
+            <h3>Yearly Plan</h3>
+            <p className="premium-price">₹500 / year</p>
+          </div>
+          <ul className="benefits-list">
+            <li>Enhanced Visibility</li>
+            <li>Top Search Ranking</li>
+            <li>40% Traffic Boost</li>
+            <li>+30% Buyer Engagement</li>
+          </ul>
+          <button className="subscribe-button">Choose Yearly</button>
         </div>
-        <button className="settings-save-button">Save Changes</button>
       </div>
     </div>
   );

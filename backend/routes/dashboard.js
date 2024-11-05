@@ -4,7 +4,7 @@ const {
     updateUserProfile, 
     getUserProperties, 
     deleteProperty, 
-    updateProperty 
+    updateProperty, requestDeleteOtp , confirmDeleteAccount
 } = require('../controllers/dashboardController');
 
 const router = express.Router();
@@ -23,5 +23,8 @@ router.delete('/myproperties/:propertyId', deleteProperty);
 
 // Route to update property details
 router.put('/myproperties/:propertyId', updateProperty);
+
+router.post('/request-delete-otp/:userId', requestDeleteOtp);
+router.post('/confirm-delete/:userId', confirmDeleteAccount);
 
 module.exports = router;
