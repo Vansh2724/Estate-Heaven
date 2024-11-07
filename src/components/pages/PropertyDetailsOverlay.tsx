@@ -77,6 +77,9 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
 
   if (!property) return null;
 
+  // Check if there is only one image
+  const isSingleImage = property.images.length === 1;
+
   return (
     <div className="property-overlay" onScroll={handleScrollStart} onMouseLeave={handleScrollEnd}>
       <div className="property-overlay-content">
@@ -85,13 +88,17 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
         </button>
 
         <div className="property-overlay-image-section">
-          <Slider {...sliderSettings}>
-            {property.images.length === 0 ? (
-              <div className="property-overlay-slider-image-container">
-                <img src="/path/to/placeholder-image.jpg" alt="No images available" />
-              </div>
-            ) : (
-              property.images.map((image, index) => (
+          {isSingleImage ? (
+            <div className="property-overlay-single-image-container">
+              <img
+                src={property.images[0]}
+                alt="Property"
+                className="property-overlay-single-image"
+              />
+            </div>
+          ) : (
+            <Slider {...sliderSettings}>
+              {property.images.map((image, index) => (
                 <div
                   key={index}
                   className="property-overlay-slider-image-container"
@@ -103,9 +110,9 @@ const PropertyDetailsOverlay: React.FC<PropertyOverlayProps> = ({ property, onCl
                     className="property-overlay-slider-image"
                   />
                 </div>
-              ))
-            )}
-          </Slider>
+              ))}
+            </Slider>
+          )}
         </div>
 
         <div className="property-overlay-section">

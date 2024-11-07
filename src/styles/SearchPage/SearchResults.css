@@ -16,7 +16,7 @@
 /* Responsive Grid */
 .search-result-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 30px;
   justify-items: center;
   margin: 0 auto;

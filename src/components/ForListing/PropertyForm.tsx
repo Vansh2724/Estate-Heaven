@@ -88,7 +88,6 @@ const PropertyForm: React.FC = () => {
     if (userString) {
       const user = JSON.parse(userString);
       userId = user.isGoogleUser ? user._id : user.id;
-      console.log("User ID:", userId);
     } else {
       toast.error("User not found. Please log in.");
       return;

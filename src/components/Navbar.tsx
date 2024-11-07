@@ -108,6 +108,9 @@ const Navbar: React.FC = () => {
                       <Link to={`/dashboard/premium/${userId}`}>
                         Premium
                       </Link>
+                      <Link to={`/dashboard/favorites/${userId}`}>
+                        Favorites
+                      </Link>
                       <Link to={`/dashboard/settings/${userId}`}>
                         Settings
                       </Link>

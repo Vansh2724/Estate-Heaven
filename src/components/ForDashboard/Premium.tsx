@@ -76,6 +76,7 @@ const Premium: React.FC = () => {
       currency: 'INR',
       name: 'Estate Heaven',
       description: `Payment for ${plan} Plan`,
+      image: 'https://estate-heaven.onrender.com/favicon.ico',
       order_id: order_id,
       handler: function (response: any) {
         alert(`Payment Successful. Payment ID: ${response.razorpay_payment_id}`);

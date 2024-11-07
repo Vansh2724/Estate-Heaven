@@ -14,6 +14,7 @@ import Profile from './components/ForDashboard/Profile'; // Import the Profile c
 import MyProperties from './components/ForDashboard/MyProperties'; // Import the MyProperties component
 import Premium from './components/ForDashboard/Premium'; // Import the Premium component
 import Settings from './components/ForDashboard/Settings'; // Import the Settings component
+import Favorites from './components/ForDashboard/Favorites'; // Ensure this path is correct
 import './App.css'; // Import global styles
 
 const App: React.FC = () => {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             <Route path="profile/:id" element={<Profile />} />
             <Route path="myproperties/:id" element={<MyProperties />} />
             <Route path="premium/:id" element={<Premium />} />
+            <Route path="favorites/:id" element={<Favorites />} />
             <Route path="settings/:id" element={<Settings />} />
           </Route>
 

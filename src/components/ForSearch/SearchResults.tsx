@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FaBed,
   FaBath,
@@ -9,6 +10,8 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import PropertyDetailsOverlay from "../pages/PropertyDetailsOverlay";
 import "../../styles/SearchPage/SearchResults.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Property {
   _id: string;
@@ -39,7 +42,6 @@ interface SearchResultsProps {
   properties: Property[];
   favorites: string[];
   onFavoriteToggle: (propertyId: string) => void;
-  toggleFavorite: (propertyId: string) => void;
   currentPage: number;
   onPageChange: (page: number) => void;
   searchExecuted: boolean;
@@ -50,17 +52,20 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   favorites,
   currentPage,
   onPageChange,
-  toggleFavorite,
+  onFavoriteToggle,
   searchExecuted,
 }) => {
   const { state, city, for: rentOrBuy } = useParams();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(12); // Default to 12 for desktop
+  const [itemsPerPage, setItemsPerPage] = useState<number>(12);
   const navigate = useNavigate();
 
-  // Update itemsPerPage based on window width
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const userId = user ? user.id : null;
+
   const updateItemsPerPage = () => {
-    if (window.innerWidth < 768) { // Example breakpoint for mobile
+    if (window.innerWidth < 768) {
       setItemsPerPage(10);
     } else {
       setItemsPerPage(12);
@@ -82,12 +87,41 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     }
   };
 
+  const handleFavoriteToggle = async (propertyId: string) => {
+    if (!userId) {
+      toast.error("You need to be logged in to add favorites.");
+      return;
+    }
+
+    try {
+      const isFavorite = favorites.includes(propertyId);
+      const url = isFavorite 
+        ? `${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/favorites/remove/${userId}`
+        : `${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/favorites/add/${userId}`;
+      
+      const response = await axios.post(url, { propertyId });
+
+      if (response.data.success) {
+        if (isFavorite) {
+          toast.success("Property removed from favorites");
+        } else {
+          toast.success("Property added to favorites");
+        }
+        onFavoriteToggle(propertyId);
+      } else {
+        toast.info(response.data.message || "Action could not be completed.");
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Failed to update favorites.";
+      toast.error(errorMessage);
+    }
+  };
+
   const closePropertyDetails = () => {
     setSelectedPropertyId(null);
   };
 
   const totalPagesCount = Math.ceil(properties.length / itemsPerPage);
-
   const displayedProperties = properties.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -143,7 +177,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
               </div>
               <FaHeart
                 className={`search-result-heart-icon ${favorites.includes(property._id) ? "favorite" : ""}`}
-                onClick={() => toggleFavorite(property._id)}
+                onClick={() => handleFavoriteToggle(property._id)}
               />
             </div>
             <img

@@ -167,14 +167,14 @@ const SearchProperty: React.FC = () => {
               />
               {properties.length > 0 ? (
                 <SearchResults
-                  properties={properties}
-                  onFavoriteToggle={handleFavoriteToggle}
-                  toggleFavorite={handleFavoriteToggle}
-                  favorites={favorites}
-                  currentPage={currentPage}
-                  onPageChange={setCurrentPage}
-                  searchExecuted={searchExecuted}
-                />
+                properties={properties}
+                onFavoriteToggle={handleFavoriteToggle}
+                favorites={favorites}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+                searchExecuted={true}
+              />
+              
               ) : (
                 <p>No Properties Found.</p> // Message if no properties
               )}

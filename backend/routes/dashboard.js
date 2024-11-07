@@ -7,6 +7,7 @@ const {
     updateProperty, requestDeleteOtp , confirmDeleteAccount
 } = require('../controllers/dashboardController');
 const{ createOrder,checkPremium } = require('../controllers/paymentController');
+const { addFavorite, removeFavorite, getFavorites } = require('../controllers/favouriteController');
 
 const router = express.Router();
 
@@ -30,5 +31,9 @@ router.post('/confirm-delete/:userId', confirmDeleteAccount);
 
 router.post('/premium/payment/:userId', createOrder);
 router.get('/checkpremium/:userId', checkPremium);
+
+router.post('/favorites/add/:userId', addFavorite);
+router.post('/favorites/remove/:userId', removeFavorite);
+router.get('/favorites/:userId', getFavorites);
 
 module.exports = router;

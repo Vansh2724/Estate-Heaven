@@ -108,6 +108,21 @@
   z-index: 1100;
 }
 
+/* New CSS for single image display */
+.property-overlay-single-image-container {
+  text-align: center; /* Center the single image */
+}
+
+.property-overlay-single-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px; /* Ensure it doesn't overflow */
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+
 .property-overlay-slider-close-btn {
   position: absolute;
   top: 15px;

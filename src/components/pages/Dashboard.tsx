@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import '../../styles/Dashboard/Dashboard.css';
-import { FaHome, FaUser, FaCrown, FaSlidersH, FaBuilding, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaUser, FaCrown, FaSlidersH, FaBuilding, FaBars, FaTimes, FaHeart } from 'react-icons/fa';
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -40,6 +40,9 @@ const Dashboard: React.FC = () => {
             </li>
             <li>
               <Link to={`/dashboard/settings/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/settings') ? 'active' : ''}`}><FaSlidersH /> Settings</Link>
+            </li>
+            <li>
+              <Link to={`/dashboard/favorites/${userId}`} className={`dashboard-sidebar-link ${location.pathname.includes('/dashboard/favorites') ? 'active' : ''}`}><FaHeart /> Favorites</Link>
             </li>
             <li>
               <Link to="/" className={`dashboard-sidebar-link ${location.pathname === '/' ? 'active' : ''}`}><FaHome /> Home</Link>

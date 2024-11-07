@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   resetToken: { type: String },
   resetTokenExpiry: { type: Date },
   isGoogleUser: { type: Boolean, default: false },
-  
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],
   // Premium-related fields
   isPremium: { type: Boolean, default: false },
   premiumStartDate: { type: Date },
