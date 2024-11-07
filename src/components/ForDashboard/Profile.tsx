@@ -40,18 +40,27 @@ const Profile: React.FC = () => {
     fetchProfile();
   }, [userId]);
 
-  const handleEditToggle = () => setEditing(!editing);
+  const handleEditToggle = () => {
+    if (editing) {
+      // Reset fields to original profile values on cancel
+      if (profile) {
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setPhone(profile.phone || '');
+      }
+    }
+    setEditing(!editing);
+  };
 
   const handleSave = async () => {
     if (profile && (firstName !== profile.firstName || lastName !== profile.lastName || phone !== profile.phone)) {
-      // Phone number validation
-      const phoneNumberPattern = /^[0-9]{10}$/; // Pattern to match exactly 10 digits
-  
+      const phoneNumberPattern = /^[0-9]{10}$/;
+
       if (!phoneNumberPattern.test(phone)) {
         toast.error('Phone number must be a 10-digit number.');
         return;
       }
-  
+
       try {
         const updatedProfile = { firstName, lastName, phone };
         const response = await axios.put(`${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/profile/${userId}`, updatedProfile);
@@ -66,7 +75,6 @@ const Profile: React.FC = () => {
       toast.warn('No changes to save.');
     }
   };
-  
 
   const handleDeletePhone = () => {
     if (profile && phone) {
@@ -144,9 +152,14 @@ const Profile: React.FC = () => {
 
         <div className="profile-button-container">
           {editing ? (
-            <button className="profile-save-btn" onClick={handleSave}>
-              Save Changes
-            </button>
+            <>
+              <button className="profile-save-btn" onClick={handleSave}>
+                Save Changes
+              </button>
+              <button className="profile-cancel-btn" onClick={handleEditToggle}>
+                Cancel
+              </button>
+            </>
           ) : (
             <button className="profile-edit-btn" onClick={handleEditToggle}>
               Edit Profile

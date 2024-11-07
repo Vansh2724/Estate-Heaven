@@ -3,7 +3,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f9f9fb;
   min-height: 100vh;
 }
 
@@ -52,9 +51,9 @@
   font-size: 1.1rem;
   color: #666;
   width: 60%;
-  min-height: 40px; /* Maintain height for consistency */
+  min-height: 40px;
   display: flex;
-  align-items: center; /* Center vertically */
+  align-items: center;
 }
 
 .profile-input-field {
@@ -62,7 +61,7 @@
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 6px;
-  width: calc(100% - 40px); /* Full width minus button space */
+  width: calc(100% - 40px);
   transition: border 0.3s;
 }
 
@@ -80,7 +79,7 @@
 .profile-name-inputs {
   display: flex;
   width: 100%;
-  gap: 10px; /* Spacing between first and last name inputs */
+  gap: 10px;
 }
 
 .profile-trash-button {
@@ -94,7 +93,7 @@
 }
 
 .profile-trash-button:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #c82333;
 }
 
 .trash-icon {
@@ -104,11 +103,13 @@
 .profile-button-container {
   display: flex;
   justify-content: center;
+  gap: 10px;
   margin-top: 20px;
 }
 
 .profile-edit-btn,
-.profile-save-btn {
+.profile-save-btn,
+.profile-cancel-btn {
   background-color: #4a90e2;
   color: #fff;
   border: none;
@@ -117,19 +118,26 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s;
-  margin: 0 5px;
 }
 
-.profile-edit-btn:hover,
-.profile-save-btn:hover {
+.profile-save-btn:hover,
+.profile-edit-btn:hover {
   background-color: #357ab8;
+}
+
+.profile-cancel-btn {
+  background-color: #6c757d;
+}
+
+.profile-cancel-btn:hover {
+  background-color: #5a6268;
 }
 
 .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height while loading */
+  height: 100vh;
 }
 
 @media (max-width: 600px) {
@@ -139,18 +147,22 @@
   }
 
   .profile-label {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
     margin-bottom: 5px;
-    font-weight: 600; /* Slightly bolder for better visibility */
+    font-weight: 600;
   }
 
   .profile-value {
-    width: auto; /* Auto width for values */
+    width: auto;
   }
 
   .profile-phone-input-container,
   .profile-name-inputs {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-input-field {
     width: 100%;
   }
 }
