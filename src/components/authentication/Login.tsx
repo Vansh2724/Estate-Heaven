@@ -14,7 +14,8 @@ import loader from '../../img/images/Loaders.gif'; // Import loader gif
 const Login: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [loading, setLoading] = useState<boolean>(false); // State for loading
+  const [loading, setLoading] = useState<boolean>(false); // State for normal loading
+  const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false); // State for Google login loading
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
@@ -73,15 +74,27 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
-    const { credential } = credentialResponse;
-    const success = await handleGoogleAuth(credential, authContext, false); // Pass false for login
-
-    if (success) {
-      navigate("/");
-    } else {
-      toast.error("Google login failed. Please try again.");
+    try {
+      setLoadingGoogle(true); // Set Google login loading to true
+      const { credential } = credentialResponse;
+      
+      // Handle Google authentication (passing `false` for login)
+      const success = await handleGoogleAuth(credential, authContext, false);
+  
+      if (success) {
+        navigate("/"); // Navigate to home if login is successful
+      } else {
+        toast.error("Google login failed. Please try again.");
+      }
+    } catch (error) {
+      // If an error occurs during Google login
+      toast.error("An error occurred during Google login. Please try again.");
+    } finally {
+      // Set Google login loading to false after completion
+      setLoadingGoogle(false);
     }
   };
+  
 
   return (
     <div className="login-wrapper">
@@ -123,11 +136,11 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+          <button type="submit" className="login-btn" disabled={loading || loadingGoogle}>
+            {loading || loadingGoogle ? "Logging in..." : "Login"}
           </button>
 
-          {loading && (
+          {(loading || loadingGoogle) && (
             <div className="login-loader-container">
               <img src={loader} alt="Loading..." className="login-loader-icon" />
             </div>

@@ -60,16 +60,18 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const googleLogin = (user: User) => {
-    if (!user) {
+    if (!user || !user.id) {
       console.error('Invalid Google login data');
       return;
     }
-
-    localStorage.setItem('googleUser', JSON.stringify(user));
+    
+    // Store only 'user' and 'token' in localStorage, using `user` for consistency
+    localStorage.setItem('user', JSON.stringify(user));
     setIsAuthenticated(true);
     setUserName(user.firstName);
     generateAvatarColor(user.id);
   };
+
 
   const logout = () => {
     localStorage.removeItem('token');
