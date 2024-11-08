@@ -39,8 +39,7 @@ const Signup: React.FC = () => {
   });
   const [passwordFocused, setPasswordFocused] = useState<boolean>(false);
   const [passwordValid, setPasswordValid] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false); // State for normal loading
-  const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false); // State for Google signup loading
+  const [loading, setLoading] = useState<boolean>(false); // State to manage loading
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
   const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
@@ -128,24 +127,13 @@ const Signup: React.FC = () => {
   };
 
   const handleGoogleSignup = async (credentialResponse: any) => {
-    try {
-      setLoadingGoogle(true); // Set Google signup loading to true
-      const { credential } = credentialResponse;
-      
-      // Handle Google authentication (passing `true` for signup)
-      const success = await handleGoogleAuth(credential, authContext, true); 
-  
-      if (success) {
-        navigate('/'); // Navigate to home if signup is successful
-      } else {
-        toast.error('Google signup failed. Please try again.');
-      }
-    } catch (error) {
-      // If an error occurs during Google signup
-      toast.error('An error occurred during Google signup. Please try again.');
-    } finally {
-      // Set Google signup loading to false after completion
-      setLoadingGoogle(false);
+    const { credential } = credentialResponse;
+    const success = await handleGoogleAuth(credential, authContext, true); // Pass true for signup
+
+    if (success) {
+      navigate('/');
+    } else {
+      toast.error('Google signup failed. Please try again.');
     }
   };
 
@@ -242,11 +230,11 @@ const Signup: React.FC = () => {
               onClick={toggleConfirmPasswordVisibility}
             />
           </div>
-          <button type="submit" className="signup-btn" disabled={loading || loadingGoogle}>
-            {loading || loadingGoogle ? "Signing Up..." : "Signup"}
+          <button type="submit" className="signup-btn" disabled={loading}>
+            {loading ? "Signing Up..." : "Signup"}
           </button>
-
-          {(loading || loadingGoogle) && (
+          
+          {loading && (
             <div className="signup-loader-container">
               <img src={Loader} alt="Loading..." className="signup-loader-icon" />
             </div>
