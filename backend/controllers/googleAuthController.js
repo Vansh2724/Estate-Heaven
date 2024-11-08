@@ -36,7 +36,10 @@ const googleAuth = async (req, res, action) => {
 
         const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ token: jwtToken, user });
+        // Add `id` as an alias for `_id` in the response user object
+        const responseUser = { ...user._doc, id: user._id };
+
+        res.status(200).json({ token: jwtToken, user: responseUser });
     } catch (error) {
         console.error('Google authentication error:', error);
         res.status(500).json({ message: 'Internal server error.' });
