@@ -5,7 +5,6 @@ import Signup from './components/authentication/Signup';
 import Login from './components/authentication/Login';
 import AboutUs from './components/pages/AboutUs';
 import ForgotPassword from './components/authentication/ForgotPassword';
-import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import SearchProperty from './components/pages/SearchProperty';
 import ListProperty from './components/pages/ListProperty';
@@ -29,12 +28,8 @@ const App: React.FC = () => {
           <Route path="/search/:state/:city/:for" element={<SearchProperty />} />
           <Route path="/list" element={<ListProperty />} />
 
-          {/* Private routes */}
-          <Route path="/dashboard/*" element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }>
+          {/* Dashboard route (accessible without login) */}
+          <Route path="/dashboard/*" element={<Dashboard />}>
             <Route path="profile/:id" element={<Profile />} />
             <Route path="myproperties/:id" element={<MyProperties />} />
             <Route path="premium/:id" element={<Premium />} />
