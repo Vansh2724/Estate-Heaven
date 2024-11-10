@@ -5,7 +5,6 @@ import Slider from 'react-slick';
 import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
 import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
-import { useParams } from 'react-router-dom'; // Import useParams to extract userId from URL
 import '../../styles/Dashboard/MyProperties.css';
 
 interface Property {
@@ -38,29 +37,22 @@ const MyProperties: React.FC = () => {
   const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null);
   const [updatedProperties, setUpdatedProperties] = useState<{ [key: string]: Partial<Property> }>({});
 
-  // Get userId from the URL using useParams
-  const { userId } = useParams<{ userId: string }>();
-
   useEffect(() => {
     const fetchProperties = async () => {
-      if (!userId) {
-        toast.error('User ID not found in URL.');
-        return;
-      }
-
       try {
+        const storedUser = localStorage.getItem("user");
+        const user = storedUser ? JSON.parse(storedUser) : null;
+        const userId = user ? user.id : null;
         const response = await axios.get(`${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/myproperties/${userId}`);
         setProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
-        toast.error("Failed to load properties.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchProperties();
-  }, [userId]);
+  }, []);
 
   const handleDelete = async (propertyId: string) => {
     try {
@@ -329,6 +321,7 @@ const MyProperties: React.FC = () => {
           </div>
         ))
       )}
+      {/* Toast container */}
       <ToastContainer />
     </div>
   );

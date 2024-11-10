@@ -5,10 +5,11 @@ import { AuthContext } from "../../contexts/AuthContext";
 import axios from 'axios';
 
 const Settings: React.FC = () => {
-  const { userId } = useParams<{ userId: string }>(); // Get userId from URL
+  const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
+  
   // Local state
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [otp, setOtp] = useState('');
@@ -22,7 +23,7 @@ const Settings: React.FC = () => {
     if (logout) {
       logout();
     }
-    navigate("/"); // Redirect to the home page after logout
+    navigate("/");
   };
 
   const openDeleteModal = async () => {
