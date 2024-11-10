@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaTrash } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from 'react-router-dom';  // Import useParams to extract userId from the URL
 import '../../styles/Dashboard/Profile.css';
 
 interface UserProfile {
@@ -20,10 +21,17 @@ const Profile: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(true);
-  const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+
+  // Get userId from the URL
+  const { userId } = useParams<{ userId: string }>(); // Assuming the route includes userId as a parameter
 
   useEffect(() => {
     const fetchProfile = async () => {
+      if (!userId) {
+        toast.error('User ID not found in URL.');
+        return;
+      }
+
       try {
         const response = await axios.get(`${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/profile/${userId}`);
         setProfile(response.data);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/Dashboard/Premium.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from 'react-router-dom'; // Import useParams
 
 declare global {
   interface Window {
@@ -12,13 +13,16 @@ declare global {
 const Premium: React.FC = () => {
   const [isPremiumUser, setIsPremiumUser] = useState(false);
   const [expiryDate, setExpiryDate] = useState<Date | null>(null);
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const userId = user ? user.id : null; // Extract the user id
+  const { userId } = useParams<{ userId: string }>(); // Extract userId from the URL
 
   useEffect(() => {
     const fetchUserPremiumStatus = async () => {
       try {
+        if (!userId) {
+          toast.error('User ID not found in URL.');
+          return;
+        }
+        
         const response = await fetch(`${process.env.REACT_APP_SERVER_API_URL}/api/dashboard/checkpremium/${userId}`);
         const userDetails = await response.json();
 
@@ -32,7 +36,9 @@ const Premium: React.FC = () => {
       }
     };
 
-    fetchUserPremiumStatus();
+    if (userId) {
+      fetchUserPremiumStatus();
+    }
   }, [userId]);
 
   const loadRazorpayScript = () => {
@@ -90,9 +96,9 @@ const Premium: React.FC = () => {
         setExpiryDate(newExpiryDate);
       },
       prefill: {
-        name: user?.name || '', // Use actual user data if available
-        email: user?.email || '', // Use actual user data if available
-        contact: user?.phone || '', // Use actual user data if available
+        name: '', // Can be updated with actual user data
+        email: '', // Can be updated with actual user data
+        contact: '', // Can be updated with actual user data
       },
       theme: {
         color: '#3399cc',

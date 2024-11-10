@@ -7,7 +7,7 @@ import {
   FaCouch,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom"; // Import useParams to get userId from URL
 import "../../styles/Dashboard/Favorites.css";
 import { toast, ToastContainer } from "react-toastify";
 import loadingGif from "../../img/images/Loaders.gif";
@@ -44,14 +44,16 @@ const Favorites: React.FC = () => {
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null); // State to manage selected property
   const navigate = useNavigate();
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const userId = user ? user.id : null;
+  // Extract userId from the URL using useParams
+  const { userId } = useParams<{ userId: string }>();
 
   useEffect(() => {
     const fetchFavorites = async () => {
       setLoading(true);
-      if (!userId) return;
+      if (!userId) {
+        toast.error("User ID not found in URL.");
+        return;
+      }
 
       try {
         const response = await axios.get(
