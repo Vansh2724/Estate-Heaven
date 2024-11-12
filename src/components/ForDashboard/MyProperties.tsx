@@ -132,8 +132,9 @@ const MyProperties: React.FC = () => {
             </div>
 
             <div className="myproperty-details">
+              {/* Property Basic Information */}
               <h3 className="myproperty-section-title">Basic Information</h3>
-              <div className="myproperty-details-section horizontal">
+	      <div className="myproperty-details-section horizontal">
                 <label>Title</label>
                 <input
                   type="text"
@@ -292,6 +293,7 @@ const MyProperties: React.FC = () => {
                 />
               </div>
 
+              {/* Property Map */}
               <div className="myproperty-map-section">
                 <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_KEY || ""}>
                   <GoogleMap
@@ -304,6 +306,8 @@ const MyProperties: React.FC = () => {
                   </GoogleMap>
                 </LoadScript>
               </div>
+
+              {/* Actions - Edit, Delete, Save, Cancel */}
               <div className="myproperty-actions">
                 {editingPropertyId === property._id ? (
                   <>

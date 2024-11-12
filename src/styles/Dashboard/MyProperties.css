@@ -1,3 +1,14 @@
+/* Viewport scaling to make the page properly responsive on mobile */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px; /* Decrease font size for smaller screens */
+  }
+}
+
 .myproperty-container {
   display: flex;
   flex-direction: column;
@@ -48,8 +59,8 @@
 
 .myproperty-details-section {
   display: flex;
-  flex-direction: column; /* Stack fields vertically */
-  gap: 10px; /* Space between fields */
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
@@ -80,9 +91,10 @@
 
 .myproperty-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center; /* Center buttons horizontally */
   gap: 10px;
   margin-top: 20px;
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
 }
 
 .myproperty-delete-button,
@@ -130,15 +142,6 @@
   background-color: #5a6268;
 }
 
-.myproperty-loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-
-
 /* Responsive Styles */
 @media (max-width: 768px) {
   .myproperty-card {
@@ -159,8 +162,13 @@
 
   .myproperty-actions {
     flex-direction: column;
-    align-items: stretch;
-    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    text-align: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .myproperty-delete-button,
@@ -168,7 +176,7 @@
   .myproperty-save-button,
   .myproperty-cancel-button {
     width: 100%;
-    margin-bottom: 10px;
+    text-align: center;
   }
 }
 
@@ -182,6 +190,19 @@
   .myproperty-save-button,
   .myproperty-cancel-button {
     padding: 10px;
+    text-align: center;
     font-size: 1em;
   }
+}
+
+.myproperty-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.no-myproperties {
+  font-size: 1.5em;
+  color: #999;
 }
